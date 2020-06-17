@@ -1,0 +1,92 @@
+<!--页头部-->
+<app-page-header></app-page-header>
+
+<!--表单-->
+<div class="add-roles-container">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+    <!--角色输入框-->
+    <div nz-row>
+      <div nz-col [nzSpan]="18">
+        <nz-form-item>
+          <nz-form-label nzRequired nzFor="rolesNmae">角色名称</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入角色名称!">
+            <input nz-input formControlName="rolesNmae" placeholder="请输入角色名称" id="rolesNmae" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!--所属机构选项框-->
+    <div nz-row>
+      <div nz-col [nzSpan]="18">
+        <nz-form-item>
+          <nz-form-label nzFor="gender" nzRequired>所属机构</nz-form-label>
+          <nz-form-control [nzSpan]="7" nzErrorTip="请选所属集团!" class="add-roles-form-control">
+            <nz-select id="gender" formControlName="group" nzPlaceHolder="请选所属集团" (ngModelChange)="groupChange($event)">
+              <nz-option nzValue="恒大集团" nzLabel="恒大集团"></nz-option>
+              <nz-option nzValue="阿里集团" nzLabel="阿里集团"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-control [nzSpan]="7" nzErrorTip="请选所属部门!" class="add-roles-form-control">
+            <nz-select id="gender" formControlName="department" nzPlaceHolder="请选所属部门"
+              (ngModelChange)="departmentChange($event)">
+              <nz-option nzValue="后勤部" nzLabel="后勤部"></nz-option>
+              <nz-option nzValue="技术部" nzLabel="技术部"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-control [nzSpan]="7" nzErrorTip="请选所属班!" class="add-roles-form-control">
+            <nz-select id="gender" formControlName="team" nzPlaceHolder="请选所属班" (ngModelChange)="teamChange($event)">
+              <nz-option nzValue="炊事班" nzLabel="炊事班"></nz-option>
+              <nz-option nzValue="娃娃班" nzLabel="娃娃班"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!--操作权限-->
+    <nz-form-label class="add-roles-form-label"  nzRequired nzFor="rolesNmae">操作权限</nz-form-label>
+    <nz-form-item class="add-roles-form-authority-item">
+
+      <nz-form-control nzErrorTip="请选择操作权限!">
+        <!-- <input nz-input formControlName="rolesNmae" placeholder="请输入角色名称" id="rolesNmae" /> -->
+        <nz-table #expandTable [nzShowPagination]="false" [nzData]="listOfMapData" nzTableLayout="fixed">
+          <thead>
+            <tr>
+              <th>页面</th>
+              <th>权限</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let data of expandTable.data">
+              <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                  <td
+                    [nzIndentSize]="item.level! * 20"
+                    [nzShowExpand]="!!item.children"
+                    [(nzExpand)]="item.expand"
+                    (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
+                  >
+                    {{ item.name }}
+                  </td>
+                  <td>{{ item.age }}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </nz-table>
+     
+      </nz-form-control>
+    </nz-form-item>
+
+
+
+    <!--提交取消按钮-->
+    <div class="add-roles-button-group">
+      <button nz-button [nzType]="'primary'">新建</button>
+      <button nz-button class="add-roles-button-reset" (click)="resetForm($event)">取消</button>
+    </div>
+  </form>
+
+</div>

@@ -1,0 +1,22 @@
+.add-roles-container {
+  margin: 24px;
+  padding: 24px 0;
+
+  .add-roles-form-control {
+    margin-right: 10px;
+  }
+
+  .add-roles-form-label {
+    text-align: left;
+  }
+
+  .add-roles-button-group {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .add-roles-button-reset {
+      margin-left: 20px;
+    }
+  }
+}
