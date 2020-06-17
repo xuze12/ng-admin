@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface TreeNodeInterface {
   key: number;
   name: string;
-  age?: number;
+  power?: any;
+  allChecked?: boolean;
+  indeterminate?: boolean;
   level?: number;
   expand?: boolean;
   children?: TreeNodeInterface[];
@@ -25,69 +27,53 @@ export class AddRolesComponent implements OnInit {
     {
       key: 1,
       name: '转账',
-      age: 60,
+      power: [
+        { label: '新建', value: '新建', checked: true },
+        { label: '修改', value: '修改', checked: false },
+        { label: '删除', value: '删除', checked: false }
+      ],
+      allChecked: false,
+      indeterminate: true,
       children: [
         {
           key: 11,
           name: '转账给企业用户',
-          age: 42,
+          allChecked: false,
+          indeterminate: true,
+          power: [
+            { label: '新建', value: '新建', checked: true },
+            { label: '修改', value: '修改', checked: false },
+            { label: '删除', value: '删除', checked: false }
+          ],
         },
         {
           key: 12,
           name: '转账给个人账户',
-          age: 30,
-          children: [
-            {
-              key: 121,
-              name: 'Jimmy Brown',
-              age: 16,
-            }
-          ]
+          allChecked: false,
+          indeterminate: true,
+          power: [
+            { label: '新建', value: '新建', checked: true },
+            { label: '修改', value: '修改', checked: false },
+            { label: '删除', value: '删除', checked: false }
+          ],
         },
-        {
-          key: 13,
-          name: 'Jim Green sr.',
-          age: 72,
-          children: [
-            {
-              key: 131,
-              name: 'Jim Green',
-              age: 42,
-              children: [
-                {
-                  key: 1311,
-                  name: 'Jim Green jr.',
-                  age: 25,
-                },
-                {
-                  key: 1312,
-                  name: 'Jimmy Green sr.',
-                  age: 18,
-                }
-              ]
-            }
-          ]
-        }
       ]
     },
-    {
-      key: 2,
-      name: 'Joe Black',
-      age: 32,
-    }
+
   ];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
 
-  constructor(private fb: FormBuilder,private router: Router) { }
+
+  constructor(private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     // 初始化表单
     this.validateForm = this.fb.group({
       rolesNmae: ['', [Validators.required]],
-      group:[null, [Validators.required]],
-      department:[null, [Validators.required]],
-      team:[null, [Validators.required]],
-      gender: [null, [Validators.required]]
+      group: [null, [Validators.required]],
+      department: [null, [Validators.required]],
+      team: [null, [Validators.required]],
+      gender: [null, [Validators.required]],
     });
 
     // 初始化操作权限
@@ -100,7 +86,6 @@ export class AddRolesComponent implements OnInit {
   resetForm(e: MouseEvent): void {
     e.preventDefault();
     this.validateForm.reset();
-    console.log('1212')
     for (const key in this.validateForm.controls) {
       this.validateForm.controls[key].markAsPristine();
       this.validateForm.controls[key].updateValueAndValidity();
@@ -115,6 +100,8 @@ export class AddRolesComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+    console.log(this.validateForm,'========validateForm')
+    console.log(this.listOfMapData,'-------listOfMapData')
   }
 
 
@@ -127,13 +114,16 @@ export class AddRolesComponent implements OnInit {
   departmentChange(value: string): void {
     // this.validateForm.get('note')!.setValue(value === 'male' ? 'Hi, man!' : 'Hi, lady!');
   }
-  
+
   // 更换班
   teamChange(value: string): void {
     // this.validateForm.get('note')!.setValue(value === 'male' ? 'Hi, man!' : 'Hi, lady!');
   }
 
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
+    console.log(array, '-------array')
+    console.log(data, '-------data')
+    console.log($event, '-------$event')
     if (!$event) {
       if (data.children) {
         data.children.forEach(d => {
@@ -170,6 +160,37 @@ export class AddRolesComponent implements OnInit {
     if (!hashMap[node.key]) {
       hashMap[node.key] = true;
       array.push(node);
+    }
+  }
+
+  // 全选
+  updateAllChecked(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
+    console.log(array, '-------array', data, '-------data', $event, '-------$event')
+    const target = array.find(a => a.key === data.key)!;
+    target.allChecked = $event;
+    target.indeterminate = false;
+    target.power = target.power.map(item => (
+      {
+        ...item,
+        checked: $event
+      }
+    ))
+
+  }
+
+  // 更新选中的
+  updateSingleChecked(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
+
+    const target = array.find(a => a.key === data.key)!;
+
+    if (target.power.every(item => !item.checked)) {
+      target.allChecked = false;
+      target.indeterminate = false;
+    } else if (target.power.every(item => item.checked)) {
+      target.allChecked = true;
+      target.indeterminate = false;
+    } else {
+      target.indeterminate = true;
     }
   }
 

@@ -46,47 +46,42 @@
     </div>
 
     <!--操作权限-->
-    <nz-form-label class="add-roles-form-label"  nzRequired nzFor="rolesNmae">操作权限</nz-form-label>
-    <nz-form-item class="add-roles-form-authority-item">
-
-      <nz-form-control nzErrorTip="请选择操作权限!">
-        <!-- <input nz-input formControlName="rolesNmae" placeholder="请输入角色名称" id="rolesNmae" /> -->
-        <nz-table #expandTable [nzShowPagination]="false" [nzData]="listOfMapData" nzTableLayout="fixed">
-          <thead>
-            <tr>
-              <th>页面</th>
-              <th>权限</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let data of expandTable.data">
-              <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
-                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                  <td
-                    [nzIndentSize]="item.level! * 20"
-                    [nzShowExpand]="!!item.children"
-                    [(nzExpand)]="item.expand"
-                    (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
-                  >
-                    {{ item.name }}
-                  </td>
-                  <td>{{ item.age }}</td>
-                </tr>
-              </ng-container>
-            </ng-container>
-          </tbody>
-        </nz-table>
-     
-      </nz-form-control>
-    </nz-form-item>
-
-
-
-    <!--提交取消按钮-->
-    <div class="add-roles-button-group">
-      <button nz-button [nzType]="'primary'">新建</button>
-      <button nz-button class="add-roles-button-reset" (click)="resetForm($event)">取消</button>
-    </div>
+    <nz-form-label class="add-roles-form-label" nzRequired nzFor="rolesNmae">操作权限</nz-form-label>
   </form>
 
+  <nz-table #expandTable [nzShowPagination]="false" [nzData]="listOfMapData" nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th>页面</th>
+        <th>权限</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of expandTable.data">
+        <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+            <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+              (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+
+              <label nz-checkbox [(ngModel)]="item.allChecked"
+                (ngModelChange)="updateAllChecked(mapOfExpandedData[data.key], item, $event)"
+                [nzIndeterminate]="item.indeterminate">
+                {{ item.name }}
+              </label>
+            </td>
+            <td>
+              <nz-checkbox-group [(ngModel)]="item.power"
+                (ngModelChange)="updateSingleChecked(mapOfExpandedData[data.key], item, $event)">
+              </nz-checkbox-group>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </nz-table>
+    <!--提交取消按钮-->
+    <div class="add-roles-button-group">
+      <button nz-button [nzType]="'primary'" (click)="submitForm()">新建</button>
+      <button nz-button class="add-roles-button-reset" (click)="resetForm($event)">取消</button>
+    </div>
 </div>
