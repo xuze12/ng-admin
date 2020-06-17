@@ -15,7 +15,31 @@ const routes: Routes = [
     {
       path: 'add',
       loadChildren: () => import('./pages/add-roles/add-roles.module').then(m => m.AddRolesModule)
-    }
+    },
+    ]
+  },
+  {
+    path: 'organization',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./pages/account/organization/organization.module').then(m => m.OrganizationModule)
+      },
+      {
+        path: 'orgInfoUpdate',
+        loadChildren: () => import('./pages/account/organization-info/organization-info.module').then(m => m.OrganizationInfoModule)
+      },
+    ]
+  },
+  {
+    path: 'person',
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./pages/account/person/person.module').then(m => m.PersonModule)
+      }
     ]
   },
   // { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) },

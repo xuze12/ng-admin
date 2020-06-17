@@ -23,17 +23,17 @@ import zh from '@angular/common/locales/zh';
 import {HeaderComponent} from './components/header/header.component'
 import {SiderComponent} from './components/sider/sider.component'
 import {LayoutComponent} from './layout/layout.component'
-import {LoginComponent} from './login/login.component'
+import {LoginComponent} from './login/login.component';
 
 registerLocaleData(zh);
-
+ 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
     HeaderComponent,
     SiderComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
