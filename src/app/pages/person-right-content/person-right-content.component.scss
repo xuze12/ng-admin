@@ -1,0 +1,32 @@
+.or-header {
+  display: flex;
+  padding: 15px 0;
+  justify-content: space-between;
+
+  .organization-search {
+    display: flex;
+    .search-ipt {
+      width: 250px;
+    }
+  }
+
+  .btns {
+    a {
+      padding: 5px;
+    }
+  }
+
+  .or-search-btn {
+    margin: 0 10px;
+  }
+
+}
+
+.modalBtns{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  .submit {
+    margin: 0 24px;
+  }
+}

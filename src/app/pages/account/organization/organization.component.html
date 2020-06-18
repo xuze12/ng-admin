@@ -11,7 +11,7 @@
   </div>
 
   <div class="add-button">
-    <a> <button nz-button nzType="primary" routerLink="/organization/orgInfoUpdate">手动添加</button></a>
+    <a> <button nz-button nzType="primary" [routerLink]="['/organization/infoUpdate/', 'add']">手动添加</button></a>
   </div>
 
 </div>
@@ -38,7 +38,7 @@
             <td>{{ item.type }}</td>
             <td>{{ item.address }}</td>
             <td>
-              <a>单位信息</a> &nbsp;&nbsp;
+              <a [routerLink]="['/organization/infoUpdate/', 'update']">单位信息</a> &nbsp;&nbsp;
               <a (click)="showConfirm()">删除</a>
             </td>
           </tr>

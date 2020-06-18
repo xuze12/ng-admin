@@ -1,0 +1,116 @@
+<app-page-header></app-page-header>
+
+<div class="formInfo">
+
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+    <div class="addform">
+      <div>
+        <!--机构输入框-->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="account" nzRequired>账号</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入账号!">
+            <input nz-input formControlName="account" placeholder="请输入账号" id="account" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- 手机号码 -->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="phoneNumber" nzRequired>手机号码</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入手机号码!">
+            <input nz-input formControlName="phoneNumber" placeholder="请输入手机号码" id="phoneNumber" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <!--账号状态-->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="accountStatus" nzRequired>账号状态</nz-form-label>
+          <nz-form-control id="accountStatus" [nzSpan]="8" nzErrorTip="请选择账号状态!" >
+            <nz-select id="accountStatus" formControlName="accountStatus" nzPlaceHolder="请选择账号状态"
+              (ngModelChange)="accountStatusChange($event)">
+              <nz-option nzValue="正常" nzLabel="正常"></nz-option>
+              <nz-option nzValue="禁用" nzLabel="禁用"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!--所属机构类型选项框-->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="type" nzRequired>所属机构</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请选所属机构类型!" >
+            <nz-select id="type" formControlName="type" nzPlaceHolder="请选所属机构类型" (ngModelChange)="typeChange($event)">
+              <nz-option nzValue="军" nzLabel="军"></nz-option>
+              <nz-option nzValue="师" nzLabel="师"></nz-option>
+              <nz-option nzValue="旅" nzLabel="旅"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!--密码-->
+        <nz-form-item *ngIf="type === 'add'">
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="password" nzRequired>密码</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="密码错误" >
+            <input nz-input formControlName="password" placeholder="请输入密码" id="password" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div>
+        <!--昵称-->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="nickname" nzRequired>昵称</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入昵称">
+            <input nz-input formControlName="nickname" placeholder="请输入昵称" id="nickname" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- 姓名 -->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="name" nzRequired>姓名</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入姓名!">
+            <input nz-input formControlName="name" placeholder="请输入姓名" id="name" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <!--性别-->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="gender" nzRequired>性别</nz-form-label>
+          <nz-form-control id="gender" [nzSpan]="8" nzErrorTip="请选择性别!" >
+            <nz-select id="gender" formControlName="gender" nzPlaceHolder="请选择性别"
+              (ngModelChange)="genderChange($event)">
+              <nz-option nzValue="男" nzLabel="男"></nz-option>
+              <nz-option nzValue="女" nzLabel="女"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!--角色-->
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="role" nzRequired>角色</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请选所属角色!" >
+            <nz-select id="role" formControlName="role" nzPlaceHolder="请选所属角色" (ngModelChange)="roleChange($event)">
+              <nz-option nzValue="admin" nzLabel="admin"></nz-option>
+              <nz-option nzValue="test" nzLabel="test"></nz-option>
+              <nz-option nzValue="user" nzLabel="user"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <!--确认密码-->
+        <nz-form-item *ngIf="type === 'add'">
+          <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="checkPassword" nzRequired>确认密码</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请确认密码" >
+            <input nz-input formControlName="checkPassword" placeholder="确认密码" id="checkPassword" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button nz-button nzType="primary">提交</button>
+      <button nz-button (click)="cancel($event)">取消</button>
+    </div>
+
+  </form>
+
+</div>

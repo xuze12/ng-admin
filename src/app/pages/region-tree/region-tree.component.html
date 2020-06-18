@@ -1,0 +1,12 @@
+<h3 nz-typography class="regionTitle">中国人民解放军</h3>
+
+<!-- 军区搜索树 -->
+<nz-input-group [nzSuffix]="suffixIcon">
+  <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+</nz-input-group>
+<ng-template #suffixIcon>
+  <i nz-icon nzType="search"></i>
+</ng-template>
+<nz-tree [nzData]="nodes" [nzSearchValue]="searchValue" (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
+  (nzSearchValueChange)="nzEvent($event)">
+</nz-tree>
