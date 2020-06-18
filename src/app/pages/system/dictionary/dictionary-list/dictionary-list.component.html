@@ -1,0 +1,22 @@
+<!--页头部-->
+<app-page-header></app-page-header>
+
+<!--列表-->
+<nz-table #basicTable [nzData]="listOfData">
+  <thead>
+    <tr>
+      <th>字典名称</th>
+      <th>描述</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.des }}</td>
+      <td>
+        <a routerLink='/system/dictionary-attr'>编辑</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

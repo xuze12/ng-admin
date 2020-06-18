@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
+
 
 interface ItemData {
   id: number;
@@ -21,6 +24,20 @@ export class RolesComponent implements OnInit {
   listOfCurrentPageData: ItemData[] = [];
   listOfData: ItemData[] = [];
   setOfCheckedId = new Set<number>();
+
+  constructor(private modal: NzModalService) { }
+
+  ngOnInit() {
+
+    this.listOfData = new Array(20).fill(0).map((_, index) => {
+      return {
+        id: index,
+        name: '炊管人员',
+        mechanism: '广州军区/后勤部',
+        authority: '人员管理/新建,编辑,删除、组织结构管理/新建,编辑,删除、角色管理/新建,编辑,删除'
+      };
+    });
+  }
 
   updateCheckedSet(id: number, checked: boolean): void {
     if (checked) {
@@ -50,21 +67,16 @@ export class RolesComponent implements OnInit {
     this.indeterminate = this.listOfCurrentPageData.some(item => this.setOfCheckedId.has(item.id)) && !this.checked;
   }
 
-
-
-  constructor() { }
-
-  ngOnInit() {
-
-    this.listOfData = new Array(20).fill(0).map((_, index) => {
-      return {
-        id: index,
-        name: '炊管人员',
-        mechanism: '广州军区/后勤部',
-        authority: '人员管理/新建,编辑,删除、组织结构管理/新建,编辑,删除、角色管理/新建,编辑,删除'
-      };
+  showDeleteConfirm(): void {
+    this.modal.confirm({
+      nzTitle: '提示',
+      nzContent: '<b style="color: red;">你正在删除角色,删除后不可恢复,你确定要删除？</b>',
+      nzOkText: '删除',
+      nzOkType: 'danger',
+      nzOnOk: () => console.log('OK'),
+      nzCancelText: '取消',
+      nzOnCancel: () => console.log('Cancel')
     });
-
   }
 
 }

@@ -1,0 +1,27 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="submitForm(validateForm.value)">
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-control [nzSpan]="20" nzValidatingTip="Validating...">
+        <input nz-input formControlName="menuName" placeholder="搜索页面" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzSpan]="20">
+        <nz-radio-group formControlName="radioValue" class='page-radio-group'>
+          <label class='page-radio-item' nz-radio nzValue="人员管理页">人员管理页</label>
+          <label class='page-radio-item' nz-radio nzValue="机构管理页">机构管理页</label>
+          <label class='page-radio-item' nz-radio nzValue="操作日志页">操作日志页</label>
+          <label class='page-radio-item' nz-radio nzValue="单位信息页">单位信息页</label>
+          <label class='page-radio-item' nz-radio nzValue="给养标准页">给养标准页</label>
+          <label class='page-radio-item' nz-radio nzValue="单位信息页">单位信息页</label>
+          <label class='page-radio-item' nz-radio nzValue="给养标准页">给养标准页</label>
+          <label class='page-radio-item' nz-radio nzValue="单位信息页">单位信息页</label>
+          <label class='page-radio-item' nz-radio nzValue="给养标准页">给养标准页</label>
+          <label class='page-radio-item' nz-radio nzValue="单位信息页">单位信息页</label>
+          <label class='page-radio-item' nz-radio nzValue="给养标准页">给养标准页</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

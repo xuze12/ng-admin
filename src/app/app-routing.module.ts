@@ -10,11 +10,11 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [{
       path: '',
-      loadChildren: () => import('./pages/roles/roles.module').then(m => m.RolesModule)
+      loadChildren: () => import('./pages/roles/roles-list/roles.module').then(m => m.RolesModule)
     },
     {
       path: 'add',
-      loadChildren: () => import('./pages/add-roles/add-roles.module').then(m => m.AddRolesModule)
+      loadChildren: () => import('./pages/roles/add-roles/add-roles.module').then(m => m.AddRolesModule)
     },
     ]
   },
@@ -44,6 +44,24 @@ const routes: Routes = [
         path: 'infoUpdate/:type',
         loadChildren: () => import('./pages/account/person-info-update/person-info-update.module').then(m => m.PersonInfoUpdateModule)
       },
+    ]
+  },
+  {
+    path: 'system',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'menu',
+        loadChildren: () => import('./pages/system/menu/menu.module').then(m => m.MenuModule)
+      },
+      {
+        path: 'dictionary-list',
+        loadChildren: () => import('./pages/system/dictionary/dictionary-list/dictionary-list.module').then(m => m.DictionaryListModule)
+      },
+      {
+        path: 'dictionary-attr',
+        loadChildren: () => import('./pages/system/dictionary/dictionary-attr/dictionary-attr.module').then(m => m.DictionaryAttrModule)
+      }
     ]
   },
   // { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) },

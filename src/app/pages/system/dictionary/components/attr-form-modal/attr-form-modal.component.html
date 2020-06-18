@@ -1,0 +1,16 @@
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm(validateForm.value)">
+  <form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired>字段名称</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzValidatingTip="Validating...">
+        <input nz-input formControlName="menuName" placeholder="请输入字段名称" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired>描述</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Please write something here!">
+        <textarea formControlName="des" nz-input rows="4" placeholder="请输入描述文字"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-modal>

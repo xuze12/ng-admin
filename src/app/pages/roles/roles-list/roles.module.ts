@@ -5,10 +5,11 @@ import { RolesRoutingModule } from './roles-routing.module';
 
 import { RolesComponent } from './roles.component';
 
-import {PageHeaderModule} from '../../components/page-header/page-header.module'
+import {PageHeaderModule} from '../../../components/page-header/page-header.module'
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
     PageHeaderModule,
     NzButtonModule,
     NzTableModule,
-    NzDividerModule
+    NzDividerModule,
+    NzModalModule
   ],
   declarations: [RolesComponent],
   exports: [RolesComponent]
