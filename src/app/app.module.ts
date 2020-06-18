@@ -2,7 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
+
 import { IconsProviderModule } from './icons-provider.module';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -23,17 +25,17 @@ import zh from '@angular/common/locales/zh';
 import {HeaderComponent} from './components/header/header.component'
 import {SiderComponent} from './components/sider/sider.component'
 import {LayoutComponent} from './layout/layout.component'
-import {LoginComponent} from './login/login.component';
+import {LoginComponent} from './login/login.component'
 
 registerLocaleData(zh);
- 
+
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
     HeaderComponent,
     SiderComponent,
-    LoginComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

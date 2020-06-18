@@ -27,7 +27,7 @@ const routes: Routes = [
         loadChildren: () => import('./pages/account/organization/organization.module').then(m => m.OrganizationModule)
       },
       {
-        path: 'infoUpdate/:type',
+        path: 'orgInfoUpdate',
         loadChildren: () => import('./pages/account/organization-info/organization-info.module').then(m => m.OrganizationInfoModule)
       },
     ]
@@ -39,11 +39,7 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./pages/account/person/person.module').then(m => m.PersonModule)
-      },
-      {
-        path: 'infoUpdate/:type',
-        loadChildren: () => import('./pages/account/person-info-update/person-info-update.module').then(m => m.PersonInfoUpdateModule)
-      },
+      }
     ]
   },
   {
