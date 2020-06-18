@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 import { PersonRightContentComponent } from './person-right-content.component';
 
-import { PageHeaderModule } from '../../components/page-header/page-header.module'
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -17,9 +16,8 @@ import { NzModalModule, NzModalComponent } from 'ng-zorro-antd/modal';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @NgModule({
-  imports: [
+  imports: [ 
     CommonModule,
-    PageHeaderModule,
     NzButtonModule,
     NzTableModule,
     NzDividerModule,

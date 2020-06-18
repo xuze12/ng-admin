@@ -9,8 +9,8 @@ import { PageHeaderModule } from '../../../components/page-header/page-header.mo
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { RegionTreeModule } from '../../region-tree/region-tree.module';
-import { PersonRightContentModule } from '../../person-right-content/person-right-content.module'
+import { RegionTreeModule } from '../region-tree/region-tree.module';
+import { PersonRightContentModule } from '../person-right-content/person-right-content.module'
 
 @NgModule({
   imports: [
