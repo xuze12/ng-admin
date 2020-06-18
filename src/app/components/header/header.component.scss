@@ -10,7 +10,7 @@ nz-header {
   height: 64px;
   padding: 0;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 }
 
 .header-trigger {
@@ -18,9 +18,53 @@ nz-header {
   padding: 20px 24px;
   font-size: 20px;
   cursor: pointer;
-  transition: all .3s,padding 0s;
+  transition: all .3s, padding 0s;
 }
 
 .trigger:hover {
   color: #1890ff;
+}
+
+.rightContent {
+  // float: right;
+  display: inline-block;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 300px;
+  margin: auto 0;
+
+  .wrapp, .search-box {
+    display: flex;
+    align-items: center;
+    >div {
+      margin: 0 5px;
+    }
+  }
+
+  .search-box { }
+
+  .search-icon, .notification, .avatar-box{
+    cursor: pointer;
+  }
+
+  .search-ipt {
+    width: 0;
+    padding: 0;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid inherit;
+    outline: none;
+    transition: all .3s;
+  }
+
+  .search-icon:hover, .notification:hover{
+    color: rgb(46, 117, 194);
+  }
+
+  .notification { }
+
+
 }
