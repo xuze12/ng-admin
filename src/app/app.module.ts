@@ -24,6 +24,7 @@ import {HeaderComponent} from './components/header/header.component'
 import {SiderComponent} from './components/sider/sider.component'
 import {LayoutComponent} from './layout/layout.component'
 import {LoginComponent} from './login/login.component';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 
 registerLocaleData(zh);
  
@@ -51,6 +52,7 @@ registerLocaleData(zh);
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NzAvatarModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }],
   bootstrap: [AppComponent]

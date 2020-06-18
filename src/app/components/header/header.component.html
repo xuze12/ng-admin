@@ -1,12 +1,26 @@
 <nz-header>
   <div class="app-header">
-    <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-        <i class="trigger"
-           nz-icon
-           [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-        ></i>
+
+    <span class="header-trigger" (click)="isCollapsedTrigger()">
+      <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
     </span>
 
-    <span>avatar</span>
+
+    <div class="rightContent" #rightContent>
+      <div class="wrapp">
+        <div class="search-box">
+          <i class="search-icon" (click)="searchIptShow()" nz-icon nzType="search" ></i>
+          <input #searchIpt type="text" class="search-ipt" nz-input placeholder="search" />
+        </div>
+        <div class="notification">
+          <i nz-icon nzType="bell" nzTheme="outline"></i>
+        </div>
+        <div class="avatar-box">
+          <nz-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+          <span>avatar-box</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </nz-header>
