@@ -101,7 +101,7 @@ export class PersonRightContentComponent implements OnInit {
   // btns
   add(): void {
     console.log('add')
-    this.router.navigate(['/person/infoUpdate/', 'add']);
+    this.router.navigate(['/admin/person/infoUpdate/', 'add']);
   }
   prohibit(): void {
     console.log('prohibit')
@@ -115,7 +115,7 @@ export class PersonRightContentComponent implements OnInit {
   }
   edit(): void {
     console.log('edit')
-    this.router.navigate(['/person/infoUpdate/', 'edit']);
+    this.router.navigate(['/admin/person/infoUpdate/', 'edit']);
   }
  
   reset(): void {

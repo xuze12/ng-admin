@@ -91,7 +91,7 @@ export class AddRolesComponent implements OnInit {
       this.validateForm.controls[key].updateValueAndValidity();
     }
 
-    this.router.navigate(['/roles'])
+    this.router.navigate(['/admin/roles/list'])
   }
 
   // 表单提交
@@ -102,6 +102,7 @@ export class AddRolesComponent implements OnInit {
     }
     console.log(this.validateForm,'========validateForm')
     console.log(this.listOfMapData,'-------listOfMapData')
+    this.router.navigate(['/admin/roles/list'])
   }
 
 

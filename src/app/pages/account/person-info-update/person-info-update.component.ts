@@ -63,7 +63,7 @@ export class PersonInfoUpdateComponent implements OnInit {
   cancel(e): void {
     e.preventDefault();
     this.validateForm.reset();
-    this.router.navigate(['/person'])
+    this.router.navigate(['/admin/person'])
   }
 
 
