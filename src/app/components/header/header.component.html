@@ -9,15 +9,25 @@
     <div class="rightContent" #rightContent>
       <div class="wrapp">
         <div class="search-box">
-          <i class="search-icon" (click)="searchIptShow()" nz-icon nzType="search" ></i>
+          <i class="search-icon" (click)="searchIptShow()" nz-icon nzType="search"></i>
           <input #searchIpt type="text" class="search-ipt" nz-input placeholder="search" />
         </div>
         <div class="notification">
           <i nz-icon nzType="bell" nzTheme="outline"></i>
         </div>
         <div class="avatar-box">
-          <nz-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
-          <span>avatar-box</span>
+          <a nz-dropdown [nzDropdownMenu]="menu" style="display: block;">
+            <nz-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+            <span>nickname</span>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item>
+                <i nz-icon nzType="logout" nzTheme="outline"></i>
+                退出登录
+              </li>
+            </ul>
+          </nz-dropdown-menu>
         </div>
       </div>
     </div>

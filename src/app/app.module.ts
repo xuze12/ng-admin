@@ -27,6 +27,7 @@ import {SiderComponent} from './components/sider/sider.component'
 import {LayoutComponent} from './layout/layout.component'
 import {LoginComponent} from './login/login.component';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 registerLocaleData(zh);
 
@@ -54,7 +55,8 @@ registerLocaleData(zh);
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NzAvatarModule
+    NzAvatarModule,
+    NzDropDownModule
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }],
   bootstrap: [AppComponent]
