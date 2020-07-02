@@ -7,6 +7,8 @@
 <ng-template #suffixIcon>
   <i nz-icon nzType="search"></i>
 </ng-template>
-<nz-tree [nzData]="nodes" [nzSearchValue]="searchValue" (nzClick)="nzEvent($event)" (nzExpandChange)="nzEvent($event)"
-  (nzSearchValueChange)="nzEvent($event)">
+<div class="tree-wrapper">
+  <nz-tree [nzData]="organizeList" [nzSearchValue]="searchValue" (nzClick)="nzEvent($event)"
+  (nzExpandChange)="nzEvent($event)" (nzSearchValueChange)="nzEvent($event)">
 </nz-tree>
+</div>

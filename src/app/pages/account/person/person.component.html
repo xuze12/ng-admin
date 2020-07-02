@@ -1,13 +1,15 @@
-<app-page-header></app-page-header>
+<app-page-header title="人员列表" [menu]="[{title:'账号管理',active:false},{title:'人员管理',active:true}]"></app-page-header>
 
 <div class="person-content">
   <!-- 左侧查询树 -->
   <div class="leftSide">
-    <app-region-tree></app-region-tree>
+    <app-region-tree [organizeList]='organizeList'></app-region-tree>
   </div>
 
   <!-- 右侧显示内容 -->
   <div class="rightSide">
-    <app-person-right-content></app-person-right-content>
+    <app-person-right-content [personList]='personList' [handleProhibitUserModalShow]='handleProhibitUserModalShow'
+      [handleDeleteUserModalShow]='handleDeleteUserModalShow'
+      [handleResetUserPassword]='handleResetUserPassword'></app-person-right-content>
   </div>
 </div>

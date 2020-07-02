@@ -1,8 +1,8 @@
 <!--页头部-->
-<app-page-header></app-page-header>
+<app-page-header title="菜单配置" [menu]="[{title:'系统维护',active:false},{title:'菜单配置',active:true}]"></app-page-header>
 
 <!--列表-->
-<nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed">
+<nz-table #expandTable [nzData]="list" nzTableLayout="fixed" [nzShowPagination]='false'>
   <thead>
     <tr>
       <th>导航菜单名称</th>
@@ -16,18 +16,18 @@
         <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
           <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
             (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-            {{ item.menuName }}
+            {{ item.name }}
           </td>
           <td>
-            <a *ngIf="item.page.name"> {{ item.page.name }}</a>
-            <a *ngIf="!item.page.name" (click)="handlePageSelectModalShow()"> 选择页面</a>
+            <a *ngIf="item.permissionGroup" (click)="handlePageSelectModalShow(item,item.permissionGroup.id)"> {{ item.permissionGroup.name }}</a>
+            <a *ngIf="!item.permissionGroup" (click)="handlePageSelectModalShow(item,0)"> 选择页面</a>
           </td>
           <td>
-            <a (click)="handleAddModalShow()">添加子导航</a>
+            <a (click)="handleAddModalShow(item)">添加子导航</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="handleEditModalShow()">编辑</a>
+            <a (click)="handleEditModalShow(item)">编辑</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="showMenuDeleteConfirm()">删除</a>
+            <a (click)="showMenuDeleteConfirm(item)">删除</a>
           </td>
         </tr>
       </ng-container>
@@ -40,9 +40,9 @@
   [handleCancel]="handleAddCancel"></app-menu-form-modal>
 
 <!--编辑导航弹框-->
-<app-menu-form-modal title='编辑子导航' [isVisible]="editNavMenuModalOpen" [handleOk]="handleEditOk"
+<app-menu-form-modal title='编辑子导航' [isVisible]="editNavMenuModalOpen" [handleOk]="handleEditOk" [menuName]='activeMenuItem?activeMenuItem.name:""'
   [handleCancel]="handleEditCancel"></app-menu-form-modal>
 
 <!--页面选择弹框-->
-<app-page-select-modal title='选择页面（人员管理）' [isVisible]="pageSelectModalOpen" [handleOk]="handlePageSelectOk"
-  [handleCancel]="handlePageSelectCancel"></app-page-select-modal>
+<app-page-select-modal title='选择页面（人员管理）' [isVisible]="pageSelectModalOpen" [pageId]='pageId'
+  [handleOk]="handlePageSelectOk" [handleCancel]="handlePageSelectCancel"></app-page-select-modal>

@@ -5,14 +5,9 @@
 
   .organization-search {
     display: flex;
+
     .search-ipt {
       width: 250px;
-    }
-  }
-
-  .btns {
-    a {
-      padding: 5px;
     }
   }
 
@@ -22,10 +17,11 @@
 
 }
 
-.modalBtns{
+.modalBtns {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+
   .submit {
     margin: 0 24px;
   }

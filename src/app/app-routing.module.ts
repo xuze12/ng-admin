@@ -3,18 +3,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { LoginComponent } from './login/login.component'
 
+import { AuthGuard } from './auth-guard.service'
+
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/admin' },
+  { path: '', pathMatch: 'full', redirectTo: '/admin/roles/list' },
   {
     path: 'admin',
+    canActivate: [AuthGuard], // 在导航 contacts 之前会先进入路由守卫
     component: LayoutComponent,
     children: [{
       path: 'roles/list',
       loadChildren: () => import('./pages/roles/roles-list/roles.module').then(m => m.RolesModule)
     },
     {
-      path: 'roles/add',
-      loadChildren: () => import('./pages/roles/add-roles/add-roles.module').then(m => m.AddRolesModule)
+      path: 'roles/infoUpdata/:type',
+      loadChildren: () => import('./pages/roles/roles-form/roles-form.module').then(m => m.RolesFormModule)
     },
     {
       path: 'organization',
@@ -24,10 +27,6 @@ const routes: Routes = [
       path: 'organization/infoUpdate/:type',
       loadChildren: () => import('./pages/account/organization-info/organization-info.module').then(m => m.OrganizationInfoModule)
     },
-    // {
-    //   path: 'organization/orgInfoUpdate',
-    //   loadChildren: () => import('./pages/account/organization-info/organization-info.module').then(m => m.OrganizationInfoModule)
-    // },
     {
       path: 'person',
       loadChildren: () => import('./pages/account/person/person.module').then(m => m.PersonModule)
@@ -45,10 +44,6 @@ const routes: Routes = [
       path: 'system/dictionary-list',
       loadChildren: () => import('./pages/system/dictionary/dictionary-list/dictionary-list.module').then(m => m.DictionaryListModule)
     },
-    {
-      path: 'system/dictionary-attr',
-      loadChildren: () => import('./pages/system/dictionary/dictionary-attr/dictionary-attr.module').then(m => m.DictionaryAttrModule)
-    }
     ]
   },
   // { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) },
@@ -57,6 +52,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }

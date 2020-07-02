@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,SimpleChanges } from '@angular/core';
 
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
@@ -18,8 +18,10 @@ export class MenuFormModalComponent implements OnInit {
   @Input() title: string
   @Input() handleOk: any
   @Input() handleCancel: any
+  @Input() menuName?:string
 
   validateForm: FormGroup;
+
 
   constructor(private fb: FormBuilder) { }
 
@@ -32,13 +34,23 @@ export class MenuFormModalComponent implements OnInit {
 
   }
 
+  // 监听父级传值变化
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(this.menuName,'------menuName')
+    const { required, maxLength, minLength, } = MyValidators;
+    this.validateForm = this.fb.group({
+      menuName: [this.menuName, [required, maxLength(12), minLength(6)], [this.menuNameAsyncValidator]],
+    });
+  }
+
+
   submitForm(value: { menuName: string; }): void {
     for (const key in this.validateForm.controls) {
       this.validateForm.controls[key].markAsDirty();
       this.validateForm.controls[key].updateValueAndValidity();
     }
-    console.log(value);
     this.handleOk(value)
+    this.validateForm.reset();
   }
 
   menuNameAsyncValidator = (control: FormControl) =>

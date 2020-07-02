@@ -14,4 +14,9 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  isCollapsedTrigger=(): void=> {
+    this.isCollapsed = !this.isCollapsed;
+  
+  }
+
 }

@@ -1,39 +1,29 @@
 <!-- <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
   [nzTrigger]="null"> -->
-  <div class="sidebar-logo">
-    <a href="https://ng.ant.design/" target="_blank">
-      <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-      <h1>机构权限管理</h1>
-    </a>
-  </div>
-  <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-    <li nz-submenu nzOpen nzTitle="角色管理" nzIcon="dashboard">
-      <ul>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/admin/roles/list">角色列表</a>
-        </li>
-      </ul>
-    </li>
-    <li nz-submenu nzOpen nzTitle="账号管理" nzIcon="form">
-      <ul>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/admin/organization">组织机构管理</a>
-        </li>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/admin/person">人员管理</a>
-        </li>
-      </ul>
-    </li>
-    <li nz-submenu nzOpen nzTitle="系统维护" nzIcon="form">
-      <ul>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/admin/system/menu">菜单配置</a>
-        </li>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/admin/system/dictionary-list">数据字典</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
+<div class="sidebar-logo">
+  <a href="https://ng.ant.design/" target="_blank">
+    <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+    <h1>机构权限管理</h1>
+  </a>
+</div>
+
 <!-- </nz-sider> -->
 
+<ul nz-menu nzMode="inline" nzTheme="dark" [nzInlineCollapsed]="isCollapsed">
+  <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menus }"></ng-container>
+  <ng-template #menuTpl let-menus>
+    <ng-container *ngFor="let menu of menus">
+      <li *ngIf="!menu.children" nz-menu-item nzMatchRouter [nzPaddingLeft]="menu.level * 24"
+        [nzDisabled]="menu.disabled" [nzSelected]="menu.selected" (click)="handleMenuChange(menu)">
+        <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></i>
+        <a [routerLink]="menu.link"><span>{{ menu.title }}</span> </a>
+      </li>
+      <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="menu.level * 24" [nzOpen]="menu.open" [nzTitle]="menu.title"
+        (nzOpenChange)='handleOpenChange(menu)' [nzIcon]="menu.icon" [nzDisabled]="menu.disabled" nzMatchRouter>
+        <ul>
+          <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menu.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ng-template>
+</ul>

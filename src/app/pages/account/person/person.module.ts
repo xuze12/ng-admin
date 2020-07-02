@@ -9,8 +9,12 @@ import { PageHeaderModule } from '../../../components/page-header/page-header.mo
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { RegionTreeModule } from '../region-tree/region-tree.module';
-import { PersonRightContentModule } from '../person-right-content/person-right-content.module'
+import { RegionTreeModule } from '../components/region-tree/region-tree.module';
+import { PersonRightContentModule } from '../components/person-right-content/person-right-content.module'
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @NgModule({
   imports: [
@@ -21,9 +25,12 @@ import { PersonRightContentModule } from '../person-right-content/person-right-c
     NzTableModule,
     NzDividerModule,
     RegionTreeModule,
-    PersonRightContentModule
+    PersonRightContentModule,
+    NzModalModule,
+    NzGridModule
   ],
   declarations: [PersonComponent],
-  exports: [PersonComponent]
+  exports: [PersonComponent],
+  providers: [NzNotificationService,NzModalService]
 })
 export class PersonModule { }

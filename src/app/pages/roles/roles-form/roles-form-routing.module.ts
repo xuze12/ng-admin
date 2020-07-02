@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AddRolesComponent } from './add-roles.component';
+import { RolesFormComponent } from './roles-form.component';
 
 const routes: Routes = [
-  { path: '', component: AddRolesComponent },
+  { path: '', component: RolesFormComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AddRolesRoutingModule { }
+export class RolesFormRoutingModule { }

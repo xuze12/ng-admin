@@ -1,5 +1,5 @@
 <!--页头部-->
-<app-page-header></app-page-header>
+<app-page-header title="机构列表" [menu]="[{title:'账号管理',active:false},{title:'组织机构管理',active:true}]"></app-page-header>
 
 <!-- 搜索 + 添加 -->
 <div class="or-header">
@@ -18,7 +18,7 @@
 
 <!-- 表格 -->
 <div style="padding: 0 24px;">
-  <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed">
+  <nz-table #expandTable [nzData]="list" nzTableLayout="fixed">
     <thead>
       <tr>
         <th>机构名称</th>
@@ -35,11 +35,11 @@
               (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
               {{ item.name }}
             </td>
-            <td>{{ item.type }}</td>
+            <td>{{ item.type | organizaType}}</td>
             <td>{{ item.address }}</td>
             <td>
-              <a [routerLink]="['/admin/organization/infoUpdate/', 'update']">单位信息</a> &nbsp;&nbsp;
-              <a (click)="showConfirm()">删除</a>
+              <a (click)="handleEditOrganiza(item)">单位信息</a> &nbsp;&nbsp;
+              <a (click)="showConfirm(item)">删除</a>
             </td>
           </tr>
         </ng-container>

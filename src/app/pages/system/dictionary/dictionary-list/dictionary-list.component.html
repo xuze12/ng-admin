@@ -1,5 +1,10 @@
 <!--页头部-->
-<app-page-header></app-page-header>
+<app-page-header title="机构属性" [menu]="[{title:'系统维护',active:false},{title:'数据字典',active:true}]"></app-page-header>
+
+<!--添加按钮-->
+<div class="add-button">
+  <a> <button nz-button nzType="primary" (click)="handleAddAttrModalShow()">新增</button></a>
+</div>
 
 <!--列表-->
 <nz-table #basicTable [nzData]="listOfData">
@@ -15,8 +20,18 @@
       <td>{{ data.name }}</td>
       <td>{{ data.des }}</td>
       <td>
-        <a routerLink='/admin/system/dictionary-attr'>编辑</a>
+        <a (click)='handleEditAttrModalShow()'>编辑</a>
+        <nz-divider nzType="vertical"></nz-divider>
+        <a (click)='showMenuDeleteConfirm()'>删除</a>
       </td>
     </tr>
   </tbody>
 </nz-table>
+
+<!--添加弹框-->
+<app-attr-form-modal title='添加' [isVisible]="addAttrModalOpen" [handleOk]="handleAddAttrOk"
+  [handleCancel]="handleAddAttrCancel"></app-attr-form-modal>
+
+<!--编辑弹框-->
+<app-attr-form-modal title='编辑' [isVisible]="editAttrModalOpen" [handleOk]="handleEditAttrOk"
+  [handleCancel]="handleEditAttrCancel"></app-attr-form-modal>

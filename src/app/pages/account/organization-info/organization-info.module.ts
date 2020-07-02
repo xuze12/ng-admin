@@ -11,6 +11,9 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 
 @NgModule({
@@ -27,7 +30,9 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     // FormsModule,
     NzFormModule,
     NzSelectModule,
+    NzTreeSelectModule,
   ],
+  providers: [NzNotificationService],
   declarations: [OrganizationInfoComponent],
   exports: [OrganizationInfoComponent]
 })

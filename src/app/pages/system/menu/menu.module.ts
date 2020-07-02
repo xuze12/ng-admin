@@ -12,6 +12,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import {MenuFormModalModule} from './components/menu-form-modal/menu-form-modal.module'
 import {PageSelectModalModule} from './components/page-select-modal/page-select-modal.module'
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import {PageSelectModalModule} from './components/page-select-modal/page-select-
     PageSelectModalModule
   ],
   declarations: [MenuComponent],
-  exports: [MenuComponent]
+  exports: [MenuComponent],
+  providers: [NzNotificationService]
 })
 export class MenuModule { }

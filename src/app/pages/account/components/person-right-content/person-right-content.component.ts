@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import {Router} from '@angular/router'
+import { Router } from '@angular/router'
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 export interface Data {
@@ -21,6 +21,12 @@ export interface Data {
   styleUrls: ['./person-right-content.component.scss']
 })
 export class PersonRightContentComponent implements OnInit {
+
+  @Input() personList: any = [];
+  @Input() handleProhibitUserModalShow: any;
+  @Input() handleDeleteUserModalShow: any;
+  @Input() handleResetUserPassword: any
+
   value?: string;
   validateForm!: FormGroup;
   isResetVisible: boolean = false;
@@ -32,28 +38,22 @@ export class PersonRightContentComponent implements OnInit {
   listOfCurrentPageData: Data[] = [];
   setOfCheckedId = new Set<number>();
 
+  activeUserItem = null;
+
   constructor(private fb: FormBuilder, private modal: NzModalService, public router: Router) { }
 
   ngOnInit(): void {
-    this.listOfData = new Array(5).fill(0).map((_, index) => {
-      return {
-        id: index,
-        account: `123456_${index}`,
-        name: `胡汉三-${index}`,
-        phoneNumber: 13592835212,
-        gender: '男',
-        organization: `锦绣花园——${index}`,
-        role: 'admin',
-        status: index % 2 == 0,
-        disabled: index % 2 == 0
-      };
-    });
 
     // 初始化表单
     this.validateForm = this.fb.group({
-      superAdminPassword: [null, [Validators.required]],
-      curAdminPassword: [null, [Validators.required]]
+      adminPassword: [null, [Validators.required]],
+      password: [null, [Validators.required]]
     })
+  }
+
+  // 监听父级传值变化
+  ngOnChanges(changes: SimpleChanges) {
+    this.personList = this.personList
   }
 
 
@@ -97,59 +97,54 @@ export class PersonRightContentComponent implements OnInit {
     }, 1000);
   }
 
+  // 禁止用户
+  prohibitUser(item: any) {
+    this.handleProhibitUserModalShow(item)
+  }
 
   // btns
   add(): void {
     console.log('add')
     this.router.navigate(['/admin/person/infoUpdate/', 'add']);
   }
-  prohibit(): void {
-    console.log('prohibit')
-    this.modal.confirm({
-      nzTitle: '提示',
-      nzContent: '<b>禁用管理员后，管理员将不可登录，确定禁用管理员：<i style="color:red;">胡彦斌(123456)</i>？</b>',
-      nzOkText: '禁用',
-      nzCancelText: '取消',
-      nzOnOk: () => console.log('OK')
-    });
-  }
-  edit(): void {
-    console.log('edit')
+
+  // 编辑 用户信息
+  edit(item: any): void {
+    window.localStorage.setItem('edit_user_info', JSON.stringify(item))
     this.router.navigate(['/admin/person/infoUpdate/', 'edit']);
   }
- 
-  reset(): void {
+
+  // 显示重置密码弹框
+  handleResetMoadlShow(item: any): void {
+    this.activeUserItem = item;
     this.isResetVisible = true;
   }
 
-  resetHandleOk(): void {
-    console.log('Button ok clicked!');
+  resetUserPassword(): void {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    console.log('formdata', this.validateForm.controls)
-    this.isResetVisible = false;
 
+    const params = Object.assign(
+      this.validateForm.value,
+      { id: this.activeUserItem.id }
+    )
+    this.handleResetUserPassword(params)
+    this.isResetVisible = false;
   }
 
-  resetHandleCancel(): void {
+  // 关闭重置密码弹框
+  handleResetMoadlHide(): void {
     console.log('Button cancel clicked!');
     // e.preventDefault();
     this.validateForm.reset();
     this.isResetVisible = false
   }
 
-
-  delete(): void {
-    console.log('delete')
-    this.modal.confirm({
-      nzTitle: '提示',
-      nzContent: '<b style="color: red">你正在删除管理员，删除后不可恢复，确定删除？</b>',
-      nzOkType: 'danger',
-      nzOkText: '删除',
-      nzOnOk: () => console.log('OK'),
-    });
+  // 删除用户弹框显示
+  handleDelete(item: any) {
+    this.handleDeleteUserModalShow(item);
   }
 
 

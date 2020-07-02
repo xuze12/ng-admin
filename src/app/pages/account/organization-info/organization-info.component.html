@@ -4,51 +4,57 @@
   <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
 
     <!--机构输入框-->
-    <nz-form-label nzFor="orgNmae" nzRequired>机构名称</nz-form-label>
+    <nz-form-label nzFor="name" nzRequired>机构名称</nz-form-label>
     <nz-form-item>
       <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入机构名称，最多输入30字!">
-        <input nz-input formControlName="orgNmae" placeholder="请输入机构名称" id="orgNmae" />
+        <input nz-input formControlName="name" placeholder="请输入机构名称" id="name" />
       </nz-form-control>
     </nz-form-item>
 
-    <!--所属机构选项框-->
-    <nz-form-label nzFor="superior" nzRequired>上级机构</nz-form-label>
+    <!--顶级属机构选项框-->
+    <nz-form-label nzFor="parentId" nzRequired>上级机构</nz-form-label>
     <nz-form-item>
-      <nz-form-control id="superior" [nzSpan]="8" nzErrorTip="请选上级机构!" class="add-roles-form-control">
-        <nz-select id="superior" formControlName="superior" nzPlaceHolder="请选上级机构"
-          (ngModelChange)="superiorChange($event)">
-          <nz-option nzValue="广州军区" nzLabel="广州军区"></nz-option>
-          <nz-option nzValue="海南军区" nzLabel="海南军区"></nz-option>
-        </nz-select>
+      <nz-form-control id="parentId" [nzSpan]="8" nzErrorTip="请选上级机构!" class="add-roles-form-control">
+
+        <!-- <nz-tree-select  nzPlaceHolder="请选上级机构" 
+          [nzDropdownMatchSelectWidth]="true" [nzDropdownStyle]="{ 'max-height': '300px' }" [nzNodes]="nodes"
+          [nzAsyncData]="true" (nzExpandChange)="onExpandChange($event)" formControlName="parentId">
+        </nz-tree-select> -->
+        <nz-tree-select id="parentId" formControlName="parentId" style="width: 250px"
+          [nzNodes]="organizeList" nzShowSearch nzPlaceHolder="请选上级机构!">
+        </nz-tree-select>
+
       </nz-form-control>
     </nz-form-item>
+
 
     <!--所属机构类型选项框-->
-    <nz-form-label nzFor="gender" nzRequired>类型</nz-form-label>
+    <nz-form-label nzFor="type" nzRequired>类型</nz-form-label>
     <nz-form-item>
       <nz-form-control [nzSpan]="8" nzErrorTip="请选所属机构类型!" class="add-roles-form-control">
-        <nz-select id="gender" formControlName="gender" nzPlaceHolder="请选所属机构类型" (ngModelChange)="genderChange($event)">
-          <nz-option nzValue="军" nzLabel="军"></nz-option>
-          <nz-option nzValue="师" nzLabel="师"></nz-option>
-          <nz-option nzValue="旅" nzLabel="旅"></nz-option>
+        <nz-select id="type" formControlName="type" nzPlaceHolder="请选所属机构类型">
+          <nz-option nzValue="1" nzLabel="军"></nz-option>
+          <nz-option nzValue="2" nzLabel="师"></nz-option>
+          <nz-option nzValue="3" nzLabel="旅"></nz-option>
+          <nz-option nzValue="4" nzLabel="营"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>
 
     <!--所属机构负责人-->
-    <nz-form-label nzFor="leaderName" nzRequired>负责人</nz-form-label>
+    <nz-form-label nzFor="chargePerson" nzRequired>负责人</nz-form-label>
     <nz-form-item>
       <nz-form-control [nzSpan]="8" nzErrorTip="请输入负责人名称，最多输入30字" class="add-roles-form-control">
-        <input nz-input formControlName="leaderName" placeholder="请输入负责人名称" id="leaderName" />
+        <input nz-input formControlName="chargePerson" placeholder="请输入负责人名称" id="chargePerson" />
       </nz-form-control>
     </nz-form-item>
 
     <!-- 机构联系电话、传真 -->
     <nz-form-item>
       <div style="width: 200px; margin-right: 10px;">
-        <nz-form-label nzFor="tel" nzRequired>联系电话</nz-form-label>
+        <nz-form-label nzFor="mobile" nzRequired>联系电话</nz-form-label>
         <nz-form-control nzErrorTip="请输入联系电话" class="add-roles-form-control">
-          <input nz-input formControlName="tel" placeholder="请输入联系电话" id="tel" />
+          <input nz-input formControlName="mobile" placeholder="请输入联系电话" id="mobile" />
         </nz-form-control>
       </div>
       <div style="width: 200px">

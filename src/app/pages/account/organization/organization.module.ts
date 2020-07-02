@@ -13,6 +13,10 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+
+// 引用自定义管道
+import {OrganizaTypePipe} from '../../../pipe/organiza-type.pipe'
 
 @NgModule({
   imports: [
@@ -27,10 +31,10 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     ReactiveFormsModule,
     NzInputModule,
     FormsModule,
-    NzModalModule
+    NzModalModule,
   ],
-  declarations: [OrganizationComponent],
+  declarations: [OrganizationComponent,OrganizaTypePipe],
   exports: [OrganizationComponent],
-  providers: [NzModalService]
+  providers: [NzModalService,NzNotificationService]
 })
 export class OrganizationModule { }

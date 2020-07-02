@@ -26,45 +26,18 @@ nz-header {
 }
 
 .rightContent {
-  // float: right;
   display: inline-block;
   height: fit-content;
-  position: absolute;
+  position: fixed;
   top: 0;
-  bottom: 0;
-  right: 300px;
+  right: 30px;
   margin: auto 0;
 
-  .wrapp, .search-box {
+  .wrapp {
     display: flex;
     align-items: center;
     >div {
       margin: 0 5px;
     }
   }
-
-  .search-box { }
-
-  .search-icon, .notification, .avatar-box{
-    cursor: pointer;
-  }
-
-  .search-ipt {
-    width: 0;
-    padding: 0;
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid inherit;
-    outline: none;
-    transition: all .3s;
-  }
-
-  .search-icon:hover, .notification:hover{
-    color: rgb(46, 117, 194);
-  }
-
-  .notification { }
-
-
 }

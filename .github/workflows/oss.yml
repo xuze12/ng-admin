@@ -1,0 +1,35 @@
+# workflow的名称，会显示在工作流运行页面
+name: MainWorkflow
+
+# 工作流执行的契机：push表示每次push代码之后都会执行1
+on: [push]
+
+jobs:
+  build:
+    # 构建运行的环境
+    runs-on: ubuntu-latest
+    # 构建步骤
+    steps:
+    # 获取主分支代码
+    - name: Checkout
+      uses: actions/checkout@master
+     # 使用 node:12
+    - name: use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: "12.x"
+     # npm install
+    - name: npm install and build
+      run: |
+        npm install
+        npm run build
+    - uses: manyuanrong/setup-ossutil@v1.0
+      with:
+        # endpoint 可以去oss控制台上查看
+        endpoint: "oss-cn-shenzhen.aliyuncs.com"
+        # 使用我们之前配置在secrets里面的accesskeys来配置ossutil
+        access-key-id: ${{ secrets.OSS_KEY_ID }}
+        access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
+    - name: Deply To OSS
+      # 把代码复制对应的 oss Bucket 列表 ng-admin目录中
+      run: ossutil cp dist oss://ng-admin/ -rf

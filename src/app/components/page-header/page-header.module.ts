@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule} from '@angular/common';
 
 // import { RolesRoutingModule } from './roles-routing.module';
 
@@ -11,6 +12,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 @NgModule({
   imports: [
     // RolesRoutingModule,
+    CommonModule,
     NzPageHeaderModule,
     NzBreadCrumbModule,
     NzDividerModule
