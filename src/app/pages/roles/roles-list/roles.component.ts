@@ -105,7 +105,7 @@ export class RolesComponent implements OnInit {
 
   handleDeleteRoles = async (item: any) => {
     try {
-      const url = `/api/api/user/user/${item.id}`
+      const url = `/api/api/user/role_info/${item.id}`
 
       const data: any = await this.http.delete(url).toPromise()
       console.log(data, 'handleDeleteUser')
