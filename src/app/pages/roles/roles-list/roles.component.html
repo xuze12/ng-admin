@@ -22,7 +22,7 @@
     <tr *ngFor="let data of rowSelectionTable.data">
       <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
       <td >{{ data.name }}</td>
-      <td>{{ data.departmentId }}</td>
+      <td>{{ data.department?data.department.name:'' }}</td>
       <td>{{ data.sign }}</td>
       <td nzAlign="center">
         <a (click)="showDeleteConfirm(data)">删除</a>
