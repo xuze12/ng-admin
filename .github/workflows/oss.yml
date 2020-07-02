@@ -32,4 +32,4 @@ jobs:
         access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
     - name: Deply To OSS
       # 把代码复制对应的 oss Bucket 列表 ng-admin目录中
-      run: ossutil cp dist/ag-admin oss://ng-admin/ -rf
+      run: ossutil cp dist/ng-admin oss://ng-admin/ -rf
