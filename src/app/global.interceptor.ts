@@ -17,6 +17,7 @@ const baseurl = 'http://119.23.227.173:9090';
 
 @Injectable()
 export class GlobalInterceptor implements HttpInterceptor {
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // let authReq = req.clone({
@@ -54,6 +55,10 @@ export class GlobalInterceptor implements HttpInterceptor {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
+      if(error.status ==403) {
+        window.location.href="/login";
+        window.localStorage.clear();
+      }
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
