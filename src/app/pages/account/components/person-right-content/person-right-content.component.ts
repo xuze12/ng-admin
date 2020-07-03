@@ -128,7 +128,7 @@ export class PersonRightContentComponent implements OnInit {
 
     const params = Object.assign(
       this.validateForm.value,
-      { id: this.activeUserItem.id }
+      { id: this.activeUserItem.userId }
     )
     this.handleResetUserPassword(params)
     this.isResetVisible = false;

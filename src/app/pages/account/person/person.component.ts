@@ -236,7 +236,7 @@ export class PersonComponent implements OnInit {
    * 重置用户密码
    * @param adminPassword 超级管理员密码
    * @param password 当前用户管理员密码
-   * @param id 用户id
+   * @param userId 用户userId
    */
   handleResetUserPassword = async (item: any) => {
     console.log(item, '-----handleResetUserPassword')
