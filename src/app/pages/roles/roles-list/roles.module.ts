@@ -12,6 +12,9 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
+// 引用自定义管道
+import {RolesPowerPipe} from '../../../pipe/roles-power.pipe'
+
 @NgModule({
   imports: [
     CommonModule,
@@ -22,7 +25,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
     NzDividerModule,
     NzModalModule
   ],
-  declarations: [RolesComponent],
+  declarations: [RolesComponent,RolesPowerPipe],
   exports: [RolesComponent],
   providers: [NzNotificationService]
 })

@@ -15,6 +15,11 @@
           </a>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu nzSelectable>
+              <a routerLink='/admin/system/menu'>
+                <li nz-menu-item>菜单配置</li>
+              </a>
+            </ul>
+            <ul nz-menu nzSelectable>
               <li nz-menu-item (click)="logOut()">退出登陆</li>
             </ul>
           </nz-dropdown-menu>

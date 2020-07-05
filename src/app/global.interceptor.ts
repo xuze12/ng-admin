@@ -7,6 +7,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 
 import { catchError, retry } from 'rxjs/operators';
+import { stringify } from 'qs'
 
 
 /**
@@ -21,29 +22,42 @@ export class GlobalInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // let authReq = req.clone({
-      // url: `${baseurl}${req.url}`,
+    // url: `${baseurl}${req.url}`,
     // })
-    console.log(req.url,'----req.url')
     let authReq = req.clone({
-      url: req.url.replace('/api',baseurl),
+      url: req.url.replace('/api', baseurl),
     })
-    console.log('authReq',authReq)
+    // console.log('authReq', authReq)
     const token = window.localStorage.getItem('auth_token')
     if (token) {
-      authReq = req.clone({ 
-        url: req.url.replace('/api',baseurl),
-        headers: req.headers.set('Authorization', `Bearer ${token}`).set('Authorization-Type', 'ID_TOKEN') });
+      authReq = req.clone({
+        url: req.url.replace('/api', baseurl),
+        headers: req.headers.set('Authorization', `Bearer ${token}`).set('Authorization-Type', 'ID_TOKEN')
+      });
       // authReq.headers.set('Authorization', `Bearer ${token}`).set('Authorization-Type', 'ID_TOKEN')
       // return next.handle(authReq);
+      if (req.url.includes('api/permission/role_permission_group_permission')
+        && (req.method === 'POST' || req.method === 'PUT')) {
+
+        authReq = req.clone({
+          url: req.url.replace('/api', baseurl),
+          headers: req.headers
+            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization-Type', 'ID_TOKEN')
+            .set('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8'),
+          body: stringify(req.body)
+        });
+
+      }
     }
 
     return next.handle(authReq)
-    .pipe(
-      /*失败时重试2次，可自由设置*/
-      // retry(2),
-      /*捕获响应错误，可根据需要自行改写，我偷懒了，直接用的官方的*/
-      catchError(this.handleError)
-    );
+      .pipe(
+        /*失败时重试2次，可自由设置*/
+        // retry(2),
+        /*捕获响应错误，可根据需要自行改写，我偷懒了，直接用的官方的*/
+        catchError(this.handleError)
+      );
   }
 
 
@@ -55,8 +69,8 @@ export class GlobalInterceptor implements HttpInterceptor {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      if(error.status ==403) {
-        window.location.href="/login";
+      if (error.status == 403) {
+        window.location.href = "/#/login";
         window.localStorage.clear();
       }
       console.error(

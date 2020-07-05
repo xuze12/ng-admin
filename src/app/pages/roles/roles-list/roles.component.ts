@@ -24,7 +24,13 @@ export class RolesComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   rolesList: RolesList[] = [];
 
-  constructor(private modal: NzModalService, private http: HttpClient, public notification: NzNotificationService, public router: Router) { }
+  constructor(
+    private modal: NzModalService,
+    private http: HttpClient,
+    public notification: NzNotificationService,
+    public router: Router) {
+
+  }
 
   ngOnInit() {
 
@@ -35,18 +41,62 @@ export class RolesComponent implements OnInit {
   * 获取角色列表
   * */
   async getRolesList() {
-    const url = '/api/api/user/role_info'
+    const url = '/api/api/user/role_info';
 
     try {
-      const data: any = await this.http.get(url).toPromise()
+      const data: any = await this.http.get(url).toPromise();
+      const rolesPowers = await this.getRolesPowers();
 
-      if (data.code === 200) {
-        this.rolesList = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
-        console.log(this.rolesList, 'getRolesList')
-      } else {
-        this.rolesList = []
+      if (data.code !== 200) {
+        this.rolesList = [];
+        return;
       }
 
+      this.rolesList = data.data.map(item => {
+        let power = []
+        const role_power_item = rolesPowers.filter(i => i.roleInfoId === item.id);
+
+        const map = {};
+        if (role_power_item.length > 0) {
+
+          role_power_item.map(j => {
+            const permissionGroupId = j.permissionGroupPermission.permissionGroupId;
+            const permissionGroup = j.permissionGroupPermission.permissionGroup;
+            const permission = j.permissionGroupPermission.permission;
+            if (!map[permissionGroupId]) {
+              map[permissionGroupId] = [`${permissionGroup.name}/`]
+            }
+            map[permissionGroupId].push(permission.description);
+          })
+
+          for (let key of Object.keys(map)) {
+            console.log(key, '---key')
+            const mapItem = map[key].join(',').replace('/,', '/');
+            power.push(`${mapItem}`)
+          }
+        }
+
+        Object.assign(item, {
+          key: item.id,
+          title: item.name,
+          power: power.join('、'),
+        })
+        return item;
+      })
+
+    } catch (error) {
+      console.log(error, '---err')
+    }
+  }
+
+  /**
+   * 查看角色权限
+   */
+  async getRolesPowers() {
+    const url = '/api/api/permission/role_permission_group_permission';
+    try {
+      const data: any = await this.http.get(url).toPromise();
+      return data.code !== 200 ? [] : data.data;
     } catch (error) {
       console.log(error, '---err')
     }
@@ -93,6 +143,7 @@ export class RolesComponent implements OnInit {
       nzOnCancel: () => console.log('Cancel')
     });
   }
+
   // 提示框
   createNotification(type: string, title: string, message: string): void {
     this.notification.create(type, title, message);
@@ -102,13 +153,11 @@ export class RolesComponent implements OnInit {
    * 删除角色
    * @param id 角色id
    */
-
   handleDeleteRoles = async (item: any) => {
     try {
       const url = `/api/api/user/role_info/${item.id}`
 
       const data: any = await this.http.delete(url).toPromise()
-      console.log(data, 'handleDeleteUser')
       const is_error = !(data.code === 200)
 
       if (is_error) {
@@ -130,6 +179,4 @@ export class RolesComponent implements OnInit {
     window.localStorage.setItem('edit_roles_info', JSON.stringify(item))
     this.router.navigate(['/admin/roles/infoUpdata/', 'edit']);
   }
-
-
 }

@@ -59,9 +59,9 @@ export class MenuComponent implements OnInit {
         this.list = list
         this.list.forEach(item => {
           this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-      
+
         });
-        console.log(this.mapOfExpandedData,'------this.mapOfExpandedData')
+        console.log(this.mapOfExpandedData, '------this.mapOfExpandedData')
       } else {
         this.list = []
       }
@@ -99,7 +99,7 @@ export class MenuComponent implements OnInit {
 
   // 列表展开关闭
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
-    console.log(array, '-------array',data,'------data','----$event')
+    console.log(array, '-------array', data, '------data', '----$event')
     if (!$event) {
       if (data.children) {
         data.children.forEach(d => {
@@ -140,7 +140,7 @@ export class MenuComponent implements OnInit {
   }
 
   // 显示添加导航菜单弹框
-  handleAddModalShow = (item: any): void => {
+  handleAddModalShow = (item: any = {}): void => {
     console.log(item, '----item')
     this.activeMenuItem = item;
     this.addNavMenuModalOpen = true;
@@ -153,18 +153,16 @@ export class MenuComponent implements OnInit {
 
   /**
    * 添加导航
-   * @param name 子导航名称
+   * @param name 导航名称
    * @param parentId 父级id
    */
 
   handleAddOk = async (value: any) => {
-    console.log('-----value', value);
-    console.log(this.activeMenuItem, '---activeMenuItem')
 
     try {
       const url = '/api/api/permission/permission_group_menu'
       const params = {
-        parentId: this.activeMenuItem.id,
+        parentId: this.activeMenuItem.id || 0,
         name: value.menuName
       }
       const data: any = await this.http.post(url, params).toPromise()
@@ -172,15 +170,15 @@ export class MenuComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '添加失败', '添加子导航失败！')
+        this.createNotification('error', '添加失败', '添加导航失败！')
         return;
       }
 
-      this.createNotification('success', '添加成功', '添加子导航成功！')
+      this.createNotification('success', '添加成功', '添加导航成功！')
       this.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '添加失败', '添加子导航失败！')
+      this.createNotification('error', '添加失败', '添加导航失败！')
       console.log(error, '---err')
     }
     this.addNavMenuModalOpen = false;
@@ -219,15 +217,15 @@ export class MenuComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '编辑失败', '编辑子导航失败！')
+        this.createNotification('error', '编辑失败', '编辑导航失败！')
         return;
       }
 
-      this.createNotification('success', '编辑成功', '编辑子导航成功！')
+      this.createNotification('success', '编辑成功', '编辑导航成功！')
       this.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '编辑失败', '编辑子导航失败！')
+      this.createNotification('error', '编辑失败', '编辑导航失败！')
       console.log(error, '---err')
     }
 
@@ -286,10 +284,10 @@ export class MenuComponent implements OnInit {
     this.pageSelectModalOpen = false;
   }
 
-    /**
-   * 删除菜单项
-   * @param id 绑定菜单id
-   */
+  /**
+ * 删除菜单项
+ * @param id 绑定菜单id
+ */
   handleDeleteMenuItem = async (item: any) => {
 
     try {
@@ -314,10 +312,10 @@ export class MenuComponent implements OnInit {
 
   }
 
-    /**
-   * 递归删除子菜单
-   * @param item 
-   */
+  /**
+ * 递归删除菜单
+ * @param item 
+ */
   handleMenuChilderDelete(item: any) {
 
     this.handleDeleteMenuItem(item);
@@ -328,10 +326,10 @@ export class MenuComponent implements OnInit {
   }
 
   // 删除菜单
-  showMenuDeleteConfirm(item:any): void {
+  showMenuDeleteConfirm(item: any): void {
     this.modal.confirm({
       nzTitle: '提示',
-      nzContent: '<b style="color: red;">你正在删除导航菜单,对应的子菜单也会被删除,确定要删除？</b>',
+      nzContent: '<b style="color: red;">你正在删除导航菜单,对应的菜单也会被删除,确定要删除？</b>',
       nzOkText: '删除',
       nzOkType: 'danger',
       nzOnOk: () => {

@@ -65,15 +65,6 @@ export class MenuService {
       disabled: false,
       children: [
         {
-          key: 31,
-          level: 2,
-          title: '菜单配置',
-          icon: 'user',
-          selected: false,
-          disabled: false,
-          link: '/admin/system/menu'
-        },
-        {
           key: 32,
           level: 2,
           title: '数据字典',
