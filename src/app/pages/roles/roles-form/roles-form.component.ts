@@ -22,6 +22,7 @@ export interface TreeNodeInterface {
   templateUrl: './roles-form.component.html',
   styleUrls: ['./roles-form.component.scss']
 })
+
 export class RolesFormComponent implements OnInit {
 
   validateForm: FormGroup;
@@ -34,18 +35,7 @@ export class RolesFormComponent implements OnInit {
   checkedPowerList = [];
 
   listOfMapData: TreeNodeInterface[] = [
-    {
-      key: 1,
-      name: '转账',
-      power: [
-        { label: '新建', value: '新建', checked: true },
-        { label: '修改', value: '修改', checked: false },
-        { label: '删除', value: '删除', checked: false }
-      ],
-      allChecked: false,
-      indeterminate: true,
 
-    },
   ];
 
   constructor(

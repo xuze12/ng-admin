@@ -1,8 +1,8 @@
-<nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm(validateForm.value)">
-  <form nz-form [formGroup]="validateForm">
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleMenuFormModalCancel()" (nzOnOk)="submitForm(validateForm.value)">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzRequired>导航菜单名称</nz-form-label>
-      <nz-form-control [nzSpan]="18" nzValidatingTip="Validating...">
+      <nz-form-control [nzSpan]="18" nzErrorTip="最多输入30字!">
         <input nz-input formControlName="menuName" placeholder="请输入导航菜单名称" />
       </nz-form-control>
     </nz-form-item>

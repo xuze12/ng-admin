@@ -1,9 +1,8 @@
-import { Component, OnInit, Input,SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { NzSafeAny } from 'ng-zorro-antd/core/types';
-import { Observable, Observer } from 'rxjs';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+// import { Observable, Observer } from 'rxjs';
+import { MyValidators } from '../../../../utils/validators';
 
 
 @Component({
@@ -18,84 +17,42 @@ export class MenuFormModalComponent implements OnInit {
   @Input() title: string
   @Input() handleOk: any
   @Input() handleCancel: any
-  @Input() menuName?:string
+  @Input() menuName?: string
 
   validateForm: FormGroup;
-
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    // use `MyValidators`
-    const { required, maxLength, minLength, } = MyValidators;
+    const { required, maxLength, minLength } = MyValidators;
     this.validateForm = this.fb.group({
-      menuName: ['', [required, maxLength(12), minLength(6)], [this.menuNameAsyncValidator]],
+      menuName: [null, [required, maxLength(30), minLength(1)]],
     });
-
   }
 
   // 监听父级传值变化
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.menuName,'------menuName')
-    const { required, maxLength, minLength, } = MyValidators;
-    this.validateForm = this.fb.group({
-      menuName: [this.menuName, [required, maxLength(12), minLength(6)], [this.menuNameAsyncValidator]],
-    });
-  }
+    if (this.validateForm) {
+      this.validateForm.setValue({ menuName: this.menuName || null });
+    }
 
+  }
 
   submitForm(value: { menuName: string; }): void {
     for (const key in this.validateForm.controls) {
       this.validateForm.controls[key].markAsDirty();
       this.validateForm.controls[key].updateValueAndValidity();
     }
-    this.handleOk(value)
+
+    if (this.validateForm.valid) {
+      this.handleOk(value)
+      this.validateForm.reset();
+    }
+
+  }
+  handleMenuFormModalCancel() {
+    this.handleCancel();
     this.validateForm.reset();
   }
 
-  menuNameAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<MyValidationErrors | null>) => {
-      setTimeout(() => {
-        if (control.value === 'JasonWood') {
-          observer.next({
-            duplicated: { 'zh-cn': `用户名已存在`, en: `The menuname is redundant!` }
-          });
-        } else {
-          observer.next(null);
-        }
-        observer.complete();
-      }, 1000);
-    });
-
-
 }
-
-// current locale is key of the MyErrorsOptions
-export type MyErrorsOptions = { 'zh-cn': string; en: string } & Record<string, NzSafeAny>;
-export type MyValidationErrors = Record<string, MyErrorsOptions>;
-
-export class MyValidators extends Validators {
-  static minLength(minLength: number): ValidatorFn {
-    return (control: AbstractControl): MyValidationErrors | null => {
-      if (Validators.minLength(minLength)(control) === null) {
-        return null;
-      }
-      return { minlength: { 'zh-cn': `最小长度为 ${minLength}`, en: `MinLength is ${minLength}` } };
-    };
-  }
-
-  static maxLength(maxLength: number): ValidatorFn {
-    return (control: AbstractControl): MyValidationErrors | null => {
-      if (Validators.maxLength(maxLength)(control) === null) {
-        return null;
-      }
-      return { maxlength: { 'zh-cn': `最大长度为 ${maxLength}`, en: `MaxLength is ${maxLength}` } };
-    };
-  }
-
-}
-
-// function isEmptyInputValue(value: NzSafeAny): boolean {
-//   return value == null || value.length === 0;
-// }
-

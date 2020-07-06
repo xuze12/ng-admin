@@ -230,11 +230,13 @@ export class MenuComponent implements OnInit {
     }
 
     this.editNavMenuModalOpen = false;
+    window.localStorage.removeItem('editMenuName');
   }
 
   // 编辑导航菜单模态框 关闭
   handleEditCancel = (): void => {
     this.editNavMenuModalOpen = false;
+    window.localStorage.removeItem('editMenuName');
   }
 
   // 显示 选择页面弹框

@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router'
-import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MyValidators } from '../../../utils/validators';
 
 export interface Data {
   id: number;
@@ -40,14 +41,18 @@ export class PersonRightContentComponent implements OnInit {
 
   activeUserItem = null;
 
-  constructor(private fb: FormBuilder, private modal: NzModalService, public router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private modal: NzModalService,
+    public router: Router) { }
 
   ngOnInit(): void {
 
+    const { required, numberAddLetter } = MyValidators;
     // 初始化表单
     this.validateForm = this.fb.group({
-      adminPassword: [null, [Validators.required]],
-      password: [null, [Validators.required]]
+      adminPassword: [null, [required]],
+      password: [null, [required, numberAddLetter(8, 16)]]
     })
   }
 
@@ -146,6 +151,5 @@ export class PersonRightContentComponent implements OnInit {
   handleDelete(item: any) {
     this.handleDeleteUserModalShow(item);
   }
-
 
 }

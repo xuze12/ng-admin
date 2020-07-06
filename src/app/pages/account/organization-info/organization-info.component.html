@@ -15,13 +15,8 @@
     <nz-form-label nzFor="parentId" nzRequired>上级机构</nz-form-label>
     <nz-form-item>
       <nz-form-control id="parentId" [nzSpan]="8" nzErrorTip="请选上级机构!" class="add-roles-form-control">
-
-        <!-- <nz-tree-select  nzPlaceHolder="请选上级机构" 
-          [nzDropdownMatchSelectWidth]="true" [nzDropdownStyle]="{ 'max-height': '300px' }" [nzNodes]="nodes"
-          [nzAsyncData]="true" (nzExpandChange)="onExpandChange($event)" formControlName="parentId">
-        </nz-tree-select> -->
-        <nz-tree-select id="parentId" formControlName="parentId" style="width: 250px"
-          [nzNodes]="organizeList" nzShowSearch nzPlaceHolder="请选上级机构!">
+        <nz-tree-select id="parentId" formControlName="parentId" style="width: 250px" [nzNodes]="organizeList"
+          nzShowSearch nzPlaceHolder="请选上级机构!">
         </nz-tree-select>
 
       </nz-form-control>

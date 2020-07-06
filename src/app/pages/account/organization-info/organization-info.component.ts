@@ -6,6 +6,8 @@ import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 // import { async } from '@angular/core/testing';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
+import { MyValidators } from '../../utils/validators';
+
 
 @Component({
   selector: 'app-organization-info',
@@ -59,16 +61,16 @@ export class OrganizationInfoComponent implements OnInit {
         fax = organiza_item.fax || '';
         address = organiza_item.address || '';
       }
-
+      const { required, numberAddLetter, maxLength, minLength, mobile: v_mobile } = MyValidators;
       // 初始化表单
       this.validateForm = this.fb.group({
-        name: [name, [Validators.required]],
-        parentId: [parentId, [Validators.required]],
-        type: [type, [Validators.required]],
-        chargePerson: [chargePerson, [Validators.required]],
-        mobile: [mobile, [Validators.required]],
-        fax: [fax, [Validators.required]],
-        address: [address, [Validators.required]],
+        name: [name, [required, maxLength(30)]],
+        parentId: [parentId, [required]],
+        type: [type, [required]],
+        chargePerson: [chargePerson, [required]],
+        mobile: [mobile, [required, v_mobile]],
+        fax: [fax, [required]],
+        address: [address, [required]],
       });
     })
 
@@ -201,13 +203,16 @@ export class OrganizationInfoComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
-    const params = this.validateForm.value
+    if (this.validateForm.valid) {
 
-    if (this.type === 'update') {
-      this.handleEditOrganiza(params)
-    } else {
+      const params = this.validateForm.value
 
-      this.handleAddOrganiza(params)
+      if (this.type === 'update') {
+        this.handleEditOrganiza(params)
+      } else {
+
+        this.handleAddOrganiza(params)
+      }
     }
   }
 
