@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { PowerService } from '../../../../services/power.service';
 
 @Component({
   selector: 'app-dictionary-list',
@@ -25,12 +26,24 @@ export class DictionaryListComponent implements OnInit {
       des: '组织机构属性，可在组织管理出进行配置',
     }
   ];
-  addAttrModalOpen = false
-  editAttrModalOpen = false
+  addAttrModalOpen = false;
+  editAttrModalOpen = false;
+  power = {
+    add: false,
+    edit: false,
+    del: false
+  }
 
-  constructor(private modal: NzModalService) { }
+  constructor(private modal: NzModalService, public powerService: PowerService) { }
 
   ngOnInit(): void {
+    this.powerService.setPagePower('dicyionary');
+    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
+    this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
+
+    if (this.powerService.hasVisitPage) {
+      // this.getMenuList();
+    }
   }
 
   // 显示 添加属性弹框

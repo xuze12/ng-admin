@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
-import { LoginComponent } from './login/login.component'
+import { LoginComponent } from './login/login.component';
+import { ProhibitComponent } from './pages/result/403/prohibit/prohibit.component';
 
 import { AuthGuard } from './auth-guard.service'
 
@@ -20,7 +21,7 @@ const routes: Routes = [
       loadChildren: () => import('./pages/roles/roles-form/roles-form.module').then(m => m.RolesFormModule)
     },
     {
-      path: 'organization',
+      path: 'organization/list',
       loadChildren: () => import('./pages/account/organization/organization.module').then(m => m.OrganizationModule)
     },
     {
@@ -28,7 +29,7 @@ const routes: Routes = [
       loadChildren: () => import('./pages/account/organization-info/organization-info.module').then(m => m.OrganizationInfoModule)
     },
     {
-      path: 'person',
+      path: 'person/list',
       loadChildren: () => import('./pages/account/person/person.module').then(m => m.PersonModule)
     },
     {
@@ -37,16 +38,22 @@ const routes: Routes = [
     },
 
     {
-      path: 'system/menu',
+      path: 'system/menu/list',
       loadChildren: () => import('./pages/system/menu/menu.module').then(m => m.MenuModule)
     },
     {
-      path: 'system/dictionary-list',
+      path: 'system/dictionary/list',
       loadChildren: () => import('./pages/system/dictionary/dictionary-list/dictionary-list.module').then(m => m.DictionaryListModule)
     },
     ]
   },
-  // { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) },
+  { path:'admin',   component: LayoutComponent,children:[
+    {
+      path: '403',
+      component: ProhibitComponent
+    },
+  ]},
+
   { path: 'login', component: LoginComponent }
 ];
 

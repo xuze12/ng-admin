@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { PowerService } from '../../../services/power.service';
 
 export interface TreeNodeInterface {
   key: string;
@@ -25,20 +26,34 @@ export class PersonComponent implements OnInit {
   organizeList: TreeNodeInterface[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   personList: any = [];
+  power = {
+    add: false,
+    edit: false,
+    del: false
+  }
 
   constructor(
     public route: ActivatedRoute,
     public router: Router,
     private http: HttpClient,
     private notification: NzNotificationService,
-    private modal: NzModalService
+    private modal: NzModalService,
+    public powerService: PowerService
   ) { }
 
   ngOnInit(): void {
 
-    this.getPersonList();
-    this.getOrganizeList();
+    this.powerService.setPagePower('person');
+    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
+    this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
+
+    if (this.powerService.hasVisitPage) {
+      this.getPersonList();
+      this.getOrganizeList();
+    }
+
   }
+
 
   /**
    * 获取机构列表
@@ -152,7 +167,7 @@ export class PersonComponent implements OnInit {
   handleProhibitUserModalShow = (item: any) => {
     this.modal.confirm({
       nzTitle: '提示',
-      nzContent: `<b>禁用管理员后，管理员将不可登录，确定禁用管理员：<i style="color:red;">${item.name}(${item.tusers?item.tusers.userName:""})</i>？</b>`,
+      nzContent: `<b>禁用管理员后，管理员将不可登录，确定禁用管理员：<i style="color:red;">${item.name}(${item.tusers ? item.tusers.userName : ""})</i>？</b>`,
       nzOkText: '禁用',
       nzCancelText: '取消',
       nzOnOk: () => {
@@ -196,7 +211,7 @@ export class PersonComponent implements OnInit {
   handleDeleteUserModalShow = (item: any) => {
     this.modal.confirm({
       nzTitle: '提示',
-      nzContent: `<b style="color: red">你正在删除${item.name}(${item.tusers?item.tusers.userName:""})管理员，删除后不可恢复，确定删除？</b>`,
+      nzContent: `<b style="color: red">你正在删除${item.name}(${item.tusers ? item.tusers.userName : ""})管理员，删除后不可恢复，确定删除？</b>`,
       nzOkType: 'danger',
       nzOkText: '删除',
       nzOnOk: () => {

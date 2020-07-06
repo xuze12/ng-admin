@@ -142,7 +142,7 @@ export class OrganizationInfoComponent implements OnInit {
       this.createNotification('success', '添加成功', '添加组织成功！')
       this.validateForm.reset();
 
-      this.router.navigate(['/admin/organization'])
+      this.router.navigate(['/admin/organization/list'])
 
     } catch (error) {
       this.createNotification('error', '添加失败', '添加组织失败！')
@@ -180,7 +180,7 @@ export class OrganizationInfoComponent implements OnInit {
       this.createNotification('success', '更新成功', '更新组织成功！')
       this.validateForm.reset();
 
-      this.router.navigate(['/admin/organization'])
+      this.router.navigate(['/admin/organization/list'])
 
     } catch (error) {
       this.createNotification('error', '更新失败', '更新组织失败！')

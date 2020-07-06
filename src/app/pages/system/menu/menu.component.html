@@ -2,7 +2,7 @@
 <app-page-header title="菜单配置" [menu]="[{title:'系统维护',active:false},{title:'菜单配置',active:true}]"></app-page-header>
 
 <!--添加按钮-->
-<div class="add-button">
+<div class="add-button" *ngIf='power.add'>
   <button nz-button nzType="primary" (click)='handleAddModalShow()'>添加菜单</button>
 </div>
 
@@ -29,11 +29,11 @@
             <a *ngIf="!item.permissionGroup" (click)="handlePageSelectModalShow(item,0)"> 选择页面</a>
           </td>
           <td>
-            <a (click)="handleAddModalShow(item)">添加子导航</a>
+            <a (click)="handleAddModalShow(item)" *ngIf='power.add'>添加子导航</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="handleEditModalShow(item)">编辑</a>
+            <a (click)="handleEditModalShow(item)" *ngIf='power.edit'>编辑</a>
             <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="showMenuDeleteConfirm(item)">删除</a>
+            <a (click)="showMenuDeleteConfirm(item)" *ngIf='power.del'>删除</a>
           </td>
         </tr>
       </ng-container>
@@ -42,8 +42,8 @@
 </nz-table>
 
 <!--添加子导航弹框-->
-<app-menu-form-modal title='添加导航' [isVisible]="addNavMenuModalOpen" [handleOk]="handleAddOk"
-[menuName]='null' [handleCancel]="handleAddCancel"></app-menu-form-modal>
+<app-menu-form-modal title='添加导航' [isVisible]="addNavMenuModalOpen" [handleOk]="handleAddOk" [menuName]='null'
+  [handleCancel]="handleAddCancel"></app-menu-form-modal>
 
 <!--编辑导航弹框-->
 <app-menu-form-modal title='编辑导航' [isVisible]="editNavMenuModalOpen" [handleOk]="handleEditOk"

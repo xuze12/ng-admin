@@ -9,7 +9,7 @@
   </div>
 
   <!--添加按钮-->
-  <button nz-button nzType="primary" (click)="add()">新增</button>
+  <button nz-button nzType="primary" (click)="add()" *ngIf='power.add'>新增</button>
 
 </div>
 
@@ -72,9 +72,9 @@
         <nz-divider nzType="vertical"></nz-divider>
         <a (click)="handleResetMoadlShow(data)">重置</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="edit(data)">编辑</a>
+        <a (click)="edit(data)" *ngIf='power.edit'>编辑</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="handleDelete(data)">删除</a>
+        <a (click)="handleDelete(data)" *ngIf='power.del'>删除</a>
       </td>
     </tr>
   </tbody>

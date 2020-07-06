@@ -10,7 +10,7 @@
     <button nz-button nzType="default">重置</button>
   </div>
 
-  <div class="add-button">
+  <div class="add-button" *ngIf='power.add'>
     <a> <button nz-button nzType="primary" [routerLink]="['/admin/organization/infoUpdate/', 'add']">手动添加</button></a>
   </div>
 
@@ -38,8 +38,8 @@
             <td>{{ item.type | organizaType}}</td>
             <td>{{ item.address }}</td>
             <td>
-              <a (click)="handleEditOrganiza(item)">单位信息</a> &nbsp;&nbsp;
-              <a (click)="showConfirm(item)">删除</a>
+              <a (click)="handleEditOrganiza(item)" *ngIf='power.edit'>单位信息</a> &nbsp;&nbsp;
+              <a (click)="showConfirm(item)" *ngIf='power.del'>删除</a>
             </td>
           </tr>
         </ng-container>

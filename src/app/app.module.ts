@@ -19,6 +19,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzResultModule } from 'ng-zorro-antd/result';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
 
@@ -31,9 +32,11 @@ import { HeaderComponent } from './components/header/header.component'
 import { SiderComponent } from './components/sider/sider.component'
 import { LayoutComponent } from './layout/layout.component'
 import { LoginComponent } from './login/login.component';
+import {ProhibitComponent} from './pages/result/403/prohibit/prohibit.component';
 
 // 服务
 import { MenuService } from './services/menu.service';
+import {PowerService} from './services/power.service';
 
 // http 请求处理
 import { GlobalInterceptor } from './global.interceptor'
@@ -49,7 +52,8 @@ registerLocaleData(zh);
     LayoutComponent,
     HeaderComponent,
     SiderComponent,
-    LoginComponent
+    LoginComponent,
+    ProhibitComponent
   ],
   // 引用第三方组件
   imports: [
@@ -70,6 +74,7 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     NzAvatarModule,
     NzDropDownModule,
+    NzResultModule,
   ],
   providers: [
     // 防止打包上线页面刷新出现404
@@ -78,6 +83,7 @@ registerLocaleData(zh);
     { provide: NZ_I18N, useValue: zh_CN, },
     // 引用菜单服务
     MenuService,
+    PowerService,
     // 引用拦截器
     {
       provide: HTTP_INTERCEPTORS,

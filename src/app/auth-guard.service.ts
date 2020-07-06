@@ -1,11 +1,12 @@
-import { Injectable }     from '@angular/core';
-import { CanActivate, Router }    from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
 
 @Injectable()
+
 export class AuthGuard implements CanActivate {
-  constructor (
-    private router: Router
-  ) {}
+
+  constructor(private router: Router) { }
+
   canActivate() {
     const token = window.localStorage.getItem('auth_token')
     if (!token) {
@@ -17,3 +18,4 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 }
+

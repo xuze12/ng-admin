@@ -26,7 +26,8 @@ export class PersonRightContentComponent implements OnInit {
   @Input() personList: any = [];
   @Input() handleProhibitUserModalShow: any;
   @Input() handleDeleteUserModalShow: any;
-  @Input() handleResetUserPassword: any
+  @Input() handleResetUserPassword: any;
+  @Input() power;
 
   value?: string;
   validateForm!: FormGroup;

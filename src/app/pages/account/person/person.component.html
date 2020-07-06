@@ -9,7 +9,9 @@
   <!-- 右侧显示内容 -->
   <div class="rightSide">
     <app-person-right-content [personList]='personList' [handleProhibitUserModalShow]='handleProhibitUserModalShow'
-      [handleDeleteUserModalShow]='handleDeleteUserModalShow'
-      [handleResetUserPassword]='handleResetUserPassword'></app-person-right-content>
+      [handleDeleteUserModalShow]='handleDeleteUserModalShow' [handleResetUserPassword]='handleResetUserPassword'
+      [power]='power'
+      >
+    </app-person-right-content>
   </div>
 </div>

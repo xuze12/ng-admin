@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-
+import { PowerService } from '../../../services/power.service';
 export interface TreeNodeInterface {
   key: number;
   menuName: string;
@@ -34,12 +34,26 @@ export class MenuComponent implements OnInit {
   pageSelectModalOpen = false;
 
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
+  power = {
+    add: false,
+    edit: false,
+    del: false
+  }
 
   constructor(private modal: NzModalService, private http: HttpClient,
-    private notification: NzNotificationService) { }
+    private notification: NzNotificationService,
+    public powerService: PowerService
+  ) { }
 
   ngOnInit(): void {
-    this.getMenuList();
+
+    this.powerService.setPagePower('menu');
+    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
+    this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
+
+    if (this.powerService.hasVisitPage) {
+      this.getMenuList();
+    }
 
   }
 

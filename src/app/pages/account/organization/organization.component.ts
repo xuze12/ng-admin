@@ -3,6 +3,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router'
+import { PowerService } from '../../../services/power.service';
 
 
 export interface TreeNodeInterface {
@@ -24,21 +25,31 @@ export interface TreeNodeInterface {
 export class OrganizationComponent implements OnInit {
 
   value?: string;
-
   list: TreeNodeInterface[] = [];
-
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
+  power = {
+    add: false,
+    edit: false,
+    del: false
+  }
 
   constructor(
     private modal: NzModalService,
     public router: Router,
     private http: HttpClient,
-    private notification: NzNotificationService) { }
+    private notification: NzNotificationService,
+    public powerService: PowerService
+  ) { }
 
   ngOnInit(): void {
 
-    this.getOrganizeList();
-
+    this.powerService.setPagePower('organization');
+    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
+    this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
+    
+    if (this.powerService.hasVisitPage) {
+      this.getOrganizeList();
+    }
   }
 
   /**
@@ -51,10 +62,10 @@ export class OrganizationComponent implements OnInit {
       const data: any = await this.http.get(url).toPromise()
 
       if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name}))
+        const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
         const list = this.handleOrganizeList(newData);
         this.list = list
-        console.log(this.list,'----getOrganizeList----list')
+        console.log(this.list, '----getOrganizeList----list')
         this.list.forEach(item => {
           this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
         });

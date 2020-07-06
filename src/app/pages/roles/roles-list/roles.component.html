@@ -2,7 +2,7 @@
 <app-page-header title="角色列表" [menu]="[{title:'角色管理',active:false},{title:'角色管理',active:true}]"></app-page-header>
 
 <!--添加按钮-->
-<div class="add-button">
+<div class="add-button" *ngIf="power.add">
   <a routerLink="/admin/roles/infoUpdata/add"> <button nz-button nzType="primary">添加</button></a>
 </div>
 
@@ -24,9 +24,9 @@
       <td>{{ data.department?data.department.name:'' }}</td>
       <td>{{ data.power}}</td>
       <td nzAlign="center">
-        <a (click)="showDeleteConfirm(data)">删除</a>
+        <a (click)="showDeleteConfirm(data)" *ngIf="power.del">删除</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)="handleEditRoles(data)">编辑</a>
+        <a (click)="handleEditRoles(data)" *ngIf="power.edit">编辑</a>
       </td>
     </tr>
   </tbody>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router'
+import {PowerService} from '../../../services/power.service';
 
 interface RolesList {
   id: number;
@@ -23,18 +24,30 @@ export class RolesComponent implements OnInit {
   listOfCurrentPageData: RolesList[] = [];
   setOfCheckedId = new Set<number>();
   rolesList: RolesList[] = [];
+  power={
+    add: false,
+    edit: false,
+    del: false
+  }
 
   constructor(
     private modal: NzModalService,
     private http: HttpClient,
     public notification: NzNotificationService,
-    public router: Router) {
-
+    public router: Router,
+    public powerService: PowerService
+    ) {
   }
 
   ngOnInit() {
+    this.powerService.setPagePower('roles');
+    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
+    this.power =  JSON.parse(window.localStorage.getItem('power')||'{}');
+    
+    if(this.powerService.hasVisitPage) {
+      this.getRolesList();
+    }
 
-    this.getRolesList();
   }
 
   /**
@@ -70,7 +83,6 @@ export class RolesComponent implements OnInit {
           })
 
           for (let key of Object.keys(map)) {
-            console.log(key, '---key')
             const mapItem = map[key].join(',').replace('/,', '/');
             power.push(`${mapItem}`)
           }

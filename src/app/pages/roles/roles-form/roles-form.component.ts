@@ -17,7 +17,6 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 
-
 @Component({
   selector: 'app-roles-form',
   templateUrl: './roles-form.component.html',
@@ -34,10 +33,7 @@ export class RolesFormComponent implements OnInit {
   menuList = [];
   mapOfExpandedMenuList: { [key: string]: TreeNodeInterface[] } = {};
   checkedPowerList = [];
-
-  listOfMapData: TreeNodeInterface[] = [
-
-  ];
+  listOfMapData: TreeNodeInterface[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +47,6 @@ export class RolesFormComponent implements OnInit {
 
     this.getOrganizeList();
     this.getMenuAndPower();
-
 
     this.route.params.subscribe(data => {
       this.type = data.type;
@@ -103,7 +98,6 @@ export class RolesFormComponent implements OnInit {
       console.log(error, '---err')
     }
   }
-
 
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
 
@@ -311,7 +305,6 @@ export class RolesFormComponent implements OnInit {
     this.menuList.forEach(item => {
       this.mapOfExpandedMenuList[item.key] = this.convertTreeToList(item);
     });
-
   }
 
   /**
@@ -501,17 +494,16 @@ export class RolesFormComponent implements OnInit {
   }
 
   /**
- * 为角色修改页面操作权限
- * @param roleInfoId 角色id
- * @param PermissionGroupPermissionIds 页面权限选项id数组 格式:[id1,id2]
- */
+   * 为角色修改页面操作权限
+   * @param roleInfoId 角色id
+   * @param PermissionGroupPermissionIds 页面权限选项id数组 格式:[id1,id2]
+   */
   async handleRolesEditPower(params: any) {
     const url = '/api/api/permission/role_permission_group_permission'
 
     try {
       const data: any = await this.http.put(url, params).toPromise()
       const is_error = !(data.code === 200)
-
     } catch (error) {
       console.log(error, '------error---')
     }

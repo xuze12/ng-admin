@@ -155,7 +155,7 @@ export class PersonInfoUpdateComponent implements OnInit {
       this.createNotification('success', '新增人员', '新增人员成功！')
       this.validateForm.reset();
 
-      this.router.navigate(['/admin/person'])
+      this.router.navigate(['/admin/person/list'])
 
     } catch (error) {
       this.createNotification('error', '新增人员', '新增人员失败！')
@@ -192,7 +192,7 @@ export class PersonInfoUpdateComponent implements OnInit {
       this.createNotification('success', '编辑人员', '编辑人员成功！')
       this.validateForm.reset();
 
-      this.router.navigate(['/admin/person'])
+      this.router.navigate(['/admin/person/list'])
 
     } catch (error) {
       this.createNotification('error', '编辑人员', '编辑人员失败！')

@@ -13,11 +13,9 @@ export class SiderComponent implements OnInit {
 
   constructor(public menu: MenuService) { }
 
-  ngOnInit(): void {
-    this.menus = this.menu.menus
-    this.menu.getNewMenus()
-    this.menu.urlFindMenuItem()
-
+  async ngOnInit(){
+   await this.menu.getMenuList();
+    this.menus = this.menu.menus;
   }
 
   handleMenuChange(value:any):void {

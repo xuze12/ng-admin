@@ -2,7 +2,7 @@
 <app-page-header title="机构属性" [menu]="[{title:'系统维护',active:false},{title:'数据字典',active:true}]"></app-page-header>
 
 <!--添加按钮-->
-<div class="add-button">
+<div class="add-button" *ngIf='power.add'>
   <a> <button nz-button nzType="primary" (click)="handleAddAttrModalShow()">新增</button></a>
 </div>
 
@@ -20,9 +20,9 @@
       <td>{{ data.name }}</td>
       <td>{{ data.des }}</td>
       <td>
-        <a (click)='handleEditAttrModalShow()'>编辑</a>
+        <a (click)='handleEditAttrModalShow()' *ngIf='power.edit'>编辑</a>
         <nz-divider nzType="vertical"></nz-divider>
-        <a (click)='showMenuDeleteConfirm()'>删除</a>
+        <a (click)='showMenuDeleteConfirm()' *ngIf='power.del'>删除</a>
       </td>
     </tr>
   </tbody>
