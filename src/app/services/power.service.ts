@@ -35,15 +35,16 @@ export class PowerService {
     let allMenuPower = JSON.parse(window.localStorage.getItem('allMenuPower') || '[]');
     let tmier = null
 
+    console.log(window.localStorage.getItem('allMenuPower'),'======aaa==a=a=a')
     if (!window.localStorage.getItem('allMenuPower')) {
       if (tmier) {
         clearInterval(tmier)
       }
       tmier = setInterval(() => {
-        allMenuPower = JSON.parse(window.localStorage.getItem('allMenuPower'));
-        if (allMenuPower) {
-          clearInterval(tmier);
+        if (window.localStorage.getItem('allMenuPower')) {
+          allMenuPower = JSON.parse(window.localStorage.getItem('allMenuPower') || '[]');
           this.getAllMenuPower(param, allMenuPower);
+          clearInterval(tmier);
         }
       }, 100);
       return;
