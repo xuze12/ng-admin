@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MyValidators } from '../../utils/validators';
 
 export interface TreeNodeInterface {
   key: number;
@@ -54,7 +55,7 @@ export class RolesFormComponent implements OnInit {
 
     this.route.params.subscribe(data => {
       this.type = data.type;
-
+      const { required, maxLength } = MyValidators;
       // 初始化表单
       if (data.type === 'edit') {
 
@@ -62,16 +63,16 @@ export class RolesFormComponent implements OnInit {
         console.log(departmentId, '---departmentId')
         // 初始化表单
         this.validateForm = this.fb.group({
-          name: [name, [Validators.required]],
-          sign: [sign, [Validators.required]],
-          departmentId: [departmentId, [Validators.required]],
+          name: [name, [required, maxLength(30)]],
+          sign: [sign, [required]],
+          departmentId: [departmentId, [required]],
         });
       } else {
         // 初始化表单
         this.validateForm = this.fb.group({
-          name: ['', [Validators.required]],
-          sign: [null, [Validators.required]],
-          departmentId: [null, [Validators.required]],
+          name: [null, [required, maxLength(30)]],
+          sign: [null, [required]],
+          departmentId: [null, [required]],
         });
       }
     })

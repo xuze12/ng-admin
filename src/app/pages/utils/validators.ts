@@ -49,6 +49,16 @@ export class MyValidators extends Validators {
     };
   }
 
+  static fax(control: AbstractControl): MyValidationErrors | null {
+    const value = control.value;
+
+    if (isEmptyInputValue(value)) {
+      return null;
+    }
+
+    return isFax(value) ? null : { mobile: { 'zh-cn': `传真号码格式不正确`, en: `Fax number is not valid` } };
+  }
+
 
 }
 
@@ -64,4 +74,9 @@ function isMobile(value: string): boolean {
 function isNumberAddLetter(value: string, minLength: number, maxLength: number): boolean {
 
   return typeof value === 'string' && new RegExp(`^[a-zA-Z0-9]{${minLength},${maxLength}}$`).test(value);
+}
+
+// 传真号
+function isFax(value: string): boolean {
+  return typeof value === 'string' && /^(\d{3,4}-)?\d{7,8}$/.test(value);
 }

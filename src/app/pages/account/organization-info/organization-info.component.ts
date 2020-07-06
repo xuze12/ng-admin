@@ -49,28 +49,25 @@ export class OrganizationInfoComponent implements OnInit {
 
       if (data.type === 'update') {
         const organiza_item = JSON.parse(window.localStorage.getItem('organiza-item') || '{}')
-        // const parentIdArray = [];
-        // this.handleGetParentId(organiza_item, parentIdArray);
-        // console.log(parentIdArray)
 
         name = organiza_item.name || '';
         parentId = `${organiza_item.parentId}`
         type = `${organiza_item.type}` || '';
         chargePerson = organiza_item.chargePerson || '';
-        mobile = organiza_item.mobile || '';
+        mobile = `${organiza_item.mobile}` || '';
         fax = organiza_item.fax || '';
         address = organiza_item.address || '';
       }
-      const { required, numberAddLetter, maxLength, minLength, mobile: v_mobile } = MyValidators;
+      const { required, maxLength, mobile: v_mobile,fax:v_fax } = MyValidators;
       // 初始化表单
       this.validateForm = this.fb.group({
         name: [name, [required, maxLength(30)]],
         parentId: [parentId, [required]],
         type: [type, [required]],
-        chargePerson: [chargePerson, [required]],
+        chargePerson: [chargePerson, [required, maxLength(30)]],
         mobile: [mobile, [required, v_mobile]],
-        fax: [fax, [required]],
-        address: [address, [required]],
+        fax: [fax, [required, v_fax]],
+        address: [address, [required, maxLength(100)]],
       });
     })
 
@@ -78,10 +75,10 @@ export class OrganizationInfoComponent implements OnInit {
   }
 
   /**
- * 递归获取父级ID
- * @param item 
- * 
- * */
+   * 递归获取父级ID
+   * @param item 
+   * 
+   * */
   handleGetParentId(item: any, array: any) {
 
     array.push(`${item.parentId}`)
@@ -116,11 +113,7 @@ export class OrganizationInfoComponent implements OnInit {
 
   // 提示框
   createNotification(type: string, title: string, message: string): void {
-    this.notification.create(
-      type,
-      title,
-      message
-    );
+    this.notification.create(type, title, message);
   }
 
   /**
@@ -132,7 +125,6 @@ export class OrganizationInfoComponent implements OnInit {
    * @param mobile 手机号
    * @param fax 传真
    * @param address 地址
-   * 
    * */
   async handleAddOrganiza(params: any) {
     const url = '/api/api/user/department'
@@ -206,11 +198,9 @@ export class OrganizationInfoComponent implements OnInit {
     if (this.validateForm.valid) {
 
       const params = this.validateForm.value
-
       if (this.type === 'update') {
         this.handleEditOrganiza(params)
       } else {
-
         this.handleAddOrganiza(params)
       }
     }

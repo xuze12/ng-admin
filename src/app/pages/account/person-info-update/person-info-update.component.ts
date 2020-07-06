@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
+import { MyValidators } from '../../utils/validators';
+
 @Component({
   selector: 'app-person-info-update',
   templateUrl: './person-info-update.component.html',
@@ -34,6 +36,8 @@ export class PersonInfoUpdateComponent implements OnInit {
     this.route.params.subscribe(data => {
       this.type = data.type;
 
+      const { required, maxLength, mobile: v_mobile, } = MyValidators;
+
       // 初始化表单
       if (data.type === 'edit') {
 
@@ -48,27 +52,27 @@ export class PersonInfoUpdateComponent implements OnInit {
           sex = null } = JSON.parse(window.localStorage.getItem('edit_user_info') || '{}')
 
         this.validateForm = this.fb.group({
-          username: [tusers.userName, [Validators.required]],
-          mobile: [mobile, [Validators.required]],
-          enabled: [tusers.enabled, [Validators.required]],
-          departmentId: [departmentId, [Validators.required]],
-          name: [name, [Validators.required]],
-          nickname: [nickname, [Validators.required]],
-          roleInfoId: [roleInfoId, [Validators.required]],
-          sex: [sex, Validators.required]
+          username: [tusers.userName, [required, maxLength(30)]],
+          mobile: [mobile, [required, v_mobile]],
+          enabled: [tusers.enabled, [required]],
+          departmentId: [departmentId, [required]],
+          name: [name, [required, maxLength(30)]],
+          nickname: [nickname, [required, maxLength(30)]],
+          roleInfoId: [roleInfoId, [required]],
+          sex: [sex, [required]]
         })
       } else {
         this.validateForm = this.fb.group({
-          username: [null, [Validators.required]],
-          mobile: [null, [Validators.required]],
-          enabled: [null, [Validators.required]],
-          departmentId: [null, [Validators.required]],
-          password: [null, [Validators.required]],
-          name: [null, [Validators.required]],
-          nickname: [null, [Validators.required]],
-          roleInfoId: [null, [Validators.required]],
-          checkPassword: [null, [Validators.required]],
-          sex: [null, Validators.required]
+          username: [null, [required, , maxLength(30)]],
+          mobile: [null, [required, v_mobile]],
+          enabled: [null, [required]],
+          departmentId: [null, [required]],
+          password: [null, [required]],
+          name: [null, [required, maxLength(30)]],
+          nickname: [null, [required, maxLength(30)]],
+          roleInfoId: [null, [required]],
+          checkPassword: [null, [required]],
+          sex: [null, [required]]
         })
       }
 
@@ -104,24 +108,21 @@ export class PersonInfoUpdateComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    console.log('formdata', this.validateForm.value)
-    // this.validateForm.reset();
-    const params = this.validateForm.value
-    if (this.type === 'edit') {
-      const edit_user_info = JSON.parse(window.localStorage.getItem('edit_user_info') || '{}')
-      Object.assign(params, { id: edit_user_info.userId })
-      this.handleEditPerson(params)
-    } else {
-      this.handleAddPerson(params)
+
+    if (this.validateForm.valid) {
+      const params = this.validateForm.value
+      if (this.type === 'edit') {
+        const edit_user_info = JSON.parse(window.localStorage.getItem('edit_user_info') || '{}')
+        Object.assign(params, { id: edit_user_info.userId })
+        this.handleEditPerson(params)
+      } else {
+        this.handleAddPerson(params)
+      }
     }
   }
   // 提示框
   createNotification(type: string, title: string, message: string): void {
-    this.notification.create(
-      type,
-      title,
-      message
-    );
+    this.notification.create(type, title, message);
   }
 
   /**
