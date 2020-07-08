@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { MenuService } from '../../services/menu.service'
 
 @Component({
@@ -11,16 +11,23 @@ export class SiderComponent implements OnInit {
   @Input() isCollapsed: boolean;
   menus: any = [];
 
-  constructor(public menu: MenuService) { }
+  constructor(public menuService: MenuService) { }
 
   async ngOnInit() {
-    await this.menu.getMenuList();
-    this.menus = this.menu.menus;
+    await this.menuService.getMenuList();
+    this.menus = this.menuService.menus;
   }
+
+   // 监听父级传值变化
+   ngOnChanges(changes: SimpleChanges) {
+    //  console.log(121212121211212121212)
+    this.menus = this.menuService.menus;
+  }
+
 
  async handleMenuChange(value: any) {
     // console.log(value,'----menu')
-   await this.menu.handleMenuChange(value)
+   await this.menuService.handleMenuChange(value)
   }
   handleOpenChange(value: any) {
     // console.log(value,'----open')

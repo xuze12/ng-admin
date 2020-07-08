@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { PowerService } from '../../../services/power.service';
 import { MenuService } from '../../../services/menu.service';
@@ -41,14 +42,15 @@ export class MenuComponent implements OnInit {
     edit: false,
     del: false
   }
-  pageMenu=[];
+  pageMenu = [];
 
   constructor(
     private modal: NzModalService,
-     private http: HttpClient,
+    private http: HttpClient,
     private notification: NzNotificationService,
     public powerService: PowerService,
-    public menuService:MenuService,
+    public menuService: MenuService,
+    public router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -66,10 +68,10 @@ export class MenuComponent implements OnInit {
   // 延迟获取pageHeader 值
   getPageMenu() {
     setTimeout(() => {
-       this.pageMenu = this.menuService.pageMenu;
-     },400)
-   }
- 
+      this.pageMenu = this.menuService.pageMenu;
+    }, 400)
+  }
+
 
   /**
    * 菜单带页面权限列表
@@ -205,6 +207,9 @@ export class MenuComponent implements OnInit {
       this.createNotification('success', '添加成功', '添加导航成功！')
       this.getMenuList();
 
+      // 重新获取菜单信息
+      // await this.menuService.getMenuList();
+
     } catch (error) {
       this.createNotification('error', '添加失败', '添加导航失败！')
       console.log(error, '---err')
@@ -251,6 +256,9 @@ export class MenuComponent implements OnInit {
 
       this.createNotification('success', '编辑成功', '编辑导航成功！')
       this.getMenuList();
+
+      // 重新获取菜单信息
+      // await this.menuService.getMenuList();
 
     } catch (error) {
       this.createNotification('error', '编辑失败', '编辑导航失败！')

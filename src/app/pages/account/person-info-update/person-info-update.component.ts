@@ -89,7 +89,7 @@ export class PersonInfoUpdateComponent implements OnInit {
       console.log(data, 'getOrganizeList')
 
       if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id }))
+        const newData = data.data.map((item) => Object.assign(item, { key: item.id })).filter((item) => item.name !== 'ADMIN')
         this.rolesList = newData
 
       } else {

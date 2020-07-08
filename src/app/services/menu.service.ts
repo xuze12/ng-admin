@@ -168,15 +168,15 @@ export class MenuService {
     try {
 
       // 超级管理员
-      const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
-      const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
+      // const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
+      // const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
 
-      if (is_admin) {
-        this.menus = menus;
-        this.getNewMenus();
-        this.urlFindMenuItem();
-        return;
-      }
+      // if (is_admin) {
+      //   this.menus = menus;
+      //   this.getNewMenus();
+      //   this.urlFindMenuItem();
+      //   return;
+      // }
 
       //角色
       const data: any = await this.http.get(url).toPromise()
@@ -353,19 +353,19 @@ export class MenuService {
       const hash = window.location.hash.replace('#/admin/', '');
       for (let i = 0; i < this.newMenus.length; i++) {
         const item = this.newMenus[i];
-  
+
         if (Array.isArray(item)) {
-          console.log(hash, 'urlFindMenuItem======hash')
+          // console.log(hash, 'urlFindMenuItem======hash')
           const target = item.find(a => a.link.includes(hash));
-          console.log(target, 'urlFindMenuItem======target')
+          // console.log(target, 'urlFindMenuItem======target')
           if (target) {
             const pageMenu = this.getPageMenu(target);
-            console.log(pageMenu, 'urlFindMenuItem======pageMenu')
+            // console.log(pageMenu, 'urlFindMenuItem======pageMenu')
             this.pageMenu = pageMenu;
           }
         }
       }
-    },100)
+    }, 100)
   }
 
   // 点击menuItem 改变pageMenu值

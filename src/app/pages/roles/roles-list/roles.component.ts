@@ -106,7 +106,8 @@ export class RolesComponent implements OnInit {
           power: power.join('、'),
         })
         return item;
-      })
+
+      }).filter((item) => item.name !== 'ADMIN')
 
     } catch (error) {
       console.log(error, '---err')
