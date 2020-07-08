@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
+
 import { PowerService } from '../../../services/power.service';
+import { MenuService } from '../../../services/menu.service';
+
 
 export interface TreeNodeInterface {
   key: string;
@@ -31,6 +34,7 @@ export class PersonComponent implements OnInit {
     edit: false,
     del: false
   }
+  pageMenu=[];
 
   constructor(
     public route: ActivatedRoute,
@@ -38,7 +42,8 @@ export class PersonComponent implements OnInit {
     private http: HttpClient,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    public powerService: PowerService
+    public powerService: PowerService,
+    public menuService:MenuService,
   ) { }
 
   ngOnInit(): void {
@@ -48,11 +53,19 @@ export class PersonComponent implements OnInit {
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
+     this.getPageMenu();
       this.getPersonList();
       this.getOrganizeList();
     }
-
   }
+
+    // 延迟获取pageHeader 值
+    getPageMenu() {
+      setTimeout(() => {
+         this.pageMenu = this.menuService.pageMenu;
+       },400)
+     }
+   
 
 
   /**
@@ -165,10 +178,12 @@ export class PersonComponent implements OnInit {
 
   // 显示禁用用户弹框
   handleProhibitUserModalShow = (item: any) => {
+    const action = item.tusers.enabled ? '禁用' : '启用';
+    const contentText = item.tusers.enabled ? '管理员将不可登录' : '管理员将重新获取登录';
     this.modal.confirm({
       nzTitle: '提示',
-      nzContent: `<b>禁用管理员后，管理员将不可登录，确定禁用管理员：<i style="color:red;">${item.name}(${item.tusers ? item.tusers.userName : ""})</i>？</b>`,
-      nzOkText: '禁用',
+      nzContent: `<b>${action}管理员后，${contentText}，确定${action}管理员：<i style="color:red;">${item.name}(${item.tusers ? item.tusers.userName : ""})</i>？</b>`,
+      nzOkText: `${action}`,
       nzCancelText: '取消',
       nzOnOk: () => {
         this.handleProhibitUser(item)
@@ -183,6 +198,9 @@ export class PersonComponent implements OnInit {
    */
 
   handleProhibitUser = async (item: any) => {
+
+    const action = item.tusers.enabled ? '禁用' : '启用';
+
     try {
       const url = '/api/api/user/user/status'
       const params = {
@@ -194,15 +212,15 @@ export class PersonComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '禁用用户', '禁用用户失败！')
+        this.createNotification('error', `${action}用户`, `${action}用户失败！`)
         return;
       }
 
-      this.createNotification('success', '禁用用户', '禁用用户成功！')
+      this.createNotification('success', `${action}用户`, `${action}用户成功！`)
       this.getPersonList();
 
     } catch (error) {
-      this.createNotification('error', '禁用用户', '禁用用户失败！')
+      this.createNotification('error', `${action}用户`, `${action}用户失败！`)
       console.log(error, '---err')
     }
   }

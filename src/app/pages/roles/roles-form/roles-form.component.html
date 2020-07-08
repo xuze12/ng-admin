@@ -1,6 +1,5 @@
 <!--页头部-->
-<app-page-header [title]="type=='add'? '新建角色': '编辑角色'"
-  [menu]="[{title:'角色管理',active:false},{title:'角色管理',active:true}]"></app-page-header>
+<app-page-header [title]="type=='add'? '新建角色': '编辑角色'"></app-page-header>
 
 <!--表单-->
 <div class="add-roles-container">
@@ -12,7 +11,7 @@
         <nz-form-item>
           <nz-form-label nzRequired nzFor="name">角色名称</nz-form-label>
           <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入角色名称!">
-            <input nz-input formControlName="name" placeholder="请输入角色名称" id="name" />
+            <input nz-input formControlName="name" placeholder="请输入角色名称" id="name" (ngModelChange)="handleNameChange($event)" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -22,9 +21,9 @@
     <div nz-row>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired nzFor="sign">角色标识</nz-form-label>
-          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入角色标识!">
-            <input nz-input formControlName="sign" placeholder="请输入角色标识" id="sign" />
+          <nz-form-label nzRequired nzFor="sign">角色编号</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入角色编号!">
+            <input nz-input formControlName="sign" placeholder="请输入角色编号" id="sign" />
           </nz-form-control>
         </nz-form-item>
       </div>

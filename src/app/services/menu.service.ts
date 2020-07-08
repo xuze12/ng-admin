@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http'
+import { Router, ActivatedRoute } from '@angular/router';
 
 export interface TreeNodeInterface {
   key: number;
@@ -11,75 +12,80 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 
-const menus = [{
-  key: 1,
-  level: 1,
-  title: '角色管理',
-  icon: 'mail',
-  open: false,
-  selected: false,
-  disabled: false,
-  children: [{
-    key: 11,
-    level: 2,
-    title: '角色列表',
-    icon: 'bars',
+const menus = [
+  {
+    key: 2,
+    level: 1,
+    title: '账号管理',
+    icon: 'team',
     open: false,
     selected: false,
     disabled: false,
-    link: '/admin/roles/list',
-  }]
-}, {
-  key: 2,
-  level: 1,
-  title: '账号管理',
-  icon: 'team',
-  open: false,
-  selected: false,
-  disabled: false,
-  children: [{
-    key: 21,
-    level: 2,
-    title: '组织机构管理',
-    icon: 'user',
-    selected: false,
-    disabled: false,
-    link: '/admin/organization/list'
+    link: '',
+    children: [{
+      key: 21,
+      level: 2,
+      title: '组织机构管理',
+      icon: 'user',
+      selected: false,
+      disabled: false,
+      link: '/admin/organization/list'
+    }, {
+      key: 22,
+      level: 2,
+      title: '人员管理',
+      icon: 'user',
+      selected: false,
+      disabled: false,
+      link: '/admin/person/list'
+    }]
   }, {
-    key: 22,
-    level: 2,
-    title: '人员管理',
-    icon: 'user',
+    key: 1,
+    level: 1,
+    title: '角色管理',
+    icon: 'mail',
+    open: false,
     selected: false,
     disabled: false,
-    link: '/admin/person/list'
-  }]
-}, {
-  key: 3,
-  level: 1,
-  title: '系统维护',
-  icon: 'team',
-  open: false,
-  selected: false,
-  disabled: false,
-  children: [{
-    key: 32,
-    level: 2,
-    title: '数据字典',
-    icon: 'user',
-    selected: false,
-    disabled: false,
-    link: '/admin/system/dictionary/list'
+    link: '',
+    children: [
+      {
+        key: 11,
+        level: 2,
+        title: '角色列表',
+        icon: 'bars',
+        open: false,
+        selected: false,
+        disabled: false,
+        link: '/admin/roles/list',
+      }]
   }, {
-    key: 32,
-    level: 2,
-    title: '菜单配置',
-    icon: 'user',
+    key: 3,
+    level: 1,
+    title: '系统维护',
+    icon: 'team',
+    open: false,
     selected: false,
     disabled: false,
-    link: '/admin/system/menu/list'
-  }]
-}];
+    link: '',
+    children: [{
+      key: 32,
+      level: 2,
+      title: '数据字典',
+      icon: 'user',
+      selected: false,
+      disabled: false,
+      link: '/admin/system/dictionary/list'
+    }, {
+      key: 32,
+      level: 2,
+      title: '菜单配置',
+      icon: 'user',
+      selected: false,
+      disabled: false,
+      link: '/admin/system/menu/list'
+    }]
+  }];
 
 @Injectable({
   providedIn: 'root'
@@ -92,8 +98,9 @@ export class MenuService {
   roleInfoPower = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   list = [];
+  pageMenu = [];
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient, private router: Router) { }
 
   /**
    * 获取登录用户拥有权限
@@ -110,9 +117,16 @@ export class MenuService {
       let allMenuPower = [];
       const map = {};
       const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
+      const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
 
-      const role_power = this.roleInfoPower.filter(item => item.roleInfoId === roleInfo.roleInfoId);
-      console.log(role_power, '---role_power')
+      let role_power = [];
+
+      // 是否超级管理员
+      if (!is_admin) {
+        role_power = this.roleInfoPower.filter(item => item.roleInfoId === roleInfo.roleInfoId)
+      } else {
+        role_power = this.roleInfoPower
+      }
 
       if (!Array.isArray(role_power) || role_power.length === 0) {
         return;
@@ -134,7 +148,6 @@ export class MenuService {
       }
 
       for (let key of Object.keys(map)) {
-
         power.push(map[key])
       }
 
@@ -167,19 +180,32 @@ export class MenuService {
 
       //角色
       const data: any = await this.http.get(url).toPromise()
-      console.log(data, 'getMenuList')
       if (data.code === 200) {
         const newData = data.data.map((item) => Object.assign(item, { key: item.id }))
         console.log(newData, '----------------getMenuList--------------------')
+
         const list = this.handleMenuList(newData);
 
         const power = await this.getRolesPowers();
         console.log(power, '---power');
-        const menuList = [];
+        let menuList = [];
 
+        // 组合 菜单
         for (let item of list) {
 
           let menuChildren = []
+          let hasParentPowerLink = '';
+
+          const hasParentPower = power.find(powerItem => powerItem.permissionGroupId === item.permissionGroupId)
+          if (hasParentPower) {
+            for (let i of hasParentPower.power) {
+              if (i.url.includes('list')) {
+                hasParentPowerLink = i.url.replace(/\*|$\//g, '')
+              }
+            }
+          }
+
+          // 父级
           let menuParent = {
             title: item.name,
             key: item.id,
@@ -188,9 +214,11 @@ export class MenuService {
             open: false,
             selected: false,
             disabled: false,
+            link: hasParentPowerLink,
             children: menuChildren
           }
 
+          // 子菜单
           for (let child of item.children) {
             const hasPower = power.find(powerItem => powerItem.permissionGroupId === child.permissionGroupId)
             if (hasPower) {
@@ -223,9 +251,30 @@ export class MenuService {
           menuList.push(menuParent);
         }
 
+        // 子菜单为空时不显示一级菜单
+        menuList = menuList.filter(item => item.children.length > 0 || item.link !== '');
+        console.log(menuList, 'filter-----------------------filter-----------')
+
+        // 判断菜单是否为空 否 设置第一个子菜单为首页
+        if (menuList.length > 0) {
+
+          // 判断父级是否有跳转 url 
+          if (menuList[0].link) {
+            this.router.navigate([`/admin/${menuList[0].link}`])
+          } else {
+            // 子菜单 是否有 url
+            const fristChild = menuList[0].children;
+            fristChild.length > 0
+              ? this.router.navigate([`/admin/${fristChild[0].link}`])
+              : this.router.navigate([`/admin/403`])
+          }
+
+        } else {
+          this.router.navigate([`/admin/403`])
+        }
+
         console.log(menuList, '===============menuList==================')
 
-        console.log(list, '---list')
         this.menus = menuList
         this.getNewMenus();
         this.urlFindMenuItem();
@@ -238,7 +287,6 @@ export class MenuService {
       console.log(error, '---err')
     }
   }
-
 
   /**
    * 处理菜单列表数据 转树形结构
@@ -301,34 +349,38 @@ export class MenuService {
 
   // 根据获取 pathname 初始化pageMenu值
   urlFindMenuItem() {
-    const pathname = window.location.pathname
-    for (let i = 0; i < this.newMenus.length; i++) {
-      const item = this.newMenus[i];
-
-      if (Array.isArray(item)) {
-        const target = item.find(a => a.link! === pathname)!;
-
-        if (target) {
-          const pageMenu = this.getPageMenu(target)
-          localStorage.setItem('pageMenu', JSON.stringify(pageMenu));
+    setTimeout(() => {
+      const hash = window.location.hash.replace('#/admin/', '');
+      for (let i = 0; i < this.newMenus.length; i++) {
+        const item = this.newMenus[i];
+  
+        if (Array.isArray(item)) {
+          console.log(hash, 'urlFindMenuItem======hash')
+          const target = item.find(a => a.link.includes(hash));
+          console.log(target, 'urlFindMenuItem======target')
+          if (target) {
+            const pageMenu = this.getPageMenu(target);
+            console.log(pageMenu, 'urlFindMenuItem======pageMenu')
+            this.pageMenu = pageMenu;
+          }
         }
       }
-    }
+    },100)
   }
 
   // 点击menuItem 改变pageMenu值
   handleMenuChange(value: any) {
-    console.log(this.newMenus, '--- this.newMenus')
     for (let i = 0; i < this.newMenus.length; i++) {
       const item = this.newMenus[i];
 
       if (Array.isArray(item)) {
-        const target = item.find(a => a.key === value.key)!;
+        const target = item.find(a => a.key === value.key);
+        console.log(target, '-------target')
 
         if (target) {
-          const pageMenu = this.getPageMenu(target)
-          console.log(pageMenu, '----pageMenu')
-          localStorage.setItem('pageMenu', JSON.stringify(pageMenu));
+          const pageMenu = this.getPageMenu(target);
+          console.log(pageMenu, 'handleMenuChange======pageMenu')
+          this.pageMenu = pageMenu;
         }
       }
     }
@@ -348,10 +400,8 @@ export class MenuService {
       array.push(menu)
     }
     get(object, array)
-    const newarray = array.sort((a, b) => a.level - b.level)
 
-    return newarray
-
+    return array.sort((a, b) => a.level - b.level)
   }
 
 }

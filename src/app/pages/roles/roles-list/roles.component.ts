@@ -3,7 +3,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router'
-import {PowerService} from '../../../services/power.service';
+
+import { PowerService } from '../../../services/power.service';
+import { MenuService } from '../../../services/menu.service';
 
 interface RolesList {
   id: number;
@@ -24,31 +26,41 @@ export class RolesComponent implements OnInit {
   listOfCurrentPageData: RolesList[] = [];
   setOfCheckedId = new Set<number>();
   rolesList: RolesList[] = [];
-  power={
+  power = {
     add: false,
     edit: false,
     del: false
   }
+  pageMenu = [];
 
   constructor(
     private modal: NzModalService,
     private http: HttpClient,
     public notification: NzNotificationService,
     public router: Router,
-    public powerService: PowerService
-    ) {
+    public powerService: PowerService,
+    public menuService: MenuService,
+  ) {
   }
 
   ngOnInit() {
     this.powerService.setPagePower('roles');
     console.log(this.powerService.hasVisitPage, '---hasVisitPage')
-    this.power =  JSON.parse(window.localStorage.getItem('power')||'{}');
-    
-    if(this.powerService.hasVisitPage) {
+    this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
+
+    if (this.powerService.hasVisitPage) {
+      this.getPageMenu();
       this.getRolesList();
     }
-
   }
+
+  // 延迟获取pageHeader 值
+  getPageMenu() {
+    setTimeout(() => {
+      this.pageMenu = this.menuService.pageMenu;
+    }, 400)
+  }
+
 
   /**
   * 获取角色列表
@@ -114,32 +126,10 @@ export class RolesComponent implements OnInit {
     }
   }
 
-  updateCheckedSet(id: number, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
-    }
-  }
-
-  onItemChecked(id: number, checked: boolean): void {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-
-  onAllChecked(value: boolean): void {
-    this.listOfCurrentPageData.forEach(item => this.updateCheckedSet(item.id, value));
-    this.refreshCheckedStatus();
-  }
 
   onCurrentPageDataChange($event: RolesList[]): void {
     this.listOfCurrentPageData = $event;
-    this.refreshCheckedStatus();
-  }
-
-  refreshCheckedStatus(): void {
-    this.checked = this.listOfCurrentPageData.every(item => this.setOfCheckedId.has(item.id));
-    this.indeterminate = this.listOfCurrentPageData.some(item => this.setOfCheckedId.has(item.id)) && !this.checked;
+    // this.refreshCheckedStatus();
   }
 
   showDeleteConfirm(item: any): void {

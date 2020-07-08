@@ -41,7 +41,7 @@
   (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
   <thead>
     <tr>
-      <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+      <!-- <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th> -->
       <th>账号</th>
       <th>昵称</th>
       <th>手机</th>
@@ -54,8 +54,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of rowSelectionTable.data">
-      <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
-        (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
+      <!-- <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
+        (nzCheckedChange)="onItemChecked(data.id, $event)"></td> -->
       <td>{{ data.tusers?data.tusers.userName:'' }}</td>
       <td>{{ data.nickname }}</td>
       <td>{{ data.mobile }}</td>
@@ -68,7 +68,8 @@
       </td>
       <td nzAlign="center">
 
-        <a (click)="prohibitUser(data)">禁用用户</a>
+        <a (click)="prohibitUser(data)" *ngIf='!(data.tusers&&data.tusers.enabled)'>启用 </a>
+        <a (click)="prohibitUser(data)" style="color: red" *ngIf="data.tusers&&data.tusers.enabled">禁用 </a>
         <nz-divider nzType="vertical"></nz-divider>
         <a (click)="handleResetMoadlShow(data)">重置</a>
         <nz-divider nzType="vertical"></nz-divider>

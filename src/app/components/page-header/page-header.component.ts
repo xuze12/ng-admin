@@ -1,4 +1,6 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+
+import { MenuService } from '../../services/menu.service';
 
 @Component({
   selector: 'app-page-header',
@@ -10,13 +12,12 @@ export class PageHeaderComponent implements OnInit {
   @Input() title: string;
   @Input() menu: any;
 
-  pageMenu=[]
+  constructor(
+    public menuService: MenuService
+  ) { }
 
-  constructor() { }
 
   ngOnInit(): void {
-    // this.pageMenu = JSON.parse(window.localStorage.getItem('pageMenu') || '[]')
-    // console.log(this.pageMenu,'----this.pageMenu')
   }
 
 }

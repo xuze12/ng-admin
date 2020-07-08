@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { PowerService } from '../../../../services/power.service';
 
+import { PowerService } from '../../../../services/power.service';
+import { MenuService } from '../../../../services/menu.service';
 @Component({
   selector: 'app-dictionary-list',
   templateUrl: './dictionary-list.component.html',
@@ -33,17 +34,32 @@ export class DictionaryListComponent implements OnInit {
     edit: false,
     del: false
   }
+  pageMenu=[];
 
-  constructor(private modal: NzModalService, public powerService: PowerService) { }
+  constructor(
+    private modal: NzModalService, 
+    public powerService: PowerService,
+    public menuService:MenuService,
+    ) { }
 
   ngOnInit(): void {
-    this.powerService.setPagePower('dicyionary');
+    this.powerService.setPagePower('dictionary');
     console.log(this.powerService.hasVisitPage, '---hasVisitPage')
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
+
+      this.getPageMenu();
+      console.log(this.menuService.pageMenu,'----this.menuService.pageMenu')
       // this.getMenuList();
     }
+  }
+
+  // 延迟获取pageHeader 值
+  getPageMenu() {
+   setTimeout(() => {
+      this.pageMenu = this.menuService.pageMenu;
+    },400)
   }
 
   // 显示 添加属性弹框

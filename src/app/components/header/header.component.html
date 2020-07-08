@@ -5,13 +5,11 @@
         <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
       </span>
 
-
       <div class="rightContent" #rightContent>
         <div class="wrapp">
-
           <a nz-dropdown [nzDropdownMenu]="menu">
+            <span>{{username }}</span>
             <nz-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
-            <!-- <span>avatar-box</span> -->
           </a>
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu nzSelectable>

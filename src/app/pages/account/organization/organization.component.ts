@@ -2,8 +2,10 @@ import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
+
 import { PowerService } from '../../../services/power.service';
+import { MenuService } from '../../../services/menu.service';
 
 
 export interface TreeNodeInterface {
@@ -32,13 +34,14 @@ export class OrganizationComponent implements OnInit {
     edit: false,
     del: false
   }
-
+  pageMenu = [];
   constructor(
     private modal: NzModalService,
     public router: Router,
     private http: HttpClient,
     private notification: NzNotificationService,
-    public powerService: PowerService
+    public powerService: PowerService,
+    public menuService: MenuService,
   ) { }
 
   ngOnInit(): void {
@@ -46,11 +49,20 @@ export class OrganizationComponent implements OnInit {
     this.powerService.setPagePower('organization');
     console.log(this.powerService.hasVisitPage, '---hasVisitPage')
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
-    
+
     if (this.powerService.hasVisitPage) {
+      this.getPageMenu();
       this.getOrganizeList();
     }
   }
+
+  // 延迟获取pageHeader 值
+  getPageMenu() {
+    setTimeout(() => {
+      this.pageMenu = this.menuService.pageMenu;
+    }, 400)
+  }
+
 
   /**
    * 获取机构列表

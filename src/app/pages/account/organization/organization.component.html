@@ -1,5 +1,5 @@
 <!--页头部-->
-<app-page-header title="机构列表" [menu]="[{title:'账号管理',active:false},{title:'组织机构管理',active:true}]"></app-page-header>
+<app-page-header title="机构列表" [menu]='pageMenu'></app-page-header>
 
 <!-- 搜索 + 添加 -->
 <div class="or-header">
@@ -11,7 +11,7 @@
   </div>
 
   <div class="add-button" *ngIf='power.add'>
-    <a> <button nz-button nzType="primary" [routerLink]="['/admin/organization/infoUpdate/', 'add']">手动添加</button></a>
+    <a> <button nz-button nzType="primary" [routerLink]="['/admin/organization/infoUpdate/', 'add']">添加</button></a>
   </div>
 
 </div>

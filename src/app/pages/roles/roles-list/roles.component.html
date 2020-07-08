@@ -1,5 +1,5 @@
 <!--页头部-->
-<app-page-header title="角色列表" [menu]="[{title:'角色管理',active:false},{title:'角色管理',active:true}]"></app-page-header>
+<app-page-header title="角色列表" [menu]='pageMenu'></app-page-header>
 
 <!--添加按钮-->
 <div class="add-button" *ngIf="power.add">
@@ -10,7 +10,6 @@
 <nz-table #rowSelectionTable [nzData]="rolesList" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
   <thead>
     <tr>
-      <th [(nzChecked)]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
       <th>角色名称</th>
       <th>所属机构</th>
       <th>访问权限</th>
@@ -19,10 +18,9 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of rowSelectionTable.data">
-      <td [nzChecked]="setOfCheckedId.has(data.id)" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
       <td>{{ data.name }}</td>
       <td>{{ data.department?data.department.name:'' }}</td>
-      <td>{{ data.power}}</td>
+      <td style='width:400px'>{{ data.power}}</td>
       <td nzAlign="center">
         <a (click)="showDeleteConfirm(data)" *ngIf="power.del">删除</a>
         <nz-divider nzType="vertical"></nz-divider>

@@ -8,22 +8,22 @@ import { MenuService } from '../../services/menu.service'
 })
 export class SiderComponent implements OnInit {
 
-  @Input() isCollapsed: boolean
-  menus: any = []
+  @Input() isCollapsed: boolean;
+  menus: any = [];
 
   constructor(public menu: MenuService) { }
 
-  async ngOnInit(){
-   await this.menu.getMenuList();
+  async ngOnInit() {
+    await this.menu.getMenuList();
     this.menus = this.menu.menus;
   }
 
-  handleMenuChange(value:any):void {
-    console.log(value,'----menu')
-    this.menu.handleMenuChange(value)
+ async handleMenuChange(value: any) {
+    // console.log(value,'----menu')
+   await this.menu.handleMenuChange(value)
   }
-  handleOpenChange(value:any){
-    console.log(value,'----open')
+  handleOpenChange(value: any) {
+    // console.log(value,'----open')
   }
 
 }

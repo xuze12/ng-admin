@@ -1,6 +1,12 @@
 <nz-page-header class="site-page-header" [nzTitle]="title" nzSubtitle="">
   <nz-breadcrumb nz-page-header-breadcrumb>
-    <nz-breadcrumb-item *ngFor="let item of menu">{{item.title}}</nz-breadcrumb-item>
+    <nz-breadcrumb-item *ngFor="let item of menu">
+      <!-- <div>{{item.link}}</div> -->
+      <!-- <span *ngIf="item.link"><a [routerLink]='item.link'>{{item.title}}</a></span> -->
+      <!-- <a *ngIf="!item.link">{{item.title}}</a> -->
+      <a>{{item.title}}</a>
+    </nz-breadcrumb-item>
   </nz-breadcrumb>
 </nz-page-header>
-<nz-divider class="page-header-line" ></nz-divider>
+
+<nz-divider class="page-header-line"></nz-divider>

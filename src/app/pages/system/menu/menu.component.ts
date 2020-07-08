@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+
 import { PowerService } from '../../../services/power.service';
+import { MenuService } from '../../../services/menu.service';
 export interface TreeNodeInterface {
   key: number;
   menuName: string;
@@ -39,10 +41,14 @@ export class MenuComponent implements OnInit {
     edit: false,
     del: false
   }
+  pageMenu=[];
 
-  constructor(private modal: NzModalService, private http: HttpClient,
+  constructor(
+    private modal: NzModalService,
+     private http: HttpClient,
     private notification: NzNotificationService,
-    public powerService: PowerService
+    public powerService: PowerService,
+    public menuService:MenuService,
   ) { }
 
   ngOnInit(): void {
@@ -52,10 +58,18 @@ export class MenuComponent implements OnInit {
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
+      this.getPageMenu();
       this.getMenuList();
     }
-
   }
+
+  // 延迟获取pageHeader 值
+  getPageMenu() {
+    setTimeout(() => {
+       this.pageMenu = this.menuService.pageMenu;
+     },400)
+   }
+ 
 
   /**
    * 菜单带页面权限列表

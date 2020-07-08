@@ -5,6 +5,9 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MyValidators } from '../../utils/validators';
 
+// 转拼音
+import pinyin from 'pinyin';
+
 export interface TreeNodeInterface {
   key: number;
   name: string;
@@ -78,11 +81,21 @@ export class RolesFormComponent implements OnInit {
     });
   }
 
+  // 组件销毁钩子函数
   ngOnDestroy() {
     if (this.type === 'edit') {
       window.localStorage.removeItem('edit_roles_info');
     }
   }
+
+  // 监听角色nane改变生成对应的标识
+  handleNameChange(value: string) {
+
+    const sign = pinyin(value, { segment: true, style: pinyin.STYLE_NORMAL }).flat().join('');
+    this.validateForm.get('sign')!.setValue(sign);
+  }
+
+
 
   /**
    * 根据角色di 查找角色页面权限

@@ -32,10 +32,10 @@ export class PowerService {
       return;
     }
 
+    // 角色
     let allMenuPower = JSON.parse(window.localStorage.getItem('allMenuPower') || '[]');
     let tmier = null
 
-    console.log(window.localStorage.getItem('allMenuPower'),'======aaa==a=a=a')
     if (!window.localStorage.getItem('allMenuPower')) {
       if (tmier) {
         clearInterval(tmier)
@@ -43,24 +43,17 @@ export class PowerService {
       tmier = setInterval(() => {
         if (window.localStorage.getItem('allMenuPower')) {
           allMenuPower = JSON.parse(window.localStorage.getItem('allMenuPower') || '[]');
-          this.getAllMenuPower(param, allMenuPower);
+          this.getAllMenuPower(param, allMenuPower,power);
           clearInterval(tmier);
         }
       }, 100);
       return;
     }
 
-    this.getAllMenuPower(param, allMenuPower);
+    this.getAllMenuPower(param, allMenuPower,power);
   }
 
-  getAllMenuPower(param: string, allMenuPower: any) {
-    // 超级管理员
-    let power = {
-      add: false,
-      edit: false,
-      del: false
-    }
-
+  getAllMenuPower(param: string, allMenuPower: any,power: any) {
 
     // 角色 根据权限显示
     const hasItem = allMenuPower.find(item => item.name.includes(`${param}-list`));

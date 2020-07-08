@@ -11,12 +11,16 @@ export class HeaderComponent implements OnInit {
 
   // 接收父级参数
   @Input() isCollapsed: boolean
-  @Input() isCollapsedTrigger:any
+  @Input() isCollapsedTrigger: any
   @ViewChild('rightContent') rightContent: any;
 
   constructor(private router: Router) { }
 
+  username: string = '';
+
   ngOnInit(): void {
+    const loginUserInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}');
+    this.username = loginUserInfo.username || '';
   }
 
   logOut(): void {

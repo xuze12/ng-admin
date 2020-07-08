@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'
 import { Router } from '@angular/router';
+import { MenuService } from '../services/menu.service'
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient) { }
+    private http: HttpClient,
+    public menuService: MenuService
+    ) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -50,21 +53,26 @@ export class LoginComponent implements OnInit {
     if (login_info.id_token) {
       window.localStorage.setItem('auth_token', login_info.id_token);
       let loginUserInfo = {}
-      if (this.validateForm.value.username === 'admin') {
-        loginUserInfo = { roleInfoId: '', role: 'admin' }
+      const { grantedAuthorities } = login_info
+      const role = grantedAuthorities[0].authority;
+      
+      if (role === 'ADMIN') {
+        loginUserInfo = { roleInfoId: '', role: 'admin', username: login_info.username }
         window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
       } else {
-        const {grantedAuthorities} = login_info
-        const role = grantedAuthorities[0].authority;
+
         const roleInfo = await this.buyRoleNameGetRoleId(role);
         console.log(roleInfo, '---roleInfo')
-        if(!roleInfo){
+        if (!roleInfo) {
           return
         }
 
-        loginUserInfo = { roleInfoId: roleInfo.id, role: 'role' }
+        loginUserInfo = { roleInfoId: roleInfo.id, role: 'role', username: login_info.username }
         window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
       }
+
+      // 获取对应的菜单
+      // await this.menuService.getMenuList();
 
       this.router.navigate(['/']);
     }
@@ -90,16 +98,16 @@ export class LoginComponent implements OnInit {
   /**
    * 获取角色id
    */
- async buyRoleNameGetRoleId(name: string){
-  const url = `/api/api/user/role_info/sign/${name}`
-  try {
-    const data: any = await this.http.get(url).toPromise();
-    return data.code===200?data.data:null;
-  } catch (error) {
-    console.log(error, '---')
-    return null;
-  }
+  async buyRoleNameGetRoleId(name: string) {
+    const url = `/api/api/user/role_info/sign/${name}`
+    try {
+      const data: any = await this.http.get(url).toPromise();
+      return data.code === 200 ? data.data : null;
+    } catch (error) {
+      console.log(error, '---')
+      return null;
+    }
   }
 
- 
+
 }
