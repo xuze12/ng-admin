@@ -24,9 +24,9 @@ export class MenuFormModalComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    const { required, maxLength, minLength } = MyValidators;
+    const { required, maxLength, minLength,numberAddLetterAddChinese } = MyValidators;
     this.validateForm = this.fb.group({
-      menuName: [null, [required, maxLength(30), minLength(1)]],
+      menuName: [null, [required, maxLength(30), minLength(1),numberAddLetterAddChinese]],
     });
   }
 

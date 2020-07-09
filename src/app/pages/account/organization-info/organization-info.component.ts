@@ -58,16 +58,16 @@ export class OrganizationInfoComponent implements OnInit {
         fax = organiza_item.fax || '';
         address = organiza_item.address || '';
       }
-      const { required, maxLength, mobile: v_mobile,fax:v_fax } = MyValidators;
+      const { required, maxLength, mobile: v_mobile,fax:v_fax,numberAddLetterAddChinese } = MyValidators;
       // 初始化表单
       this.validateForm = this.fb.group({
-        name: [name, [required, maxLength(30)]],
+        name: [name, [required, maxLength(30),numberAddLetterAddChinese]],
         parentId: [parentId, [required]],
         type: [type, [required]],
-        chargePerson: [chargePerson, [required, maxLength(30)]],
+        chargePerson: [chargePerson, [required, maxLength(30),numberAddLetterAddChinese]],
         mobile: [mobile, [required, v_mobile]],
         fax: [fax, [required, v_fax]],
-        address: [address, [required, maxLength(100)]],
+        address: [address, [required, maxLength(100),numberAddLetterAddChinese]],
       });
     })
 

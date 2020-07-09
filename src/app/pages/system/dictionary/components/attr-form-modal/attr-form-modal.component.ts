@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Vali
 import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Observable, Observer } from 'rxjs';
 
+import { MyValidators } from '../../../../utils/validators';
+
 
 @Component({
   selector: 'app-attr-form-modal',
@@ -22,10 +24,10 @@ export class AttrFormModalComponent implements OnInit {
 
   ngOnInit(): void {
     // use `MyValidators`
-    const { required, maxLength, minLength, } = MyValidators;
+    const { required, maxLength, minLength, numberAddLetterAddChinese} = MyValidators;
     this.validateForm = this.fb.group({
-      menuName: ['', [required, maxLength(12), minLength(6)], [this.menuNameAsyncValidator]],
-      des:['', [required]],
+      menuName: ['', [required, maxLength(12), minLength(6),numberAddLetterAddChinese]],
+      des:['', [required, maxLength(30), minLength(1),numberAddLetterAddChinese]],
     });
 
   }
@@ -37,46 +39,6 @@ export class AttrFormModalComponent implements OnInit {
     }
     console.log(value);
     this.handleOk(value)
-  }
-
-  menuNameAsyncValidator = (control: FormControl) =>
-    new Observable((observer: Observer<MyValidationErrors | null>) => {
-      setTimeout(() => {
-        if (control.value === 'JasonWood') {
-          observer.next({
-            duplicated: { 'zh-cn': `用户名已存在`, en: `The menuname is redundant!` }
-          });
-        } else {
-          observer.next(null);
-        }
-        observer.complete();
-      }, 1000);
-    });
-
-
-}
-
-// current locale is key of the MyErrorsOptions
-export type MyErrorsOptions = { 'zh-cn': string; en: string } & Record<string, NzSafeAny>;
-export type MyValidationErrors = Record<string, MyErrorsOptions>;
-
-export class MyValidators extends Validators {
-  static minLength(minLength: number): ValidatorFn {
-    return (control: AbstractControl): MyValidationErrors | null => {
-      if (Validators.minLength(minLength)(control) === null) {
-        return null;
-      }
-      return { minlength: { 'zh-cn': `最小长度为 ${minLength}`, en: `MinLength is ${minLength}` } };
-    };
-  }
-
-  static maxLength(maxLength: number): ValidatorFn {
-    return (control: AbstractControl): MyValidationErrors | null => {
-      if (Validators.maxLength(maxLength)(control) === null) {
-        return null;
-      }
-      return { maxlength: { 'zh-cn': `最大长度为 ${maxLength}`, en: `MaxLength is ${maxLength}` } };
-    };
   }
 
 }

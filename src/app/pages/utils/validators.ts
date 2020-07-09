@@ -42,8 +42,6 @@ export class MyValidators extends Validators {
       if (isEmptyInputValue(value)) {
         return null;
       }
-      console.log(value, '---value')
-      console.log(value, minLength, maxLength, '-----isNumberAddLetter(value, minLength, maxLength)')
 
       return isNumberAddLetter(value, minLength, maxLength) ? null : { mobile: { 'zh-cn': `请输入${minLength}-${maxLength}位数字、字母组合的密码`, en: `Passwordr is not valid` } };
     };
@@ -57,6 +55,16 @@ export class MyValidators extends Validators {
     }
 
     return isFax(value) ? null : { mobile: { 'zh-cn': `传真号码格式不正确`, en: `Fax number is not valid` } };
+  }
+
+  static numberAddLetterAddChinese(control: AbstractControl): MyValidationErrors | null {
+    const value = control.value;
+
+    if (isEmptyInputValue(value)) {
+      return null;
+    }
+
+    return isNumberAddLetterAddChinese(value) ? null : { mobile: { 'zh-cn': `不允许输入特殊字符和空格`, en: `Input is not valid` } };
   }
 
 
@@ -79,4 +87,9 @@ function isNumberAddLetter(value: string, minLength: number, maxLength: number):
 // 传真号
 function isFax(value: string): boolean {
   return typeof value === 'string' && /^(\d{3,4}-)?\d{7,8}$/.test(value);
+}
+
+// 字符串只能是数字、字母和中文组成，限制特殊字符和空格
+function isNumberAddLetterAddChinese(value: string): boolean {
+  return typeof value === 'string' && /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(value);
 }

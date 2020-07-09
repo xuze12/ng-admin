@@ -36,7 +36,7 @@ export class PersonInfoUpdateComponent implements OnInit {
     this.route.params.subscribe(data => {
       this.type = data.type;
 
-      const { required, maxLength, mobile: v_mobile, } = MyValidators;
+      const { required, maxLength, mobile: v_mobile, numberAddLetterAddChinese} = MyValidators;
 
       // 初始化表单
       if (data.type === 'edit') {
@@ -52,26 +52,26 @@ export class PersonInfoUpdateComponent implements OnInit {
           sex = null } = JSON.parse(window.localStorage.getItem('edit_user_info') || '{}')
 
         this.validateForm = this.fb.group({
-          username: [tusers.userName, [required, maxLength(30)]],
+          username: [tusers.userName, [required, maxLength(30),numberAddLetterAddChinese]],
           mobile: [mobile, [required, v_mobile]],
           enabled: [tusers.enabled, [required]],
           departmentId: [departmentId, [required]],
-          name: [name, [required, maxLength(30)]],
-          nickname: [nickname, [required, maxLength(30)]],
+          name: [name, [required, maxLength(30),numberAddLetterAddChinese]],
+          nickname: [nickname, [required, maxLength(30),numberAddLetterAddChinese]],
           roleInfoId: [roleInfoId, [required]],
           sex: [sex, [required]]
         })
       } else {
         this.validateForm = this.fb.group({
-          username: [null, [required, , maxLength(30)]],
+          username: [null, [required, , maxLength(30),numberAddLetterAddChinese]],
           mobile: [null, [required, v_mobile]],
           enabled: [null, [required]],
           departmentId: [null, [required]],
-          password: [null, [required]],
-          name: [null, [required, maxLength(30)]],
-          nickname: [null, [required, maxLength(30)]],
+          password: [null, [required],numberAddLetterAddChinese],
+          name: [null, [required, maxLength(30),numberAddLetterAddChinese]],
+          nickname: [null, [required, maxLength(30),numberAddLetterAddChinese]],
           roleInfoId: [null, [required]],
-          checkPassword: [null, [required]],
+          checkPassword: [null, [required],numberAddLetterAddChinese],
           sex: [null, [required]]
         })
       }

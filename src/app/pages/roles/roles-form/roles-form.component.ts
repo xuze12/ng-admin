@@ -53,7 +53,7 @@ export class RolesFormComponent implements OnInit {
 
     this.route.params.subscribe(data => {
       this.type = data.type;
-      const { required, maxLength } = MyValidators;
+      const { required, maxLength,numberAddLetterAddChinese } = MyValidators;
       // 初始化表单
       if (data.type === 'edit') {
 
@@ -61,14 +61,14 @@ export class RolesFormComponent implements OnInit {
         console.log(departmentId, '---departmentId')
         // 初始化表单
         this.validateForm = this.fb.group({
-          name: [name, [required, maxLength(30)]],
+          name: [name, [required, maxLength(30),numberAddLetterAddChinese]],
           sign: [sign, [required]],
           departmentId: [departmentId, [required]],
         });
       } else {
         // 初始化表单
         this.validateForm = this.fb.group({
-          name: [null, [required, maxLength(30)]],
+          name: [null, [required, maxLength(30),numberAddLetterAddChinese]],
           sign: [null, [required]],
           departmentId: [null, [required]],
         });
