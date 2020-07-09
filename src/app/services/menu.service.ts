@@ -185,6 +185,7 @@ export class MenuService {
         console.log(newData, '----------------getMenuList--------------------')
 
         const list = this.handleMenuList(newData);
+        console.log(list, 'list---')
 
         const power = await this.getRolesPowers();
         console.log(power, '---power');
@@ -219,32 +220,34 @@ export class MenuService {
           }
 
           // 子菜单
-          for (let child of item.children) {
-            const hasPower = power.find(powerItem => powerItem.permissionGroupId === child.permissionGroupId)
-            if (hasPower) {
-
-              let haschildPowerLink = '';
-              let menuChildPower = [];
-              for (let i of hasPower.power) {
-                if (i.url.includes('list')) {
-                  haschildPowerLink = i.url.replace(/\*|$\//g, '')
+          if(item.children) {
+            for (let child of item.children) {
+              const hasPower = power.find(powerItem => powerItem.permissionGroupId === child.permissionGroupId)
+              if (hasPower) {
+  
+                let haschildPowerLink = '';
+                let menuChildPower = [];
+                for (let i of hasPower.power) {
+                  if (i.url.includes('list')) {
+                    haschildPowerLink = i.url.replace(/\*|$\//g, '')
+                  }
                 }
-              }
-
-              if (haschildPowerLink) {
-                let menuChild = {
-                  title: child.name,
-                  key: child.id,
-                  level: 2,
-                  icon: 'team',
-                  open: false,
-                  selected: false,
-                  disabled: false,
-                  link: haschildPowerLink,
+  
+                if (haschildPowerLink) {
+                  let menuChild = {
+                    title: child.name,
+                    key: child.id,
+                    level: 2,
+                    icon: 'team',
+                    open: false,
+                    selected: false,
+                    disabled: false,
+                    link: haschildPowerLink,
+                  }
+                  menuChildren.push(menuChild)
                 }
-                menuChildren.push(menuChild)
+  
               }
-
             }
           }
 

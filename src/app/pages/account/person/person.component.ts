@@ -7,7 +7,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { PowerService } from '../../../services/power.service';
 import { MenuService } from '../../../services/menu.service';
 
-
 export interface TreeNodeInterface {
   key: string;
   name: string;
@@ -24,6 +23,7 @@ export interface TreeNodeInterface {
   templateUrl: './person.component.html',
   styleUrls: ['./person.component.scss']
 })
+
 export class PersonComponent implements OnInit {
 
   organizeList: TreeNodeInterface[] = [];
@@ -34,7 +34,7 @@ export class PersonComponent implements OnInit {
     edit: false,
     del: false
   }
-  pageMenu=[];
+  pageMenu = [];
 
   constructor(
     public route: ActivatedRoute,
@@ -43,7 +43,7 @@ export class PersonComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public powerService: PowerService,
-    public menuService:MenuService,
+    public menuService: MenuService,
   ) { }
 
   ngOnInit(): void {
@@ -53,25 +53,22 @@ export class PersonComponent implements OnInit {
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
-     this.getPageMenu();
+      this.getPageMenu();
       this.getPersonList();
       this.getOrganizeList();
     }
   }
 
-    // 延迟获取pageHeader 值
-    getPageMenu() {
-      setTimeout(() => {
-         this.pageMenu = this.menuService.pageMenu;
-       },400)
-     }
-   
-
+  // 延迟获取pageHeader 值
+  getPageMenu() {
+    setTimeout(() => {
+      this.pageMenu = this.menuService.pageMenu;
+    }, 400)
+  }
 
   /**
    * 获取机构列表
-   * 
-   * */
+   */
   async getPersonList() {
     const url = '/api/api/user/user'
 
