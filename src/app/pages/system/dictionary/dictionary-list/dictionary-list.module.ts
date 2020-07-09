@@ -11,7 +11,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @NgModule({
   imports: [
@@ -22,9 +22,10 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzTableModule,
     NzDividerModule,
     NzModalModule,
-    AttrFormModalModule
+    AttrFormModalModule,
   ],
   declarations: [DictionaryListComponent],
-  exports: [DictionaryListComponent]
+  exports: [DictionaryListComponent],
+  providers: [NzNotificationService]
 })
 export class DictionaryListModule { }

@@ -35,7 +35,7 @@
               (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
               {{ item.name }}
             </td>
-            <td>{{ item.type | organizaType}}</td>
+            <td>{{ item.dictionary?item.dictionary.name:''}}</td>
             <td>{{ item.address }}</td>
             <td>
               <a (click)="handleEditOrganiza(item)" *ngIf='power.edit'>单位信息</a> &nbsp;&nbsp;

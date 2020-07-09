@@ -7,7 +7,7 @@
 </div>
 
 <!--列表-->
-<nz-table #basicTable [nzData]="listOfData">
+<!-- <nz-table #basicTable [nzData]="dictionaryList">
   <thead>
     <tr>
       <th>字典名称</th>
@@ -18,7 +18,7 @@
   <tbody>
     <tr *ngFor="let data of basicTable.data">
       <td>{{ data.name }}</td>
-      <td>{{ data.des }}</td>
+      <td>{{ data.description }}</td>
       <td>
         <a (click)='handleEditAttrModalShow()' *ngIf='power.edit'>编辑</a>
         <nz-divider nzType="vertical"></nz-divider>
@@ -26,12 +26,40 @@
       </td>
     </tr>
   </tbody>
+</nz-table> -->
+
+<nz-table #expandTable [nzShowPagination]="false" [nzData]="dictionaryList" nzTableLayout="fixed">
+  <thead>
+    <tr>
+      <th>字典名称</th>
+      <th>描述</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of expandTable.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent" class='triangle-table-container'>
+          <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+            (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
+            {{ item.name }}
+          </td>
+          <td>{{ item.description }}</td>
+          <td>
+            <a (click)='handleEditAttrModalShow(item)' *ngIf='power.edit'>编辑</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)='showMenuDeleteConfirm(item)' *ngIf='power.del'>删除</a>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
 </nz-table>
 
 <!--添加弹框-->
-<app-attr-form-modal title='添加' [isVisible]="addAttrModalOpen" [handleOk]="handleAddAttrOk"
+<app-attr-form-modal title='添加' [isVisible]="addAttrModalOpen" [handleOk]="handleAddDictionary"
   [handleCancel]="handleAddAttrCancel"></app-attr-form-modal>
 
 <!--编辑弹框-->
-<app-attr-form-modal title='编辑' [isVisible]="editAttrModalOpen" [handleOk]="handleEditAttrOk"
-  [handleCancel]="handleEditAttrCancel"></app-attr-form-modal>
+<app-attr-form-modal title='编辑' [isVisible]="editAttrModalOpen" [handleOk]="handleEditDictionary"
+  [editData]='activeDictonaryItem' [handleCancel]="handleEditAttrCancel"></app-attr-form-modal>

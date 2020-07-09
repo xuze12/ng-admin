@@ -51,7 +51,9 @@ export class MenuComponent implements OnInit {
     public powerService: PowerService,
     public menuService: MenuService,
     public router: Router,
-  ) { }
+  ) { 
+  
+  }
 
   ngOnInit(): void {
 
@@ -60,6 +62,7 @@ export class MenuComponent implements OnInit {
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
+
       this.getPageMenu();
       this.getMenuList();
     }
@@ -71,7 +74,7 @@ export class MenuComponent implements OnInit {
       this.pageMenu = this.menuService.pageMenu;
     }, 400)
   }
-
+  
 
   /**
    * 菜单带页面权限列表

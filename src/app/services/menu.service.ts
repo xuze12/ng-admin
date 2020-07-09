@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs'
 
 export interface TreeNodeInterface {
   key: number;
@@ -100,6 +101,10 @@ export class MenuService {
   list = [];
   pageMenu = [];
 
+  stream = new Observable<any>((observer => {
+    observer.next(this.pageMenu)
+  }))
+
   constructor(public http: HttpClient, private router: Router) { }
 
   /**
@@ -118,6 +123,7 @@ export class MenuService {
       const map = {};
       const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
       const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
+
 
       let role_power = [];
 
@@ -220,11 +226,11 @@ export class MenuService {
           }
 
           // 子菜单
-          if(item.children) {
+          if (item.children) {
             for (let child of item.children) {
               const hasPower = power.find(powerItem => powerItem.permissionGroupId === child.permissionGroupId)
               if (hasPower) {
-  
+
                 let haschildPowerLink = '';
                 let menuChildPower = [];
                 for (let i of hasPower.power) {
@@ -232,7 +238,7 @@ export class MenuService {
                     haschildPowerLink = i.url.replace(/\*|$\//g, '')
                   }
                 }
-  
+
                 if (haschildPowerLink) {
                   let menuChild = {
                     title: child.name,
@@ -246,7 +252,7 @@ export class MenuService {
                   }
                   menuChildren.push(menuChild)
                 }
-  
+
               }
             }
           }
@@ -384,6 +390,9 @@ export class MenuService {
           const pageMenu = this.getPageMenu(target);
           console.log(pageMenu, 'handleMenuChange======pageMenu')
           this.pageMenu = pageMenu;
+          this.stream = new Observable<any>((observer => {
+            observer.next(pageMenu)
+          }))
         }
       }
     }

@@ -14,9 +14,11 @@ import { MyValidators } from '../../utils/validators';
   templateUrl: './organization-info.component.html',
   styleUrls: ['./organization-info.component.scss']
 })
+
 export class OrganizationInfoComponent implements OnInit {
   validateForm!: FormGroup;
   type: string;
+  dictionaryList=[];
 
   organizeList: any = [
     {
@@ -40,6 +42,7 @@ export class OrganizationInfoComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.getDictionaryList();
 
     this.route.params.subscribe(data => {
 
@@ -52,7 +55,7 @@ export class OrganizationInfoComponent implements OnInit {
 
         name = organiza_item.name || '';
         parentId = `${organiza_item.parentId}`
-        type = `${organiza_item.type}` || '';
+        type = organiza_item.type || '';
         chargePerson = organiza_item.chargePerson || '';
         mobile = `${organiza_item.mobile}` || '';
         fax = organiza_item.fax || '';
@@ -110,6 +113,30 @@ export class OrganizationInfoComponent implements OnInit {
       return [];
     }
   }
+
+
+    /**
+  * 获取机构字典列表
+  * @param department_type 目前固定写死
+  * */
+ async getDictionaryList() {
+  const url = '/api/api/user/dictionary/key/department_type';
+
+  try {
+    const data: any = await this.http.get(url).toPromise();
+
+    if (data.code !== 200) {
+      this.dictionaryList = [];
+      return;
+    }
+    this.dictionaryList = data.data.map(item => Object.assign(item, { key: item.id, key1: item.key, title: item.name }));
+    console.log(data, '---data')
+
+  } catch (error) {
+    console.log(error, '---')
+    this.dictionaryList = [];
+  }
+}
 
   // 提示框
   createNotification(type: string, title: string, message: string): void {

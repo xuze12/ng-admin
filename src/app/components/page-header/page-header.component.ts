@@ -19,5 +19,10 @@ export class PageHeaderComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  // 监听父级传值变化
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log(this.menu,'----------------aaaaaa-')
+  //   this.menu = this.menu
+  // }
 
 }

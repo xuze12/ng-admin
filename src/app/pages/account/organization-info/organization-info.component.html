@@ -28,10 +28,7 @@
     <nz-form-item>
       <nz-form-control [nzSpan]="8" nzErrorTip="请选所属机构类型!" class="add-roles-form-control">
         <nz-select id="type" formControlName="type" nzPlaceHolder="请选所属机构类型">
-          <nz-option nzValue="1" nzLabel="军"></nz-option>
-          <nz-option nzValue="2" nzLabel="师"></nz-option>
-          <nz-option nzValue="3" nzLabel="旅"></nz-option>
-          <nz-option nzValue="4" nzLabel="营"></nz-option>
+          <nz-option [nzValue]="item.id" [nzLabel]="item.name" *ngFor="let item of dictionaryList"></nz-option>
         </nz-select>
       </nz-form-control>
     </nz-form-item>
