@@ -67,11 +67,11 @@ export class PersonInfoUpdateComponent implements OnInit {
           mobile: [null, [required, v_mobile]],
           enabled: [null, [required]],
           departmentId: [null, [required]],
-          password: [null, [required],numberAddLetterAddChinese],
+          password: [null, [required,numberAddLetterAddChinese]],
           name: [null, [required, maxLength(30),numberAddLetterAddChinese]],
           nickname: [null, [required, maxLength(30),numberAddLetterAddChinese]],
           roleInfoId: [null, [required]],
-          checkPassword: [null, [required],numberAddLetterAddChinese],
+          checkPassword: [null, [required,numberAddLetterAddChinese]],
           sex: [null, [required]]
         })
       }
