@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http'
 import { Router } from '@angular/router';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MenuService } from '../services/menu.service'
 
 @Component({
@@ -15,10 +16,11 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private notification: NzNotificationService,
     private router: Router,
     private http: HttpClient,
     public menuService: MenuService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
@@ -26,6 +28,11 @@ export class LoginComponent implements OnInit {
       password: ['changeMyPassword', [Validators.required]],
       remember: [true]
     });
+  }
+
+  // 提示框
+  createNotification(type: string, title: string, message: string): void {
+    this.notification.create(type, title, message);
   }
 
   /**
@@ -50,33 +57,36 @@ export class LoginComponent implements OnInit {
 
     const login_info = await this.login(params);
 
-    if (login_info.id_token) {
-      window.localStorage.setItem('auth_token', login_info.id_token);
-      let loginUserInfo = {}
-      const { grantedAuthorities } = login_info
-      const role = grantedAuthorities[0].authority;
-      
-      if (role === 'ADMIN') {
-        loginUserInfo = { roleInfoId: '', role: 'admin', username: login_info.username }
-        window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
-      } else {
+    const is_success_login = Reflect.has(login_info, 'id_token') && Reflect.get(login_info, 'id_token')
 
-        const roleInfo = await this.buyRoleNameGetRoleId(role);
-        console.log(roleInfo, '---roleInfo')
-        if (!roleInfo) {
-          return
-        }
+    if (!is_success_login) {
 
-        loginUserInfo = { roleInfoId: roleInfo.id, role: 'role', username: login_info.username }
-        window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
-      }
-
-      // 获取对应的菜单
-      // await this.menuService.getMenuList();
-
-      this.router.navigate(['/']);
+      this.createNotification('error', '登陆失败', login_info.additionalInformation ? login_info.additionalInformation.error : '登陆成功！')
+      return;
     }
 
+    window.localStorage.setItem('auth_token', login_info.id_token);
+    let loginUserInfo = {}
+    const { grantedAuthorities } = login_info
+    const role = grantedAuthorities[0].authority;
+
+    if (role === 'ADMIN') {
+      loginUserInfo = { roleInfoId: '', role: 'admin', username: login_info.username }
+      window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
+    } else {
+
+      const roleInfo = await this.buyRoleNameGetRoleId(role);
+      console.log(roleInfo, '---roleInfo')
+      if (!roleInfo) {
+        return
+      }
+
+      loginUserInfo = { roleInfoId: roleInfo.id, role: 'role', username: login_info.username }
+      window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
+    }
+    this.createNotification('success', '登陆', '登陆成功！')
+
+    this.router.navigate(['/']);
   }
 
   /**
@@ -87,8 +97,8 @@ export class LoginComponent implements OnInit {
     const url = '/api/v1/token'
 
     try {
-      const token: any = await this.http.post(url, params).toPromise()
-      return token.id_token ? token : null
+      const token: any = await this.http.post(url, params).toPromise();
+      return token
     } catch (error) {
       console.log(error, '---')
       return null;

@@ -37,6 +37,7 @@ import {ProhibitComponent} from './pages/result/403/prohibit/prohibit.component'
 // 服务
 import { MenuService } from './services/menu.service';
 import {PowerService} from './services/power.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 // http 请求处理
 import { GlobalInterceptor } from './global.interceptor'
@@ -89,7 +90,8 @@ registerLocaleData(zh);
       provide: HTTP_INTERCEPTORS,
       useClass: GlobalInterceptor,
       multi: true
-    }
+    },
+    NzNotificationService
   ],
   bootstrap: [AppComponent]
 })
