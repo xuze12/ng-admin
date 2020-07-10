@@ -165,7 +165,7 @@ export class OrganizationComponent implements OnInit {
   showConfirm(item: any,): void {
     this.modal.confirm({
       nzTitle: '提示',
-      nzContent: `你正在删除${item.name}机构，删除后不可恢复，确定要删除?`,
+      nzContent: `你正在删除 ${item.name} 以及机构下所有子级机构，删除后不可恢复，确定要删除?`,
       nzOkText: '删除',
       nzCancelText: '取消',
       nzOnOk: () => {
@@ -211,7 +211,7 @@ export class OrganizationComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '删除失败', '删除组织失败！');
+        this.createNotification('error', '删除失败', data.message || '删除组织失败！');
         return;
       }
 
@@ -219,7 +219,7 @@ export class OrganizationComponent implements OnInit {
       this.getOrganizeList();
 
     } catch (error) {
-      this.createNotification('error', '删除失败', '删除组织失败！');
+      this.createNotification('error', '删除失败', error.message || '删除组织失败！');
       console.log(error, '---err')
     }
   }

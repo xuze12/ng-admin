@@ -164,7 +164,7 @@ export class RolesComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '删除角色', '删除角色失败！')
+        this.createNotification('error', '删除角色', data.message || '删除角色失败！')
         return;
       }
 
@@ -172,7 +172,7 @@ export class RolesComponent implements OnInit {
       this.getRolesList();
 
     } catch (error) {
-      this.createNotification('error', '删除角色', '删除角色失败！')
+      this.createNotification('error', '删除角色', error.message || '删除角色失败！')
       console.log(error, '---err')
     }
   }

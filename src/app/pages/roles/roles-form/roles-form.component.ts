@@ -53,7 +53,7 @@ export class RolesFormComponent implements OnInit {
 
     this.route.params.subscribe(data => {
       this.type = data.type;
-      const { required, maxLength,numberAddLetterAddChinese } = MyValidators;
+      const { required, maxLength, numberAddLetterAddChinese } = MyValidators;
       // 初始化表单
       if (data.type === 'edit') {
 
@@ -61,14 +61,14 @@ export class RolesFormComponent implements OnInit {
         console.log(departmentId, '---departmentId')
         // 初始化表单
         this.validateForm = this.fb.group({
-          name: [name, [required, maxLength(30),numberAddLetterAddChinese]],
+          name: [name, [required, maxLength(30), numberAddLetterAddChinese]],
           sign: [sign, [required]],
           departmentId: [departmentId, [required]],
         });
       } else {
         // 初始化表单
         this.validateForm = this.fb.group({
-          name: [null, [required, maxLength(30),numberAddLetterAddChinese]],
+          name: [null, [required, maxLength(30), numberAddLetterAddChinese]],
           sign: [null, [required]],
           departmentId: [null, [required]],
         });
@@ -427,7 +427,7 @@ export class RolesFormComponent implements OnInit {
 
 
       if (is_error) {
-        this.createNotification('error', '新增角色', data.msg || '新增角色失败！')
+        this.createNotification('error', '新增角色', data.message || '新增角色失败！')
         return;
       }
 
@@ -447,7 +447,7 @@ export class RolesFormComponent implements OnInit {
       this.router.navigate(['/admin/roles/list'])
 
     } catch (error) {
-      this.createNotification('error', '新增角色', '新增人员失败！')
+      this.createNotification('error', '新增角色', error.message || '新增人员失败！')
     }
   }
 
@@ -476,7 +476,7 @@ export class RolesFormComponent implements OnInit {
       const powerData = await this.handleRolesEditPower(powerParams);
 
       if (is_error) {
-        this.createNotification('error', '编辑角色', '编辑角色失败！')
+        this.createNotification('error', '编辑角色', data.message || '编辑角色失败！')
         return;
       }
 
@@ -485,7 +485,7 @@ export class RolesFormComponent implements OnInit {
       this.router.navigate(['/admin/roles/list'])
 
     } catch (error) {
-      this.createNotification('error', '编辑角色', '编辑角色失败！')
+      this.createNotification('error', '编辑角色', error.message || '编辑角色失败！')
     }
   }
 

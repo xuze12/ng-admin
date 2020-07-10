@@ -51,8 +51,8 @@ export class MenuComponent implements OnInit {
     public powerService: PowerService,
     public menuService: MenuService,
     public router: Router,
-  ) { 
-  
+  ) {
+
   }
 
   ngOnInit(): void {
@@ -74,7 +74,7 @@ export class MenuComponent implements OnInit {
       this.pageMenu = this.menuService.pageMenu;
     }, 400)
   }
-  
+
 
   /**
    * 菜单带页面权限列表
@@ -203,7 +203,7 @@ export class MenuComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '添加失败', '添加导航失败！')
+        this.createNotification('error', '添加失败', data.message || '添加导航失败！')
         return;
       }
 
@@ -214,7 +214,7 @@ export class MenuComponent implements OnInit {
       // await this.menuService.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '添加失败', '添加导航失败！')
+      this.createNotification('error', '添加失败', error.message || '添加导航失败！')
       console.log(error, '---err')
     }
     this.addNavMenuModalOpen = false;
@@ -253,7 +253,7 @@ export class MenuComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '编辑失败', '编辑导航失败！')
+        this.createNotification('error', '编辑失败', data.message || '编辑导航失败！')
         return;
       }
 
@@ -264,7 +264,7 @@ export class MenuComponent implements OnInit {
       // await this.menuService.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '编辑失败', '编辑导航失败！')
+      this.createNotification('error', '编辑失败', error.message || '编辑导航失败！')
       console.log(error, '---err')
     }
 
@@ -305,7 +305,7 @@ export class MenuComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '绑定权限页面', '绑定权限页面失败！')
+        this.createNotification('error', '绑定权限页面', data.message || '绑定权限页面失败！')
         return;
       }
 
@@ -313,7 +313,7 @@ export class MenuComponent implements OnInit {
       this.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '绑定权限页面', '绑定权限页面失败！')
+      this.createNotification('error', '绑定权限页面', error.message || '绑定权限页面失败！')
       console.log(error, '---err')
     }
 
@@ -339,7 +339,7 @@ export class MenuComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '删除菜单项', '删除菜单项失败！')
+        this.createNotification('error', '删除菜单项', data.message || '删除菜单项失败！')
         return;
       }
 
@@ -347,7 +347,7 @@ export class MenuComponent implements OnInit {
       this.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '删除菜单项', '删除菜单项失败！')
+      this.createNotification('error', '删除菜单项', error.message || '删除菜单项失败！')
       console.log(error, '---err')
     }
 

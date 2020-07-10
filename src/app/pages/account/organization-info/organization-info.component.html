@@ -42,23 +42,41 @@
     </nz-form-item>
 
     <!-- 机构联系电话、传真 -->
-    <nz-form-item>
+
+    <div class="organize-item">
+      <div style=" margin-right: 20px;">
+        <nz-form-item>
+          <nz-form-label nzFor="mobile" nzRequired>联系电话</nz-form-label>
+          <nz-form-control nzErrorTip="请输入联系电话!" class="add-roles-form-control">
+            <input nz-input formControlName="mobile" placeholder="请输入联系电话" id="mobile" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label nzFor="fax">传真</nz-form-label>
+        <nz-form-control nzErrorTip="请输入传真号" class="add-roles-form-control">
+          <input nz-input formControlName="fax" placeholder="请输入传真号" id="fax" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <!-- <nz-form-item>
       <div style="width: 200px; margin-right: 10px;">
         <nz-form-label nzFor="mobile" nzRequired>联系电话</nz-form-label>
-        <nz-form-control nzErrorTip="请输入联系电话" class="add-roles-form-control">
+        <nz-form-control nzErrorTip="请输入联系电话!" class="add-roles-form-control">
           <input nz-input formControlName="mobile" placeholder="请输入联系电话" id="mobile" />
         </nz-form-control>
       </div>
       <div style="width: 200px">
-        <nz-form-label nzFor="fax" nzRequired>传真</nz-form-label>
+        <nz-form-label nzFor="fax">传真</nz-form-label>
         <nz-form-control nzErrorTip="请输入传真号" class="add-roles-form-control">
           <input nz-input formControlName="fax" placeholder="请输入传真号" id="fax" />
         </nz-form-control>
       </div>
-    </nz-form-item>
+    </nz-form-item> -->
 
     <!-- 机构详细地址 -->
-    <nz-form-label nzFor="address" nzRequired>详细地址</nz-form-label>
+    <nz-form-label nzFor="address">详细地址</nz-form-label>
     <nz-form-item>
       <nz-form-control [nzSpan]="8" nzErrorTip="请输入详细地址，最多输入100字" class="add-roles-form-control">
         <input nz-input formControlName="address" placeholder="请输入负责人名称" id="address" />

@@ -18,13 +18,13 @@ import { MyValidators } from '../../utils/validators';
 export class OrganizationInfoComponent implements OnInit {
   validateForm!: FormGroup;
   type: string;
-  dictionaryList=[];
+  dictionaryList = [];
 
   organizeList: any = [
     {
       title: '顶级机构',
-      value: '0',
-      key: '0',
+      value: 0,
+      key: 0,
       children: [...JSON.parse(window.localStorage.getItem('organizeList') || '[]')]
     },
   ];
@@ -48,29 +48,31 @@ export class OrganizationInfoComponent implements OnInit {
 
       this.type = data.type;
 
-      let name = '', parentId = '', type = '', chargePerson = '', mobile = '', fax = '', address = '';
+      let name = null, parentId = null, type = null, chargePerson = null, mobile = null, fax = null, address = null;
 
       if (data.type === 'update') {
         const organiza_item = JSON.parse(window.localStorage.getItem('organiza-item') || '{}')
 
-        name = organiza_item.name || '';
-        parentId = `${organiza_item.parentId}`
-        type = organiza_item.type || '';
-        chargePerson = organiza_item.chargePerson || '';
-        mobile = `${organiza_item.mobile}` || '';
-        fax = organiza_item.fax || '';
-        address = organiza_item.address || '';
+        console.log(organiza_item.parentId, '====================organiza_item.parentId ')
+
+        name = organiza_item.name || null;
+        parentId = organiza_item.parentId || 0
+        type = organiza_item.type || null;
+        chargePerson = organiza_item.chargePerson || null;
+        mobile = `${organiza_item.mobile}` || null;
+        fax = organiza_item.fax || null;
+        address = organiza_item.address || null;
       }
-      const { required, maxLength, mobile: v_mobile,fax:v_fax,numberAddLetterAddChinese } = MyValidators;
+      const { required, maxLength, mobile: v_mobile, fax: v_fax, numberAddLetterAddChinese } = MyValidators;
       // 初始化表单
       this.validateForm = this.fb.group({
-        name: [name, [required, maxLength(30),numberAddLetterAddChinese]],
+        name: [name, [required, maxLength(30), numberAddLetterAddChinese]],
         parentId: [parentId, [required]],
         type: [type, [required]],
-        chargePerson: [chargePerson, [required, maxLength(30),numberAddLetterAddChinese]],
+        chargePerson: [chargePerson, [required, maxLength(30), numberAddLetterAddChinese]],
         mobile: [mobile, [required, v_mobile]],
-        fax: [fax, [required, v_fax]],
-        address: [address, [required, maxLength(100),numberAddLetterAddChinese]],
+        fax: [fax, [v_fax]],
+        address: [address, [maxLength(100), numberAddLetterAddChinese]],
       });
     })
 
@@ -80,7 +82,6 @@ export class OrganizationInfoComponent implements OnInit {
   /**
    * 递归获取父级ID
    * @param item 
-   * 
    * */
   handleGetParentId(item: any, array: any) {
 
@@ -93,7 +94,6 @@ export class OrganizationInfoComponent implements OnInit {
   /**
    * 获取上级机构列表
    * @params parentId 父级 id
-   * 
    * */
 
   async getParentOrganizeList(parentId) {
@@ -115,28 +115,28 @@ export class OrganizationInfoComponent implements OnInit {
   }
 
 
-    /**
+  /**
   * 获取机构字典列表
   * @param department_type 目前固定写死
   * */
- async getDictionaryList() {
-  const url = '/api/api/user/dictionary/key/department_type';
+  async getDictionaryList() {
+    const url = '/api/api/user/dictionary/key/department_type';
 
-  try {
-    const data: any = await this.http.get(url).toPromise();
+    try {
+      const data: any = await this.http.get(url).toPromise();
 
-    if (data.code !== 200) {
+      if (data.code !== 200) {
+        this.dictionaryList = [];
+        return;
+      }
+      this.dictionaryList = data.data.map(item => Object.assign(item, { key: item.id, key1: item.key, title: item.name }));
+      console.log(data, '---data')
+
+    } catch (error) {
+      console.log(error, '---')
       this.dictionaryList = [];
-      return;
     }
-    this.dictionaryList = data.data.map(item => Object.assign(item, { key: item.id, key1: item.key, title: item.name }));
-    console.log(data, '---data')
-
-  } catch (error) {
-    console.log(error, '---')
-    this.dictionaryList = [];
   }
-}
 
   // 提示框
   createNotification(type: string, title: string, message: string): void {
@@ -162,7 +162,7 @@ export class OrganizationInfoComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '添加失败', '添加组织失败！')
+        this.createNotification('error', '添加失败', data.message || '添加组织失败！')
         return;
       }
 
@@ -172,13 +172,13 @@ export class OrganizationInfoComponent implements OnInit {
       this.router.navigate(['/admin/organization/list'])
 
     } catch (error) {
-      this.createNotification('error', '添加失败', '添加组织失败！')
+      this.createNotification('error', '添加失败', error.message || '添加组织失败！')
       console.log(error, '---err')
     }
   }
 
   /**
-  * 添加组织
+  * 更新组织
   * @param name 组织名称
   * @param parentId [] 上级机构id
   * @param type 类型
@@ -200,7 +200,7 @@ export class OrganizationInfoComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '更新失败', '更新组织失败！')
+        this.createNotification('error', '更新失败', data.message || '更新组织失败！')
         return;
       }
 
@@ -210,7 +210,7 @@ export class OrganizationInfoComponent implements OnInit {
       this.router.navigate(['/admin/organization/list'])
 
     } catch (error) {
-      this.createNotification('error', '更新失败', '更新组织失败！')
+      this.createNotification('error', '更新失败', error.message || '更新组织失败！')
       console.log(error, '---err')
     }
   }

@@ -209,7 +209,7 @@ export class PersonComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', `${action}用户`, `${action}用户失败！`)
+        this.createNotification('error', `${action}用户`, data.message || `${action}用户失败！`)
         return;
       }
 
@@ -217,7 +217,7 @@ export class PersonComponent implements OnInit {
       this.getPersonList();
 
     } catch (error) {
-      this.createNotification('error', `${action}用户`, `${action}用户失败！`)
+      this.createNotification('error', `${action}用户`, error.message || `${action}用户失败！`)
       console.log(error, '---err')
     }
   }
@@ -249,7 +249,7 @@ export class PersonComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '删除用户', '删除用户失败！')
+        this.createNotification('error', '删除用户', data.message || '删除用户失败！')
         return;
       }
 
@@ -257,7 +257,7 @@ export class PersonComponent implements OnInit {
       this.getPersonList();
 
     } catch (error) {
-      this.createNotification('error', '删除用户', '删除用户失败！')
+      this.createNotification('error', '删除用户', error.message || '删除用户失败！')
       console.log(error, '---err')
     }
   }
@@ -278,7 +278,7 @@ export class PersonComponent implements OnInit {
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '重置用户密码', '重置用户密码失败！')
+        this.createNotification('error', '重置用户密码', data.message || '重置用户密码失败！')
         return;
       }
 
@@ -286,7 +286,7 @@ export class PersonComponent implements OnInit {
       this.getPersonList();
 
     } catch (error) {
-      this.createNotification('error', '重置用户密码', '禁用用户失败！')
+      this.createNotification('error', '重置用户密码', error.message || '禁用用户失败！')
       console.log(error, '---err')
     }
   }
