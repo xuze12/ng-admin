@@ -172,23 +172,15 @@ export class MenuService {
 
     try {
 
-      //角色
       const data: any = await this.http.get(url).toPromise()
       if (data.code === 200) {
         const newData = data.data.map((item) => Object.assign(item, { key: item.id }))
         console.log(newData, '----------------getMenuList--------------------')
 
-        const list = this.handleMenuList(newData);
-        console.log(list, 'list---')
-
         const power = await this.getRolesPowers();
         console.log(power, '---power');
-        let menuList = [];
 
-        // 组合 菜单
-        for (let item of list) {
-
-          let menuChildren = []
+        for (let item of newData) {
           let hasParentPowerLink = '';
 
           const hasParentPower = power.find(powerItem => powerItem.permissionGroupId === item.permissionGroupId)
@@ -199,56 +191,25 @@ export class MenuService {
               }
             }
           }
-
-          // 父级
-          let menuParent = {
-            title: item.name,
-            key: item.id,
-            level: 1,
-            icon: 'team',
+          Object.assign(item, {
+            link: hasParentPowerLink,
             open: false,
             selected: false,
-            disabled: false,
-            link: hasParentPowerLink,
-            children: menuChildren
-          }
-
-          // 子菜单
-          if (item.children) {
-            for (let child of item.children) {
-              const hasPower = power.find(powerItem => powerItem.permissionGroupId === child.permissionGroupId)
-              if (hasPower) {
-
-                let haschildPowerLink = '';
-                let menuChildPower = [];
-                for (let i of hasPower.power) {
-                  if (i.url.includes('list')) {
-                    haschildPowerLink = i.url.replace(/\*|$\//g, '')
-                  }
-                }
-
-                if (haschildPowerLink) {
-                  let menuChild = {
-                    title: child.name,
-                    key: child.id,
-                    level: 2,
-                    icon: 'team',
-                    open: false,
-                    selected: false,
-                    disabled: false,
-                    link: haschildPowerLink,
-                  }
-                  menuChildren.push(menuChild)
-                }
-
-              }
-            }
-          }
-
-          menuList.push(menuParent);
+            disabled: false, title: item.name
+          })
         }
 
-        // 子菜单为空时不显示一级菜单
+        console.log(newData, '----zzzzz-------newData');
+
+        const list = this.handleMenuList(newData);
+        console.log(list, 'list---')
+
+
+        let menuList = list;
+
+        this.isHasLinkItem(menuList);
+        console.log(menuList, '-----menuList')
+
         menuList = menuList.filter(item => item.children.length > 0 || item.link !== '');
 
         // 判断菜单是否为空 否 设置第一个子菜单为首页
@@ -282,6 +243,25 @@ export class MenuService {
     }
   }
 
+  isHasLinkItem(array: any) {
+
+    const childrenHasLink = (parent, target) => {
+
+      if (target.children) {
+        childrenHasLink(target, target.children)
+      }
+
+      parent.children = parent.children.filter(item => item.children && item.children.length > 0 || item.link !== '');
+    }
+
+    for (let item of array) {
+      childrenHasLink(item, item.children);
+    }
+  }
+
+
+
+
   /**
    * 处理菜单列表数据 转树形结构
    * */
@@ -298,6 +278,7 @@ export class MenuService {
       var parent = map[item.parentId];
       // 好绕啊，如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
       if (parent) {
+
         (parent.children || (parent.children = [])).push(item);
       } else {
         //如果没有在map中找到对应的索引ID,那么直接把 当前的item添加到 val结果集中，作为顶级

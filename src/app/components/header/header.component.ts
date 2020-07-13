@@ -20,7 +20,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     const loginUserInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}');
-    this.username = loginUserInfo.username || '';
+    const username = loginUserInfo.name || '';
+    this.username = username.toLowerCase();
   }
 
   logOut(): void {

@@ -60,6 +60,59 @@ export class RolesComponent implements OnInit {
     }, 400)
   }
 
+    /**
+   * 菜单带页面权限列表
+   */
+  async getMenuList() {
+    const url = '/api/api/permission/permission_group_menu/with_permission_group';
+
+    try {
+      const data: any = await this.http.get(url).toPromise();
+      return data.code === 200 ? data.data : [];
+    } catch (error) {
+      console.log(error, '---err')
+    }
+  }
+
+   /**
+   * 获取权限页面列表
+   */
+  async getPagesList() {
+    const url = '/api/api/permission/permission_group_permission';
+
+    try {
+      const data: any = await this.http.get(url).toPromise();
+      return data.code === 200 ? data.data : [];
+    } catch (error) {
+      console.log(error, '---err')
+    }
+  }
+
+   /**
+   * 处理菜单列表数据 转树形结构
+   */
+  handleMenuList(array) {
+    // 将数据存储为 以 id 为 KEY 的 map 索引数据列
+    const map = {};
+    for (let i = 0; i < array.length; i++) {
+      map[array[i].id] = array[i]
+    }
+
+    var val = [];
+    array.forEach(function (item) {
+      // 以当前遍历项，的pid,去map对象中找到索引的id
+      var parent = map[item.parentId];
+      // 好绕啊，如果找到索引，那么说明此项不在顶级当中,那么需要把此项添加到，他对应的父级中
+      if (parent) {
+        (parent.children || (parent.children = [])).push(item);
+      } else {
+        //如果没有在map中找到对应的索引ID,那么直接把 当前的item添加到 val结果集中，作为顶级
+        val.push(item);
+      }
+    });
+    return val;
+  }
+
   /**
   * 获取角色列表
   * */
@@ -75,11 +128,33 @@ export class RolesComponent implements OnInit {
         return;
       }
 
+      // const menuList = await this.getMenuList() ;
+      // const pageList = await this.getPagesList();
+
+      // for (let item of menuList) {
+
+      // }
+      // console.log(pageList,'---pageList')
+      // console.log(menuList,'-----menuList')
+
+      // for (let item of menuList) {
+      //   let powerGroup = []
+      //   let hasPowerGroup = pageList.filter(i => i.permissionGroupId === item.permissionGroupId);
+  
+      //   if (hasPowerGroup) {
+      //     powerGroup = hasPowerGroup
+      //   }
+      //   item.power = powerGroup
+      // }
+
+      // const newMenuList = this.handleMenuList(menuList);
+      // console.log(newMenuList,'-------------------newMenuList')
+
       this.rolesList = data.data.map(item => {
         const newItem = item;
         let power = new Set();
         const role_power_item = rolesPowers.filter(i => i.roleInfoId === newItem.id);
-        // console.log(role_power_item, '---role_power_item')
+        console.log(role_power_item, '---role_power_item')
         const map = {};
 
         if (role_power_item.length > 0) {
