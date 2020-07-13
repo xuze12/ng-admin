@@ -81,17 +81,24 @@ export class RolesComponent implements OnInit {
         const map = {};
 
         if (role_power_item.length > 0) {
-          role_power_item.map(j => {
-            const permissionGroupId = j.permissionGroupPermission.permissionGroupId;
-            const permissionGroup = j.permissionGroupPermission.permissionGroup;
-            const permission = j.permissionGroupPermission.permission;
 
+          for (let j of role_power_item) {
+            const {
+              permissionGroupId = '',
+              permissionGroup = '',
+              permission = ''
+            } = j.permissionGroupPermission || {};
+
+            if (!permissionGroupId) {
+              continue;
+            }
             if (!map[permissionGroupId]) {
               map[permissionGroupId] = [`${permissionGroup.name}/`]
             }
 
             map[permissionGroupId].push(permission.description);
-          })
+          }
+
 
           for (let key of Object.keys(map)) {
             const mapItem = map[key].join(',').replace('/,', '/');

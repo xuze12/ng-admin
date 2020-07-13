@@ -138,10 +138,8 @@ export class MenuService {
         return;
       }
 
-      console.log(role_power, '------role_power')
-
       for (let item of role_power) {
-
+        
         const {
           permissionGroupId = '',
           permissionGroup = '',
