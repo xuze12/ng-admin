@@ -28,7 +28,7 @@ export class PersonRightContentComponent implements OnInit {
   @Input() handleDeleteUserModalShow: any;
   @Input() handleResetUserPassword: any;
   @Input() power;
-  value?: string;
+  searchValue?: string;
   validateForm!: FormGroup;
   isResetVisible: boolean = false;
   checked = false;
@@ -58,45 +58,8 @@ export class PersonRightContentComponent implements OnInit {
     this.personList = this.personList
   }
 
-
-  updateCheckedSet(id: number, checked: boolean): void {
-    if (checked) {
-      this.setOfCheckedId.add(id);
-    } else {
-      this.setOfCheckedId.delete(id);
-    }
-  }
-
   onCurrentPageDataChange(listOfCurrentPageData: Data[]): void {
     this.listOfCurrentPageData = listOfCurrentPageData;
-    this.refreshCheckedStatus();
-  }
-
-  refreshCheckedStatus(): void {
-    const listOfEnabledData = this.listOfCurrentPageData.filter(({ disabled }) => !disabled);
-    this.checked = listOfEnabledData.every(({ id }) => this.setOfCheckedId.has(id));
-    this.indeterminate = listOfEnabledData.some(({ id }) => this.setOfCheckedId.has(id)) && !this.checked;
-  }
-
-  onItemChecked(id: number, checked: boolean): void {
-    this.updateCheckedSet(id, checked);
-    this.refreshCheckedStatus();
-  }
-
-  onAllChecked(checked: boolean): void {
-    this.listOfCurrentPageData.filter(({ disabled }) => !disabled).forEach(({ id }) => this.updateCheckedSet(id, checked));
-    this.refreshCheckedStatus();
-  }
-
-  sendRequest(): void {
-    this.loading = true;
-    const requestData = this.listOfData.filter(data => this.setOfCheckedId.has(data.id));
-    console.log(requestData);
-    setTimeout(() => {
-      this.setOfCheckedId.clear();
-      this.refreshCheckedStatus();
-      this.loading = false;
-    }, 1000);
   }
 
   // 禁止用户
@@ -147,6 +110,37 @@ export class PersonRightContentComponent implements OnInit {
   // 删除用户弹框显示
   handleDelete(item: any) {
     this.handleDeleteUserModalShow(item);
+  }
+
+  /**
+   * 搜索
+   */
+  handelSearch() {
+    try {
+
+      const personList = JSON.parse(window.localStorage.getItem('personList')).filter(item => item.department.name.includes(this.searchValue));
+      this.personList = personList;
+      this.searchValue = '';
+    } catch (error) {
+      console.log(error, '---')
+    }
+  }
+
+  /**
+   * 搜索onchange事件
+   */
+  onSearchChange(value: string) {
+    if (!value) {
+      this.personList = JSON.parse(window.localStorage.getItem('personList'));
+    }
+  }
+
+  /**
+   * 重置onchange事件
+   */
+  resetSearch() {
+    this.searchValue = '';
+    this.personList = JSON.parse(window.localStorage.getItem('personList'));
   }
 
 }

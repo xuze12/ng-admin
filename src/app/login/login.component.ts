@@ -66,26 +66,19 @@ export class LoginComponent implements OnInit {
     }
 
     window.localStorage.setItem('auth_token', login_info.id_token);
-    let loginUserInfo = {}
     const { grantedAuthorities } = login_info
     const role = grantedAuthorities[0].authority;
 
-    if (role === 'ADMIN') {
-      loginUserInfo = { roleInfoId: '', role: 'admin', username: login_info.username }
-      window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
-    } else {
+    const roleInfo = await this.buyRoleNameGetRoleId(role);
 
-      const roleInfo = await this.buyRoleNameGetRoleId(role);
-      console.log(roleInfo, '---roleInfo')
-      if (!roleInfo) {
-        return
-      }
-
-      loginUserInfo = { roleInfoId: roleInfo.id, role: 'role', username: login_info.username }
-      window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
+    if (!roleInfo) {
+      return
     }
-    this.createNotification('success', '登陆', '登陆成功！')
 
+    let loginUserInfo = { roleInfoId: roleInfo.id, ...roleInfo }
+    window.localStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo))
+
+    this.createNotification('success', '登陆', '登陆成功！')
     this.router.navigate(['/']);
   }
 

@@ -69,6 +69,7 @@ export class RolesFormComponent implements OnInit {
           name: [null, [required, maxLength(30), numberAddLetterAddChinese]],
           sign: [{ value: null, disabled: true }, [required]],
           departmentId: [null, [required]],
+          PermissionGroupPermissionIds: [null, [required]],
         });
       }
     })
@@ -385,8 +386,10 @@ export class RolesFormComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+    console.log(this.validateForm.value,'-------this.validateForm.value')
 
     if (!this.validateForm.valid) {
+      console.log(this.validateForm.value,'-------!this.validateForm.valid')
       return;
     }
 
@@ -427,6 +430,10 @@ export class RolesFormComponent implements OnInit {
 
       // 给角色绑定页面权限
       const PermissionGroupPermissionIds = this.checkedPowerList.map(item => item.id).join();
+
+      // if(!PermissionGroupPermissionIds) {
+      //   this.createNotification('error', '新增角色', '还未选择绑定页面！');
+      // }
 
       const powerParams = {
         roleInfoId: data.data,

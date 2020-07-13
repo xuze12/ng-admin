@@ -13,7 +13,7 @@ export class PowerService {
 
     // 超级管理员
     const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
-    const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
+    const is_admin = Reflect.has(roleInfo, 'name') && Reflect.get(roleInfo, 'name') === 'ADMIN';
     let power = {
       add: false,
       edit: false,
@@ -43,17 +43,17 @@ export class PowerService {
       tmier = setInterval(() => {
         if (window.localStorage.getItem('allMenuPower')) {
           allMenuPower = JSON.parse(window.localStorage.getItem('allMenuPower') || '[]');
-          this.getAllMenuPower(param, allMenuPower,power);
+          this.getAllMenuPower(param, allMenuPower, power);
           clearInterval(tmier);
         }
       }, 100);
       return;
     }
 
-    this.getAllMenuPower(param, allMenuPower,power);
+    this.getAllMenuPower(param, allMenuPower, power);
   }
 
-  getAllMenuPower(param: string, allMenuPower: any,power: any) {
+  getAllMenuPower(param: string, allMenuPower: any, power: any) {
 
     // 角色 根据权限显示
     const hasItem = allMenuPower.find(item => item.name.includes(`${param}-list`));

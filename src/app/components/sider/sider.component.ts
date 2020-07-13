@@ -18,16 +18,15 @@ export class SiderComponent implements OnInit {
     this.menus = this.menuService.menus;
   }
 
-   // 监听父级传值变化
-   ngOnChanges(changes: SimpleChanges) {
+  // 监听父级传值变化
+  ngOnChanges(changes: SimpleChanges) {
     //  console.log(121212121211212121212)
     this.menus = this.menuService.menus;
   }
 
-
- async handleMenuChange(value: any) {
+  async handleMenuChange(value: any) {
     // console.log(value,'----menu')
-   await this.menuService.handleMenuChange(value)
+    await this.menuService.handleMenuChange(value)
   }
   handleOpenChange(value: any) {
     // console.log(value,'----open')

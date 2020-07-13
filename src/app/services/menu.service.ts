@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http'
-import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http'
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs'
 
 export interface TreeNodeInterface {
@@ -94,7 +94,6 @@ const menus = [
 
 export class MenuService {
   menus = []
-  // menus = menus;
   newMenus = [];
   roleInfoPower = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
@@ -121,25 +120,17 @@ export class MenuService {
       let power = [];
       let allMenuPower = [];
       const map = {};
-      const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
-      const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
-
-
-      let role_power = [];
-
-      // 是否超级管理员
-      if (!is_admin) {
-        role_power = this.roleInfoPower.filter(item => item.roleInfoId === roleInfo.roleInfoId)
-      } else {
-        role_power = this.roleInfoPower
-      }
+      const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}');
+      let role_power = this.roleInfoPower.filter(item => item.roleInfoId === roleInfo.roleInfoId);
 
       if (!Array.isArray(role_power) || role_power.length === 0) {
         return;
       }
 
+      console.log(role_power, '------role_power');
+
       for (let item of role_power) {
-        
+
         const {
           permissionGroupId = '',
           permissionGroup = '',
@@ -180,17 +171,6 @@ export class MenuService {
     const url = '/api/api/permission/permission_group_menu/with_permission_group'
 
     try {
-
-      // 超级管理员
-      // const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}')
-      // const is_admin = Reflect.has(roleInfo, 'role') && Reflect.get(roleInfo, 'role') === 'admin';
-
-      // if (is_admin) {
-      //   this.menus = menus;
-      //   this.getNewMenus();
-      //   this.urlFindMenuItem();
-      //   return;
-      // }
 
       //角色
       const data: any = await this.http.get(url).toPromise()

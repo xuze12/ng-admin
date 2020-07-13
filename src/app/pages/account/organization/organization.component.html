@@ -5,9 +5,9 @@
 <div class="or-header">
 
   <div class="organization-search">
-    <input nz-input placeholder="请输入机构名称" [(ngModel)]="value" class="search-ipt" />
-    <button nz-button nzType="primary" class="or-search-btn">查询</button>
-    <button nz-button nzType="default">重置</button>
+    <input nz-input placeholder="请输入机构名称" [(ngModel)]="searchValue" class="search-ipt" (ngModelChange)="onSearchChange($event)" />
+    <button nz-button nzType="primary" class="or-search-btn" (click)="handelSearch()">查询</button>
+    <button nz-button nzType="default" (click)="resetSearch()">重置</button>
   </div>
 
   <div class="add-button" *ngIf='power.add'>

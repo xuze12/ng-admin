@@ -82,6 +82,7 @@ export class PersonComponent implements OnInit {
       }
 
       this.personList = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }));
+      window.localStorage.setItem('personList', JSON.stringify(this.personList));
 
     } catch (error) {
       console.log(error, '---err')
@@ -99,6 +100,7 @@ export class PersonComponent implements OnInit {
 
       if (data.code === 200) {
         const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }));
+
         const list = this.handleOrganizeList(newData);
         this.organizeList = list
         this.organizeList.forEach(item => {

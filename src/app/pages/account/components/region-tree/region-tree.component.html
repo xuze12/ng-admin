@@ -2,13 +2,13 @@
 
 <!-- 军区搜索树 -->
 <nz-input-group [nzSuffix]="suffixIcon">
-  <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+  <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue"  />
 </nz-input-group>
 <ng-template #suffixIcon>
   <i nz-icon nzType="search"></i>
 </ng-template>
 <div class="tree-wrapper">
-  <nz-tree [nzData]="organizeList" [nzSearchValue]="searchValue" (nzClick)="nzEvent($event)"
-  (nzExpandChange)="nzEvent($event)" (nzSearchValueChange)="nzEvent($event)">
+  <nz-tree [nzData]="organizeList" [nzSearchValue]="searchValue" (nzClick)="handelSearch($event)"
+  (nzExpandChange)="handelSearch($event)" (nzSearchValueChange)="handelSearch($event)">
 </nz-tree>
 </div>

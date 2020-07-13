@@ -26,7 +26,7 @@ export interface TreeNodeInterface {
 
 export class OrganizationComponent implements OnInit {
 
-  value?: string;
+  searchValue?: string;
   list: TreeNodeInterface[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   power = {
@@ -80,6 +80,9 @@ export class OrganizationComponent implements OnInit {
       }
 
       const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
+
+      window.localStorage.setItem('organizeQequestList', JSON.stringify(newData));
+
       this.list = this.handleOrganizeList(newData);
       this.list.forEach(item => {
         this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
@@ -223,9 +226,45 @@ export class OrganizationComponent implements OnInit {
    * 获取单位新
    */
   handleEditOrganiza(item: any) {
-    
+
     window.localStorage.setItem('organiza-item', JSON.stringify(item))
     this.router.navigateByUrl('/admin/organization/infoUpdate/update');
+  }
+
+  /**
+   * 搜索
+   */
+  handelSearch() {
+    try {
+
+      const organizeQequestList = JSON.parse(window.localStorage.getItem('organizeQequestList'))
+        .filter(item => item.name.includes(this.searchValue))
+
+      this.list = this.handleOrganizeList(organizeQequestList);
+      this.list.forEach(item => {
+        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      });
+      this.searchValue = '';
+    } catch (error) {
+      console.log(error, '---')
+    }
+  }
+
+  /**
+   * 搜索onchange事件
+   */
+  onSearchChange(value: string) {
+    if (!value) {
+      this.list = JSON.parse(window.localStorage.getItem('organizeList'));
+    }
+  }
+
+  /**
+   * 重置onchange事件
+   */
+  resetSearch() {
+    this.searchValue = '';
+    this.list = JSON.parse(window.localStorage.getItem('organizeList'));
   }
 
 }
