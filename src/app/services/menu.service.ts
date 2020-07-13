@@ -138,10 +138,20 @@ export class MenuService {
         return;
       }
 
+      console.log(role_power, '------role_power')
+
       for (let item of role_power) {
-        const permissionGroupId = item.permissionGroupPermission.permissionGroupId;
-        const permissionGroup = item.permissionGroupPermission.permissionGroup;
-        const permission = item.permissionGroupPermission.permission;
+
+        const {
+          permissionGroupId = '',
+          permissionGroup = '',
+          permission = ''
+        } = item.permissionGroupPermission || {};
+
+        if (!permissionGroupId) {
+          continue;
+        }
+
         if (!map[permissionGroupId]) {
           map[permissionGroupId] = {
             name: permissionGroup.name,
