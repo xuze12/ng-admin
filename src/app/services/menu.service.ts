@@ -250,7 +250,6 @@ export class MenuService {
 
         // 子菜单为空时不显示一级菜单
         menuList = menuList.filter(item => item.children.length > 0 || item.link !== '');
-        console.log(menuList, 'filter-----------------------filter-----------')
 
         // 判断菜单是否为空 否 设置第一个子菜单为首页
         if (menuList.length > 0) {
@@ -269,8 +268,6 @@ export class MenuService {
         } else {
           this.router.navigate([`/admin/403`])
         }
-
-        console.log(menuList, '===============menuList==================')
 
         this.menus = menuList
         this.getNewMenus();

@@ -101,6 +101,8 @@ export class PersonComponent implements OnInit {
       if (data.code === 200) {
         const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }));
 
+        window.localStorage.setItem('organizeQequestList', JSON.stringify(newData));
+        
         const list = this.handleOrganizeList(newData);
         this.organizeList = list
         this.organizeList.forEach(item => {
@@ -286,6 +288,29 @@ export class PersonComponent implements OnInit {
     } catch (error) {
       this.createNotification('error', '重置用户密码', error.message || '禁用用户失败！')
       console.log(error, '---err')
+    }
+  }
+
+  /**
+   * 搜索
+   */
+  handelSearch=(target: any,searchValue:string)=> {
+
+    console.log(target, 'handelSearch----target')
+    try {
+      const personList = JSON.parse(window.localStorage.getItem('personList'))
+        .filter(item => item.department.name.includes(target.name))
+        console.log(personList,'----personList')
+
+      this.personList=personList;
+
+      // this.organizeList = this.handleOrganizeList(organizeQequestList);
+      // this.organizeList.forEach(item => {
+      //   this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      // });
+      // this.searchValue = '';
+    } catch (error) {
+      console.log(error, '---')
     }
   }
 

@@ -244,7 +244,7 @@ export class OrganizationComponent implements OnInit {
       this.list.forEach(item => {
         this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
       });
-      this.searchValue = '';
+      // this.searchValue = '';
     } catch (error) {
       console.log(error, '---')
     }

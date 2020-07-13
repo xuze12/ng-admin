@@ -76,8 +76,10 @@ export class RolesComponent implements OnInit {
       }
 
       this.rolesList = data.data.map(item => {
-        let power = []
-        const role_power_item = rolesPowers.filter(i => i.roleInfoId === item.id);
+        const newItem = item;
+        let power = new Set();
+        const role_power_item = rolesPowers.filter(i => i.roleInfoId === newItem.id);
+        // console.log(role_power_item, '---role_power_item')
         const map = {};
 
         if (role_power_item.length > 0) {
@@ -92,6 +94,7 @@ export class RolesComponent implements OnInit {
             if (!permissionGroupId) {
               continue;
             }
+
             if (!map[permissionGroupId]) {
               map[permissionGroupId] = [`${permissionGroup.name}/`]
             }
@@ -99,17 +102,16 @@ export class RolesComponent implements OnInit {
             map[permissionGroupId].push(permission.description);
           }
 
-
           for (let key of Object.keys(map)) {
             const mapItem = map[key].join(',').replace('/,', '/');
-            power.push(`${mapItem}`)
+            power.add(`${mapItem}`)
           }
         }
 
         Object.assign(item, {
           key: item.id,
           title: item.name,
-          power: power.join('、'),
+          power: [...power].join('、'),
         })
 
         return item;

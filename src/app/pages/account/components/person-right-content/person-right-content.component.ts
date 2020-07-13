@@ -118,9 +118,9 @@ export class PersonRightContentComponent implements OnInit {
   handelSearch() {
     try {
 
-      const personList = JSON.parse(window.localStorage.getItem('personList')).filter(item => item.department.name.includes(this.searchValue));
+      const personList = JSON.parse(window.localStorage.getItem('personList')).filter(item => item.tusers.userName.includes(this.searchValue));
       this.personList = personList;
-      this.searchValue = '';
+      // this.searchValue = '';
     } catch (error) {
       console.log(error, '---')
     }
