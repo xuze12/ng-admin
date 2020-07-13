@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'
 import { HttpClient, HttpParams } from '@angular/common/http'
+
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
-// import { async } from '@angular/core/testing';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 import { MyValidators } from '../../utils/validators';
-
 
 @Component({
   selector: 'app-organization-info',
@@ -16,10 +15,10 @@ import { MyValidators } from '../../utils/validators';
 })
 
 export class OrganizationInfoComponent implements OnInit {
+
   validateForm!: FormGroup;
   type: string;
   dictionaryList = [];
-
   organizeList: any = [
     {
       title: '顶级机构',
@@ -29,16 +28,13 @@ export class OrganizationInfoComponent implements OnInit {
     },
   ];
 
-
   constructor(
     private fb: FormBuilder,
     public route: ActivatedRoute,
     public router: Router,
     private http: HttpClient,
     private notification: NzNotificationService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
 
@@ -52,9 +48,6 @@ export class OrganizationInfoComponent implements OnInit {
 
       if (data.type === 'update') {
         const organiza_item = JSON.parse(window.localStorage.getItem('organiza-item') || '{}')
-
-        console.log(organiza_item.parentId, '====================organiza_item.parentId ')
-
         name = organiza_item.name || null;
         parentId = organiza_item.parentId || 0
         type = organiza_item.type || null;
@@ -63,6 +56,7 @@ export class OrganizationInfoComponent implements OnInit {
         fax = organiza_item.fax || null;
         address = organiza_item.address || null;
       }
+
       const { required, maxLength, mobile: v_mobile, fax: v_fax, numberAddLetterAddChinese } = MyValidators;
       // 初始化表单
       this.validateForm = this.fb.group({
@@ -75,8 +69,6 @@ export class OrganizationInfoComponent implements OnInit {
         address: [address, [maxLength(100), numberAddLetterAddChinese]],
       });
     })
-
-
   }
 
   /**
@@ -97,17 +89,15 @@ export class OrganizationInfoComponent implements OnInit {
    * */
 
   async getParentOrganizeList(parentId) {
-    const url = '/api/api/user/department'
+
+    const url = '/api/api/user/department';
     const options = {
       params: new HttpParams().set('parentId', parentId)
     }
+
     try {
       const data: any = await this.http.get(url, options).toPromise()
-      console.log(data, 'getParentOrganizationList')
-
       return data.data
-
-      // const hasData =  data&&typeof data === 'object'&& Reflect.has(data,'code')
     } catch (error) {
       console.log(error, '---err')
       return [];
@@ -120,17 +110,18 @@ export class OrganizationInfoComponent implements OnInit {
   * @param department_type 目前固定写死
   * */
   async getDictionaryList() {
-    const url = '/api/api/user/dictionary/key/department_type';
-
     try {
+
+      const url = '/api/api/user/dictionary/key/department_type';
+
       const data: any = await this.http.get(url).toPromise();
 
       if (data.code !== 200) {
         this.dictionaryList = [];
         return;
       }
+
       this.dictionaryList = data.data.map(item => Object.assign(item, { key: item.id, key1: item.key, title: item.name }));
-      console.log(data, '---data')
 
     } catch (error) {
       console.log(error, '---')
@@ -140,6 +131,7 @@ export class OrganizationInfoComponent implements OnInit {
 
   // 提示框
   createNotification(type: string, title: string, message: string): void {
+
     this.notification.create(type, title, message);
   }
 
@@ -154,25 +146,24 @@ export class OrganizationInfoComponent implements OnInit {
    * @param address 地址
    * */
   async handleAddOrganiza(params: any) {
-    const url = '/api/api/user/department'
 
     try {
-      const data: any = await this.http.post(url, params).toPromise()
-      console.log(data, 'add')
+      const url = '/api/api/user/department';
+
+      const data: any = await this.http.post(url, params).toPromise();
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '添加失败', data.message || '添加组织失败！')
+        this.createNotification('error', '添加失败', data.message || '添加组织失败！');
         return;
       }
 
-      this.createNotification('success', '添加成功', '添加组织成功！')
+      this.createNotification('success', '添加成功', '添加组织成功！');
       this.validateForm.reset();
-
-      this.router.navigate(['/admin/organization/list'])
+      this.router.navigate(['/admin/organization/list']);
 
     } catch (error) {
-      this.createNotification('error', '添加失败', error.message || '添加组织失败！')
+      this.createNotification('error', '添加失败', error.message || '添加组织失败！');
       console.log(error, '---err')
     }
   }
@@ -191,12 +182,12 @@ export class OrganizationInfoComponent implements OnInit {
 
     try {
 
-      const organiza_item = JSON.parse(window.localStorage.getItem('organiza-item') || '{}')
+      const organiza_item = JSON.parse(window.localStorage.getItem('organiza-item') || '{}');
       Object.assign(params, { id: organiza_item.id })
       const url = '/api/api/user/department'
 
-      const data: any = await this.http.put(url, params).toPromise()
-      console.log(data, 'add')
+      const data: any = await this.http.put(url, params).toPromise();
+
       const is_error = !(data.code === 200)
 
       if (is_error) {
@@ -204,10 +195,9 @@ export class OrganizationInfoComponent implements OnInit {
         return;
       }
 
-      this.createNotification('success', '更新成功', '更新组织成功！')
+      this.createNotification('success', '更新成功', '更新组织成功！');
       this.validateForm.reset();
-
-      this.router.navigate(['/admin/organization/list'])
+      this.router.navigate(['/admin/organization/list']);
 
     } catch (error) {
       this.createNotification('error', '更新失败', error.message || '更新组织失败！')
@@ -235,7 +225,6 @@ export class OrganizationInfoComponent implements OnInit {
 
   onExpandChange(e: NzFormatEmitEvent): void {
     const node = e.node;
-    console.log(node, '---node')
     const parentId = node.origin.value
     if (node && node.getChildren().length === 0 && node.isExpanded) {
 

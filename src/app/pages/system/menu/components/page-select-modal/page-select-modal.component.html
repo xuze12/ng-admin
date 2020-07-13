@@ -1,19 +1,19 @@
 <nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleCancel()"
   (nzOnOk)="submitForm(validateForm.value)">
   <form nz-form [formGroup]="validateForm">
+
     <nz-form-item>
       <nz-form-control [nzSpan]="20" nzValidatingTip="Validating...">
         <input nz-input formControlName="menuName" placeholder="搜索页面" (ngModelChange)="handleSearchChange($event)" />
       </nz-form-control>
     </nz-form-item>
+
     <nz-form-item>
       <nz-form-control [nzSpan]="20" nzErrorTip="选择页面!">
         <nz-radio-group formControlName="radioValue" class='page-radio-group'>
-
           <div *ngFor="let item of pagesList">
             <label class='page-radio-item' nz-radio [nzValue]="item.id" *ngIf="item.show">{{item.name}}</label>
           </div>
-
         </nz-radio-group>
       </nz-form-control>
     </nz-form-item>

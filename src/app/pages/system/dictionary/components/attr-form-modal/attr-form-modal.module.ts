@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AttrFormModalRoutingModule } from './attr-form-modal-routing.module';
 import { AttrFormModalComponent } from './attr-form-modal.component';
@@ -25,4 +25,5 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
   declarations: [AttrFormModalComponent],
   exports: [AttrFormModalComponent]
 })
+
 export class AttrFormModalModule { }

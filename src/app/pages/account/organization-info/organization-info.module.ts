@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { OrganizationInfoRoutingModule } from './organization-info-routing.module';
 import { OrganizationInfoComponent } from './organization-info.component';
@@ -28,7 +28,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
     NzGridModule,
     NzInputModule,
     ReactiveFormsModule,
-    // FormsModule,
     NzFormModule,
     NzSelectModule,
     NzTreeSelectModule,
@@ -37,4 +36,5 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
   declarations: [OrganizationInfoComponent],
   exports: [OrganizationInfoComponent]
 })
+
 export class OrganizationInfoModule { }

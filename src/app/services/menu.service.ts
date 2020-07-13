@@ -390,9 +390,6 @@ export class MenuService {
           const pageMenu = this.getPageMenu(target);
           console.log(pageMenu, 'handleMenuChange======pageMenu')
           this.pageMenu = pageMenu;
-          this.stream = new Observable<any>((observer => {
-            observer.next(pageMenu)
-          }))
         }
       }
     }

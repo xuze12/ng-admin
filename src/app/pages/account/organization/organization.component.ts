@@ -1,12 +1,11 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 
 import { PowerService } from '../../../services/power.service';
 import { MenuService } from '../../../services/menu.service';
-
 
 export interface TreeNodeInterface {
   key: string;
@@ -24,6 +23,7 @@ export interface TreeNodeInterface {
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
+
 export class OrganizationComponent implements OnInit {
 
   value?: string;
@@ -35,6 +35,7 @@ export class OrganizationComponent implements OnInit {
     del: false
   }
   pageMenu = [];
+
   constructor(
     private modal: NzModalService,
     public router: Router,
@@ -47,7 +48,6 @@ export class OrganizationComponent implements OnInit {
   ngOnInit(): void {
 
     this.powerService.setPagePower('organization');
-    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
@@ -63,27 +63,27 @@ export class OrganizationComponent implements OnInit {
     }, 400)
   }
 
-
   /**
    * 获取机构列表
    * */
   async getOrganizeList() {
-    const url = '/api/api/user/department'
 
     try {
-      const data: any = await this.http.get(url).toPromise()
+      const url = '/api/api/user/department';
 
-      if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
-        const list = this.handleOrganizeList(newData);
-        this.list = list
-        console.log(this.list, '----getOrganizeList----list')
-        this.list.forEach(item => {
-          this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-        });
-      } else {
-        this.list = []
+      const data: any = await this.http.get(url).toPromise();
+
+      if (data.code !== 200) {
+        this.list = [];
+        window.localStorage.setItem('organizeList', JSON.stringify(this.list));
+        return;
       }
+
+      const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
+      this.list = this.handleOrganizeList(newData);
+      this.list.forEach(item => {
+        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      });
       window.localStorage.setItem('organizeList', JSON.stringify(this.list))
 
     } catch (error) {
@@ -95,7 +95,6 @@ export class OrganizationComponent implements OnInit {
    * 处理获取机构列表数据 转成树形结构
    */
   handleOrganizeList(array) {
-    const list = [];
     // 将数据存储为 以 id 为 KEY 的 map 索引数据列
     const map = {};
     for (let i = 0; i < array.length; i++) {
@@ -178,11 +177,7 @@ export class OrganizationComponent implements OnInit {
 
   // 提示框
   createNotification(type: string, title: string, message: string): void {
-    this.notification.create(
-      type,
-      title,
-      message
-    );
+    this.notification.create(type, title, message);
   }
 
   /**
@@ -228,6 +223,7 @@ export class OrganizationComponent implements OnInit {
    * 获取单位新
    */
   handleEditOrganiza(item: any) {
+    
     window.localStorage.setItem('organiza-item', JSON.stringify(item))
     this.router.navigateByUrl('/admin/organization/infoUpdate/update');
   }

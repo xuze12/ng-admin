@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MyValidators } from '../../utils/validators';
 
@@ -58,18 +58,16 @@ export class RolesFormComponent implements OnInit {
       if (data.type === 'edit') {
 
         const { name, sign, departmentId } = JSON.parse(window.localStorage.getItem('edit_roles_info') || '{}');
-        console.log(departmentId, '---departmentId')
-        // 初始化表单
         this.validateForm = this.fb.group({
           name: [name, [required, maxLength(30), numberAddLetterAddChinese]],
-          sign: [sign, [required]],
+          sign: [{ value: sign, disabled: true }, [required]],
           departmentId: [departmentId, [required]],
         });
+
       } else {
-        // 初始化表单
         this.validateForm = this.fb.group({
           name: [null, [required, maxLength(30), numberAddLetterAddChinese]],
-          sign: [null, [required]],
+          sign: [{ value: null, disabled: true }, [required]],
           departmentId: [null, [required]],
         });
       }
@@ -95,14 +93,13 @@ export class RolesFormComponent implements OnInit {
     this.validateForm.get('sign')!.setValue(sign);
   }
 
-
-
   /**
    * 根据角色di 查找角色页面权限
    * @param id 角色id
    */
   async handleRoleIdGetPower(id: number) {
-    const url = `/api/api/permission/role_permission_group_permission/${id}`
+
+    const url = `/api/api/permission/role_permission_group_permission/${id}`;
 
     try {
       const data: any = await this.http.get(url).toPromise()
@@ -177,7 +174,6 @@ export class RolesFormComponent implements OnInit {
         this.checkedPowerList = this.checkedPowerList.filter(i => i.id !== item.id);
       }
     }
-    console.log(this.checkedPowerList, '---this.checkedPowerList')
   }
 
   // 更新选中的
@@ -195,8 +191,6 @@ export class RolesFormComponent implements OnInit {
       target.indeterminate = true;
     }
 
-    console.log(target.power, '---target.power')
-
     for (let item of target.power) {
       if (item.checked) {
         const hasItem = this.checkedPowerList.find(i => i.id === item.id);
@@ -208,7 +202,6 @@ export class RolesFormComponent implements OnInit {
         this.checkedPowerList = this.checkedPowerList.filter(i => i.id !== item.id);
       }
     }
-    console.log(this.checkedPowerList, '---this.checkedPowerList')
   }
 
   /**
@@ -264,26 +257,27 @@ export class RolesFormComponent implements OnInit {
    * 获取页面权限列表 以及 页面权限
    */
   async getMenuAndPower() {
+    // 角色拥有的权限
+    let rolesHasPower = [];
+
     const pageList = await this.getPagesList();
-    console.log(pageList, '-----pageList')
     this.pagesList = pageList;
+
 
     const menuList = await this.getMenuList();
 
-    // 角色拥有的权限
-    let rolesHasPower = [];
     if (this.type === 'edit') {
       const { id } = JSON.parse(window.localStorage.getItem('edit_roles_info') || '{}');
       rolesHasPower = await this.handleRoleIdGetPower(id);
     }
-    console.log(rolesHasPower, '---rolesHasPower--')
 
     for (let item of menuList) {
       let powerGroup = []
       let hasPowerGroup = pageList.filter(i => i.permissionGroupId === item.permissionGroupId);
-      console.log(hasPowerGroup, '----hasPowerGroup')
-      if (hasPowerGroup) {
+      let allChecked = false;
+      let indeterminate = false;
 
+      if (hasPowerGroup) {
         powerGroup = hasPowerGroup.map(powerItem => Object.assign(powerItem, {
           label: powerItem.permission ? powerItem.permission.description : '',
           value: powerItem.permission ? powerItem.permission.id : '',
@@ -299,22 +293,19 @@ export class RolesFormComponent implements OnInit {
         }
       }
 
-      let allChecked = false;
-      let indeterminate = false;
       if (powerGroup.length > 0) {
         const checkedPower = powerGroup.filter(i => i.checked === true);
         allChecked = checkedPower.length == powerGroup.length;
         item.indeterminate = checkedPower.length > 0 && checkedPower.length < powerGroup.length;
       }
+
       item.key = item.id;
       item.power = powerGroup;
       item.allChecked = allChecked;
       item.indeterminate = indeterminate;
-
     }
 
-
-    this.menuList = this.handleMenuList(menuList)
+    this.menuList = this.handleMenuList(menuList);
     this.menuList.forEach(item => {
       this.mapOfExpandedMenuList[item.key] = this.convertTreeToList(item);
     });
@@ -324,10 +315,10 @@ export class RolesFormComponent implements OnInit {
    * 菜单带页面权限列表
    */
   async getMenuList() {
-    const url = '/api/api/permission/permission_group_menu/with_permission_group'
+    const url = '/api/api/permission/permission_group_menu/with_permission_group';
 
     try {
-      const data: any = await this.http.get(url).toPromise()
+      const data: any = await this.http.get(url).toPromise();
       return data.code === 200 ? data.data : [];
     } catch (error) {
       console.log(error, '---err')
@@ -363,10 +354,10 @@ export class RolesFormComponent implements OnInit {
    * 获取权限页面列表
    */
   async getPagesList() {
-    const url = '/api/api/permission/permission_group_permission'
+    const url = '/api/api/permission/permission_group_permission';
 
     try {
-      const data: any = await this.http.get(url).toPromise()
+      const data: any = await this.http.get(url).toPromise();
       return data.code === 200 ? data.data : [];
     } catch (error) {
       console.log(error, '---err')
@@ -395,14 +386,18 @@ export class RolesFormComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
+    if (!this.validateForm.valid) {
+      return;
+    }
+
     const params = this.validateForm.value;
 
     if (this.type === 'edit') {
-      const edit_roles_info = JSON.parse(window.localStorage.getItem('edit_roles_info') || '{}')
-      Object.assign(params, { id: edit_roles_info.id || '' })
-      this.handleEditRoles(params)
+      const edit_roles_info = JSON.parse(window.localStorage.getItem('edit_roles_info') || '{}');
+      Object.assign(params, { id: edit_roles_info.id || '' });
+      this.handleEditRoles(params);
     } else {
-      this.handleAddRole(params)
+      this.handleAddRole(params);
     }
   }
 
@@ -419,19 +414,17 @@ export class RolesFormComponent implements OnInit {
    */
 
   async handleAddRole(params: any) {
-    const url = '/api/api/user/role_info'
+    const url = '/api/api/user/role_info';
 
     try {
-      const data: any = await this.http.post(url, params).toPromise()
-      const is_error = !(data.code === 200)
-
+      const data: any = await this.http.post(url, params).toPromise();
+      const is_error = !(data.code === 200);
 
       if (is_error) {
-        this.createNotification('error', '新增角色', data.message || '新增角色失败！')
+        this.createNotification('error', '新增角色', data.message || '新增角色失败！');
         return;
       }
 
-      console.log(this.checkedPowerList, '-----this.checkedPowerList')
       // 给角色绑定页面权限
       const PermissionGroupPermissionIds = this.checkedPowerList.map(item => item.id).join();
 
@@ -442,12 +435,12 @@ export class RolesFormComponent implements OnInit {
 
       const powerData = await this.handleRolesAddPower(powerParams);
 
-      this.createNotification('success', '新增角色', '新增角色成功！')
+      this.createNotification('success', '新增角色', '新增角色成功！');
       this.validateForm.reset();
-      this.router.navigate(['/admin/roles/list'])
+      this.router.navigate(['/admin/roles/list']);
 
     } catch (error) {
-      this.createNotification('error', '新增角色', error.message || '新增人员失败！')
+      this.createNotification('error', '新增角色', error.message || '新增人员失败！');
     }
   }
 
@@ -460,7 +453,7 @@ export class RolesFormComponent implements OnInit {
    * */
 
   async handleEditRoles(params: any) {
-    const url = '/api/api/user/role_info'
+    const url = '/api/api/user/role_info';
 
     try {
       const data: any = await this.http.put(url, params).toPromise()
@@ -495,12 +488,12 @@ export class RolesFormComponent implements OnInit {
    * @param PermissionGroupPermissionIds 页面权限选项id数组 格式:[id1,id2]
    */
   async handleRolesAddPower(params: any) {
-    const url = '/api/api/permission/role_permission_group_permission'
 
     try {
+      const url = '/api/api/permission/role_permission_group_permission';
+
       const data: any = await this.http.post(url, params).toPromise()
       const is_error = !(data.code === 200)
-
     } catch (error) {
       console.log(error, '------error---')
     }
@@ -512,9 +505,10 @@ export class RolesFormComponent implements OnInit {
    * @param PermissionGroupPermissionIds 页面权限选项id数组 格式:[id1,id2]
    */
   async handleRolesEditPower(params: any) {
-    const url = '/api/api/permission/role_permission_group_permission'
 
     try {
+      const url = '/api/api/permission/role_permission_group_permission';
+
       const data: any = await this.http.put(url, params).toPromise()
       const is_error = !(data.code === 200)
     } catch (error) {

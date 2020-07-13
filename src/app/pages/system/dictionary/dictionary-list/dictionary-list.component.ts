@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 import { PowerService } from '../../../../services/power.service';
 import { MenuService } from '../../../../services/menu.service';
@@ -18,12 +19,12 @@ export interface TreeNodeInterface {
   parent?: TreeNodeInterface;
 }
 
-
 @Component({
   selector: 'app-dictionary-list',
   templateUrl: './dictionary-list.component.html',
   styleUrls: ['./dictionary-list.component.scss']
 })
+
 export class DictionaryListComponent implements OnInit {
 
   dictionaryList = [];
@@ -82,7 +83,7 @@ export class DictionaryListComponent implements OnInit {
         this.dictionaryList = [];
         return;
       }
-      const list = data.data.map(item => Object.assign(item, { key: item.id, key1: item.key, title: item.name })).sort((a, b) =>a.id-b.id);
+      const list = data.data.map(item => Object.assign(item, { key: item.id, key1: item.key, title: item.name })).sort((a, b) => a.id - b.id);
       console.log(data, '---data')
 
       this.dictionaryList = this.handleTreeData(list);
@@ -97,6 +98,7 @@ export class DictionaryListComponent implements OnInit {
       this.dictionaryList = [];
     }
   }
+
   // 提示框
   createNotification(type: string, title: string, message: string): void {
     this.notification.create(type, title, message);
@@ -141,7 +143,6 @@ export class DictionaryListComponent implements OnInit {
       return false;
     }
   }
-
 
   // 添加属性弹框 关闭
   handleAddAttrCancel = (): void => {
@@ -215,9 +216,9 @@ export class DictionaryListComponent implements OnInit {
   }
 
   /**
- * 删除机构字典
- * @param id 机构字典id
- */
+   * 删除机构字典
+   * @param id 机构字典id
+   */
   handleDeleteDictionary = async (item: any) => {
     try {
       const url = `/api/api/user/dictionary/key/department_type/${item.id}`
@@ -238,7 +239,6 @@ export class DictionaryListComponent implements OnInit {
       console.log(error, '---err')
     }
   }
-
 
   // 转成树形结构
   handleTreeData(array: any) {
@@ -265,7 +265,6 @@ export class DictionaryListComponent implements OnInit {
 
     return list;
   }
-
 
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
 

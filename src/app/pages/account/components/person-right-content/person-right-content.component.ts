@@ -28,18 +28,15 @@ export class PersonRightContentComponent implements OnInit {
   @Input() handleDeleteUserModalShow: any;
   @Input() handleResetUserPassword: any;
   @Input() power;
-
   value?: string;
   validateForm!: FormGroup;
   isResetVisible: boolean = false;
-
   checked = false;
   loading = false;
   indeterminate = false;
   listOfData: Data[] = [];
   listOfCurrentPageData: Data[] = [];
   setOfCheckedId = new Set<number>();
-
   activeUserItem = null;
 
   constructor(
@@ -50,7 +47,6 @@ export class PersonRightContentComponent implements OnInit {
   ngOnInit(): void {
 
     const { required, numberAddLetter } = MyValidators;
-    // 初始化表单
     this.validateForm = this.fb.group({
       adminPassword: [null, [required]],
       password: [null, [required, numberAddLetter(8, 16)]]

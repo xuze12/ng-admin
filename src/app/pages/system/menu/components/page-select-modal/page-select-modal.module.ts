@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
-import {CommonModule} from '@angular/common';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
-
-import { PageSelectModalRoutingModule } from './page-select-modal-routing.module';
-import { PageSelectModalComponent } from './page-select-modal.component';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -12,6 +9,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 
+import { PageSelectModalRoutingModule } from './page-select-modal-routing.module';
+import { PageSelectModalComponent } from './page-select-modal.component';
 
 @NgModule({
   imports: [

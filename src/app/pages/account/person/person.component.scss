@@ -1,12 +1,14 @@
 .person-content {
   padding: 15px 24px;
   display: flex;
+
   .leftSide {
     width: 170px;
     border-right: 1px solid #eee;
     margin-right: 24px;
     padding-right: 24px;
   }
+
   .rightSide {
     flex: 1;
   }

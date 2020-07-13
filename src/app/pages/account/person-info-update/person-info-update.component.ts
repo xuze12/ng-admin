@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 import { MyValidators } from '../../utils/validators';
@@ -11,12 +11,12 @@ import { MyValidators } from '../../utils/validators';
   templateUrl: './person-info-update.component.html',
   styleUrls: ['./person-info-update.component.scss']
 })
+
 export class PersonInfoUpdateComponent implements OnInit {
   validateForm!: FormGroup;
   type: string;
   form_data: object;
   expandKeys = [];
-
   organizeList: any = JSON.parse(window.localStorage.getItem('organizeList') || '[]');
   rolesList = [];
 
@@ -83,27 +83,27 @@ export class PersonInfoUpdateComponent implements OnInit {
    * 获取角色列表
    */
   async getRolesList() {
-    const url = '/api/api/user/role_info'
+
     try {
-      const data: any = await this.http.get(url).toPromise()
-      console.log(data, 'getOrganizeList')
+      const url = '/api/api/user/role_info';
 
-      if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id })).filter((item) => item.name !== 'ADMIN')
-        this.rolesList = newData
+      const data: any = await this.http.get(url).toPromise();
 
-      } else {
-        this.rolesList = []
+      if (data.code !== 200) {
+        this.rolesList = [];
+        return;
       }
+
+      this.rolesList = data.data.map((item) => Object.assign(item, { key: item.id })).filter((item) => item.name !== 'ADMIN');
 
     } catch (error) {
       console.log(error, '---err')
     }
   }
 
-
   // 表单提交
   submitForm(): void {
+
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
@@ -122,6 +122,7 @@ export class PersonInfoUpdateComponent implements OnInit {
   }
   // 提示框
   createNotification(type: string, title: string, message: string): void {
+
     this.notification.create(type, title, message);
   }
 
@@ -139,26 +140,26 @@ export class PersonInfoUpdateComponent implements OnInit {
    * */
 
   async handleAddPerson(params: any) {
-    const url = '/api/api/user/user'
 
     try {
-      const data: any = await this.http.post(url, params).toPromise()
-      console.log(data, 'add')
+      const url = '/api/api/user/user';
+
+      const data: any = await this.http.post(url, params).toPromise();
+
       const is_error = !(data.code === 200)
 
       if (is_error) {
 
-        this.createNotification('error', '新增人员', data.message || '新增人员失败！')
+        this.createNotification('error', '新增人员', data.message || '新增人员失败！');
         return;
       }
 
-      this.createNotification('success', '新增人员', '新增人员成功！')
+      this.createNotification('success', '新增人员', '新增人员成功！');
       this.validateForm.reset();
-
-      this.router.navigate(['/admin/person/list'])
+      this.router.navigate(['/admin/person/list']);
 
     } catch (error) {
-      this.createNotification('error', '新增人员', error.message || '新增人员失败！')
+      this.createNotification('error', '新增人员', error.message || '新增人员失败！');
       console.log(error, '---err')
     }
   }
@@ -177,31 +178,33 @@ export class PersonInfoUpdateComponent implements OnInit {
    * */
 
   async handleEditPerson(params: any) {
-    const url = '/api/api/user/user'
 
     try {
-      const data: any = await this.http.put(url, params).toPromise()
-      console.log(data, 'handleEditPerson')
-      const is_error = !(data.code === 200)
+
+      const url = '/api/api/user/user';
+
+      const data: any = await this.http.put(url, params).toPromise();
+
+      const is_error = !(data.code === 200);
 
       if (is_error) {
-        this.createNotification('error', '编辑人员', data.message || '编辑人员失败！')
+        this.createNotification('error', '编辑人员', data.message || '编辑人员失败！');
         return;
       }
 
-      this.createNotification('success', '编辑人员', '编辑人员成功！')
+      this.createNotification('success', '编辑人员', '编辑人员成功！');
       this.validateForm.reset();
-
-      this.router.navigate(['/admin/person/list'])
+      this.router.navigate(['/admin/person/list']);
 
     } catch (error) {
-      this.createNotification('error', '编辑人员', error.message || '编辑人员失败！')
+      this.createNotification('error', '编辑人员', error.message || '编辑人员失败！');
       console.log(error, '---err')
     }
   }
 
 
   cancel(e): void {
+
     e.preventDefault();
     this.validateForm.reset();
     this.router.navigate(['/admin/person/list'])

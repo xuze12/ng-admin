@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
+import { Router } from '@angular/router';
+
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Router, ActivatedRoute } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { PowerService } from '../../../services/power.service';
 import { MenuService } from '../../../services/menu.service';
+
 export interface TreeNodeInterface {
   key: number;
   menuName: string;
@@ -21,12 +23,11 @@ export interface TreeNodeInterface {
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
 
+export class MenuComponent implements OnInit {
 
   list: TreeNodeInterface[] = [];
   pageId = 0;
-
   // 当前点击的菜单
   activeMenuItem: any = null;
   // 是否显示 添加菜单弹框
@@ -35,7 +36,6 @@ export class MenuComponent implements OnInit {
   editNavMenuModalOpen = false;
   //是否显示 选择页面弹框
   pageSelectModalOpen = false;
-
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   power = {
     add: false,
@@ -51,18 +51,14 @@ export class MenuComponent implements OnInit {
     public powerService: PowerService,
     public menuService: MenuService,
     public router: Router,
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
 
     this.powerService.setPagePower('menu');
-    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
-
       this.getPageMenu();
       this.getMenuList();
     }
@@ -75,29 +71,26 @@ export class MenuComponent implements OnInit {
     }, 400)
   }
 
-
   /**
    * 菜单带页面权限列表
    */
   async getMenuList() {
-    const url = '/api/api/permission/permission_group_menu/with_permission_group'
 
     try {
-      const data: any = await this.http.get(url).toPromise()
-      console.log(data, 'getMenuList')
-      if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id }))
-        const list = this.handleMenuList(newData);
-        console.log(list, '---list')
-        this.list = list
-        this.list.forEach(item => {
-          this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      const url = '/api/api/permission/permission_group_menu/with_permission_group';
 
-        });
-        console.log(this.mapOfExpandedData, '------this.mapOfExpandedData')
-      } else {
-        this.list = []
+      const data: any = await this.http.get(url).toPromise();
+
+      if (data.code !== 200) {
+        this.list = [];
+        return;
       }
+
+      const newData = data.data.map((item) => Object.assign(item, { key: item.id }))
+      this.list = this.handleMenuList(newData);
+      this.list.forEach(item => {
+        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      });
 
     } catch (error) {
       console.log(error, '---err')
@@ -109,7 +102,6 @@ export class MenuComponent implements OnInit {
    * */
 
   handleMenuList(array) {
-    const list = [];
     // 将数据存储为 以 id 为 KEY 的 map 索引数据列
     const map = {};
     for (let i = 0; i < array.length; i++) {
@@ -132,7 +124,6 @@ export class MenuComponent implements OnInit {
 
   // 列表展开关闭
   collapse(array: TreeNodeInterface[], data: TreeNodeInterface, $event: boolean): void {
-    console.log(array, '-------array', data, '------data', '----$event')
     if (!$event) {
       if (data.children) {
         data.children.forEach(d => {
@@ -174,7 +165,7 @@ export class MenuComponent implements OnInit {
 
   // 显示添加导航菜单弹框
   handleAddModalShow = (item: any = {}): void => {
-    console.log(item, '----item')
+
     this.activeMenuItem = item;
     this.addNavMenuModalOpen = true;
   }
@@ -193,14 +184,15 @@ export class MenuComponent implements OnInit {
   handleAddOk = async (value: any) => {
 
     try {
-      const url = '/api/api/permission/permission_group_menu'
+      const url = '/api/api/permission/permission_group_menu';
       const params = {
         parentId: this.activeMenuItem.id || 0,
         name: value.menuName
-      }
-      const data: any = await this.http.post(url, params).toPromise()
-      console.log(data, 'add')
-      const is_error = !(data.code === 200)
+      };
+
+      const data: any = await this.http.post(url, params).toPromise();
+
+      const is_error = !(data.code === 200);
 
       if (is_error) {
         this.createNotification('error', '添加失败', data.message || '添加导航失败！')
@@ -217,6 +209,7 @@ export class MenuComponent implements OnInit {
       this.createNotification('error', '添加失败', error.message || '添加导航失败！')
       console.log(error, '---err')
     }
+
     this.addNavMenuModalOpen = false;
   }
 
@@ -234,37 +227,35 @@ export class MenuComponent implements OnInit {
     window.localStorage.setItem('editMenuName', item.name);
     this.activeMenuItem = item
     this.editNavMenuModalOpen = true;
-
   }
   // 编辑导航菜单模态框 确认
   handleEditOk = async (value: any) => {
-    console.log('-----value', value);
-
-    console.log(this.activeMenuItem, '---activeMenuItem')
 
     try {
-      const url = '/api/api/permission/permission_group_menu'
+
+      const url = '/api/api/permission/permission_group_menu';
       const params = {
         id: this.activeMenuItem.id,
         name: value.menuName
-      }
-      const data: any = await this.http.put(url, params).toPromise()
-      console.log(data, 'add')
-      const is_error = !(data.code === 200)
+      };
+
+      const data: any = await this.http.put(url, params).toPromise();
+
+      const is_error = !(data.code === 200);
 
       if (is_error) {
-        this.createNotification('error', '编辑失败', data.message || '编辑导航失败！')
+        this.createNotification('error', '编辑失败', data.message || '编辑导航失败！');
         return;
       }
 
-      this.createNotification('success', '编辑成功', '编辑导航成功！')
+      this.createNotification('success', '编辑成功', '编辑导航成功！');
       this.getMenuList();
 
       // 重新获取菜单信息
       // await this.menuService.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '编辑失败', error.message || '编辑导航失败！')
+      this.createNotification('error', '编辑失败', error.message || '编辑导航失败！');
       console.log(error, '---err')
     }
 
@@ -274,12 +265,14 @@ export class MenuComponent implements OnInit {
 
   // 编辑导航菜单模态框 关闭
   handleEditCancel = (): void => {
+
     this.editNavMenuModalOpen = false;
     window.localStorage.removeItem('editMenuName');
   }
 
   // 显示 选择页面弹框
   handlePageSelectModalShow = (item: any, pageId?: number): void => {
+
     this.activeMenuItem = item;
     this.pageId = pageId;
     this.pageSelectModalOpen = true;
@@ -291,29 +284,28 @@ export class MenuComponent implements OnInit {
    * @param permissionGroupId 权限页面id
    */
   handlePageSelectOk = async (value: any) => {
-    console.log(value, '--value')
-    console.log(this.activeMenuItem, '---activeMenuItem')
 
     try {
-      const url = '/api/api/permission/permission_group_menu'
+      const url = '/api/api/permission/permission_group_menu';
       const params = {
         id: this.activeMenuItem.id,
         permissionGroupId: value.radioValue
-      }
-      const data: any = await this.http.put(url, params).toPromise()
-      console.log(data, 'handlePageSelectOk')
+      };
+
+      const data: any = await this.http.put(url, params).toPromise();
+
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '绑定权限页面', data.message || '绑定权限页面失败！')
+        this.createNotification('error', '绑定权限页面', data.message || '绑定权限页面失败！');
         return;
       }
 
-      this.createNotification('success', '绑定权限页面', '绑定权限页面成功！')
+      this.createNotification('success', '绑定权限页面', '绑定权限页面成功！');
       this.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '绑定权限页面', error.message || '绑定权限页面失败！')
+      this.createNotification('error', '绑定权限页面', error.message || '绑定权限页面失败！');
       console.log(error, '---err')
     }
 
@@ -322,41 +314,42 @@ export class MenuComponent implements OnInit {
 
   // 选择页面弹框 关闭
   handlePageSelectCancel = (): void => {
+
     this.pageSelectModalOpen = false;
   }
 
   /**
- * 删除菜单项
- * @param id 绑定菜单id
- */
+   * 删除菜单项
+   * @param id 绑定菜单id
+   */
   handleDeleteMenuItem = async (item: any) => {
 
     try {
-      const url = `/api/api/permission/permission_group_menu/${item.id}`
+      const url = `/api/api/permission/permission_group_menu/${item.id}`;
 
-      const data: any = await this.http.delete(url).toPromise()
-      console.log(data, 'handleDeleteMenuItem')
-      const is_error = !(data.code === 200)
+      const data: any = await this.http.delete(url).toPromise();
+
+      const is_error = !(data.code === 200);
 
       if (is_error) {
-        this.createNotification('error', '删除菜单项', data.message || '删除菜单项失败！')
+        this.createNotification('error', '删除菜单项', data.message || '删除菜单项失败！');
         return;
       }
 
-      this.createNotification('success', '删除菜单项', '删除菜单项成功！')
+      this.createNotification('success', '删除菜单项', '删除菜单项成功！');
       this.getMenuList();
 
     } catch (error) {
-      this.createNotification('error', '删除菜单项', error.message || '删除菜单项失败！')
+      this.createNotification('error', '删除菜单项', error.message || '删除菜单项失败！');
       console.log(error, '---err')
     }
 
   }
 
   /**
- * 递归删除菜单
- * @param item 
- */
+   * 递归删除菜单
+   * @param item 
+   */
   handleMenuChilderDelete(item: any) {
 
     this.handleDeleteMenuItem(item);

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
+
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
@@ -49,7 +50,6 @@ export class PersonComponent implements OnInit {
   ngOnInit(): void {
 
     this.powerService.setPagePower('person');
-    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
@@ -70,17 +70,18 @@ export class PersonComponent implements OnInit {
    * 获取机构列表
    */
   async getPersonList() {
-    const url = '/api/api/user/user'
-
     try {
-      const data: any = await this.http.get(url).toPromise()
 
-      if (data.code === 200) {
-        this.personList = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
-        console.log(this.personList, 'getPersonList')
-      } else {
-        this.personList = []
+      const url = '/api/api/user/user';
+
+      const data: any = await this.http.get(url).toPromise();
+
+      if (data.code !== 200) {
+        this.personList = [];
+        return;
       }
+
+      this.personList = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }));
 
     } catch (error) {
       console.log(error, '---err')
@@ -94,22 +95,20 @@ export class PersonComponent implements OnInit {
     const url = '/api/api/user/department'
 
     try {
-      const data: any = await this.http.get(url).toPromise()
-      console.log(data, 'getOrganizeList')
+      const data: any = await this.http.get(url).toPromise();
 
       if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }))
+        const newData = data.data.map((item) => Object.assign(item, { key: item.id, title: item.name }));
         const list = this.handleOrganizeList(newData);
         this.organizeList = list
         this.organizeList.forEach(item => {
           this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
         });
-        console.log(this.mapOfExpandedData, '------mapOfExpandedData')
       } else {
         this.organizeList = []
       }
 
-      window.localStorage.setItem('organizeList', JSON.stringify(this.organizeList))
+      window.localStorage.setItem('organizeList', JSON.stringify(this.organizeList));
 
     } catch (error) {
       console.log(error, '---err')
@@ -175,6 +174,7 @@ export class PersonComponent implements OnInit {
 
   // 显示禁用用户弹框
   handleProhibitUserModalShow = (item: any) => {
+
     const action = item.tusers.enabled ? '禁用' : '启用';
     const contentText = item.tusers.enabled ? '管理员将不可登录' : '管理员将重新获取登录';
     this.modal.confirm({
@@ -204,20 +204,19 @@ export class PersonComponent implements OnInit {
         id: item.userId,
         enabled: !item.tusers.enabled
       }
-      const data: any = await this.http.put(url, params).toPromise()
-      console.log(data, 'handleProhibitUser')
+      const data: any = await this.http.put(url, params).toPromise();
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', `${action}用户`, data.message || `${action}用户失败！`)
+        this.createNotification('error', `${action}用户`, data.message || `${action}用户失败！`);
         return;
       }
 
-      this.createNotification('success', `${action}用户`, `${action}用户成功！`)
+      this.createNotification('success', `${action}用户`, `${action}用户成功！`);
       this.getPersonList();
 
     } catch (error) {
-      this.createNotification('error', `${action}用户`, error.message || `${action}用户失败！`)
+      this.createNotification('error', `${action}用户`, error.message || `${action}用户失败！`);
       console.log(error, '---err')
     }
   }
@@ -245,19 +244,18 @@ export class PersonComponent implements OnInit {
       const url = `/api/api/user/user/${item.id}`
 
       const data: any = await this.http.delete(url).toPromise()
-      console.log(data, 'handleDeleteUser')
       const is_error = !(data.code === 200)
 
       if (is_error) {
-        this.createNotification('error', '删除用户', data.message || '删除用户失败！')
+        this.createNotification('error', '删除用户', data.message || '删除用户失败！');
         return;
       }
 
-      this.createNotification('success', '删除用户', '删除用户成功！')
+      this.createNotification('success', '删除用户', '删除用户成功！');
       this.getPersonList();
 
     } catch (error) {
-      this.createNotification('error', '删除用户', error.message || '删除用户失败！')
+      this.createNotification('error', '删除用户', error.message || '删除用户失败！');
       console.log(error, '---err')
     }
   }
@@ -269,12 +267,10 @@ export class PersonComponent implements OnInit {
    * @param userId 用户userId
    */
   handleResetUserPassword = async (item: any) => {
-    console.log(item, '-----handleResetUserPassword')
     try {
       const url = '/api/api/user/user'
 
       const data: any = await this.http.put(url, item).toPromise()
-      console.log(data, 'handleResetUserPassword')
       const is_error = !(data.code === 200)
 
       if (is_error) {
@@ -290,6 +286,5 @@ export class PersonComponent implements OnInit {
       console.log(error, '---err')
     }
   }
-
 
 }

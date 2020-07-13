@@ -11,7 +11,8 @@
         <nz-form-item>
           <nz-form-label nzRequired nzFor="name">角色名称</nz-form-label>
           <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入角色名称!">
-            <input nz-input formControlName="name" placeholder="请输入角色名称" id="name" (ngModelChange)="handleNameChange($event)" />
+            <input nz-input formControlName="name" placeholder="请输入角色名称" id="name"
+              (ngModelChange)="handleNameChange($event)" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -23,7 +24,7 @@
         <nz-form-item>
           <nz-form-label nzRequired nzFor="sign">角色编号</nz-form-label>
           <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入角色编号!">
-            <input disabled nz-input formControlName="sign" placeholder="请输入角色编号" id="sign" />
+            <input nz-input formControlName="sign" placeholder="请输入角色编号" id="sign" />
           </nz-form-control>
         </nz-form-item>
       </div>

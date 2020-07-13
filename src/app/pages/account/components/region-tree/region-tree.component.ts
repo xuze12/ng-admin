@@ -6,10 +6,10 @@ import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
   templateUrl: './region-tree.component.html',
   styleUrls: ['./region-tree.component.scss']
 })
+
 export class RegionTreeComponent implements OnInit {
 
   @Input() organizeList: any=[];
-  
   searchValue = '';
 
   nzEvent(event: NzFormatEmitEvent): void {

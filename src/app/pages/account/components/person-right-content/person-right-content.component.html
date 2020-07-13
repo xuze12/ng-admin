@@ -54,8 +54,6 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of rowSelectionTable.data">
-      <!-- <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
-        (nzCheckedChange)="onItemChecked(data.id, $event)"></td> -->
       <td>{{ data.tusers?data.tusers.userName:'' }}</td>
       <td>{{ data.nickname }}</td>
       <td>{{ data.mobile }}</td>

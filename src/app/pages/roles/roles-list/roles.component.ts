@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router'
 
@@ -40,12 +40,11 @@ export class RolesComponent implements OnInit {
     public router: Router,
     public powerService: PowerService,
     public menuService: MenuService,
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
+
     this.powerService.setPagePower('roles');
-    console.log(this.powerService.hasVisitPage, '---hasVisitPage')
     this.power = JSON.parse(window.localStorage.getItem('power') || '{}');
 
     if (this.powerService.hasVisitPage) {
@@ -61,14 +60,13 @@ export class RolesComponent implements OnInit {
     }, 400)
   }
 
-
   /**
   * 获取角色列表
   * */
   async getRolesList() {
-    const url = '/api/api/user/role_info';
 
     try {
+      const url = '/api/api/user/role_info';
       const data: any = await this.http.get(url).toPromise();
       const rolesPowers = await this.getRolesPowers();
 
@@ -80,17 +78,18 @@ export class RolesComponent implements OnInit {
       this.rolesList = data.data.map(item => {
         let power = []
         const role_power_item = rolesPowers.filter(i => i.roleInfoId === item.id);
-
         const map = {};
-        if (role_power_item.length > 0) {
 
+        if (role_power_item.length > 0) {
           role_power_item.map(j => {
             const permissionGroupId = j.permissionGroupPermission.permissionGroupId;
             const permissionGroup = j.permissionGroupPermission.permissionGroup;
             const permission = j.permissionGroupPermission.permission;
+
             if (!map[permissionGroupId]) {
               map[permissionGroupId] = [`${permissionGroup.name}/`]
             }
+
             map[permissionGroupId].push(permission.description);
           })
 
@@ -105,8 +104,8 @@ export class RolesComponent implements OnInit {
           title: item.name,
           power: power.join('、'),
         })
-        return item;
 
+        return item;
       }).filter((item) => item.name !== 'ADMIN')
 
     } catch (error) {
@@ -118,8 +117,10 @@ export class RolesComponent implements OnInit {
    * 查看角色权限
    */
   async getRolesPowers() {
-    const url = '/api/api/permission/role_permission_group_permission';
+
     try {
+      const url = '/api/api/permission/role_permission_group_permission';
+
       const data: any = await this.http.get(url).toPromise();
       return data.code !== 200 ? [] : data.data;
     } catch (error) {
@@ -127,10 +128,9 @@ export class RolesComponent implements OnInit {
     }
   }
 
-
   onCurrentPageDataChange($event: RolesList[]): void {
+
     this.listOfCurrentPageData = $event;
-    // this.refreshCheckedStatus();
   }
 
   showDeleteConfirm(item: any): void {
@@ -157,6 +157,7 @@ export class RolesComponent implements OnInit {
    * @param id 角色id
    */
   handleDeleteRoles = async (item: any) => {
+
     try {
       const url = `/api/api/user/role_info/${item.id}`
 
@@ -179,7 +180,7 @@ export class RolesComponent implements OnInit {
 
   // 跳转编辑角色页面
   handleEditRoles(item: any) {
-    window.localStorage.setItem('edit_roles_info', JSON.stringify(item))
+    window.localStorage.setItem('edit_roles_info', JSON.stringify(item));
     this.router.navigate(['/admin/roles/infoUpdata/', 'edit']);
   }
 }

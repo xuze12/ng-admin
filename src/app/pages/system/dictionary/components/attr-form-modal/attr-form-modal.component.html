@@ -1,4 +1,5 @@
-<nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleCancel()" (nzOnOk)="submitForm(validateForm.value)">
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="title" (nzOnCancel)="handleCancel()"
+  (nzOnOk)="submitForm(validateForm.value)">
   <form nz-form [formGroup]="validateForm">
     <nz-form-item>
       <nz-form-label [nzSpan]="24" nzRequired>字典名称</nz-form-label>
