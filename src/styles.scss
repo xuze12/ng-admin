@@ -19,3 +19,10 @@
 .triangle-table-container .ant-table-row-expand-icon::after {
   display: none;
 }
+
+.tree-wrapper .ant-tree-node-content-wrapper {
+
+  white-space: normal;
+
+  word-break:break-all;
+}

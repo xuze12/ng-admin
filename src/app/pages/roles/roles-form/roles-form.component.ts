@@ -69,7 +69,6 @@ export class RolesFormComponent implements OnInit {
           name: [null, [required, maxLength(30), numberAddLetterAddChinese]],
           sign: [{ value: null, disabled: true }, [required]],
           departmentId: [null, [required]],
-          PermissionGroupPermissionIds: [null, [required]],
         });
       }
     })
