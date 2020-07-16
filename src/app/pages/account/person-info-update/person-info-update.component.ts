@@ -53,7 +53,7 @@ export class PersonInfoUpdateComponent implements OnInit {
 
         this.validateForm = this.fb.group({
           username: [tusers.userName, [required, maxLength(30), numberAddLetterAddChinese]],
-          mobile: [mobile, [required, v_mobile]],
+          mobile: [`${mobile}`, [required, v_mobile]],
           enabled: [tusers.enabled, [required]],
           departmentId: [departmentId, [required]],
           name: [name, [required, maxLength(30), numberAddLetterAddChinese]],
