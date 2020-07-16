@@ -60,9 +60,9 @@ export class RolesComponent implements OnInit {
     }, 400)
   }
 
-    /**
-   * 菜单带页面权限列表
-   */
+  /**
+ * 菜单带页面权限列表
+ */
   async getMenuList() {
     const url = '/api/api/permission/permission_group_menu/with_permission_group';
 
@@ -74,9 +74,9 @@ export class RolesComponent implements OnInit {
     }
   }
 
-   /**
-   * 获取权限页面列表
-   */
+  /**
+  * 获取权限页面列表
+  */
   async getPagesList() {
     const url = '/api/api/permission/permission_group_permission';
 
@@ -88,9 +88,9 @@ export class RolesComponent implements OnInit {
     }
   }
 
-   /**
-   * 处理菜单列表数据 转树形结构
-   */
+  /**
+  * 处理菜单列表数据 转树形结构
+  */
   handleMenuList(array) {
     // 将数据存储为 以 id 为 KEY 的 map 索引数据列
     const map = {};
@@ -127,28 +127,6 @@ export class RolesComponent implements OnInit {
         this.rolesList = [];
         return;
       }
-
-      // const menuList = await this.getMenuList() ;
-      // const pageList = await this.getPagesList();
-
-      // for (let item of menuList) {
-
-      // }
-      // console.log(pageList,'---pageList')
-      // console.log(menuList,'-----menuList')
-
-      // for (let item of menuList) {
-      //   let powerGroup = []
-      //   let hasPowerGroup = pageList.filter(i => i.permissionGroupId === item.permissionGroupId);
-  
-      //   if (hasPowerGroup) {
-      //     powerGroup = hasPowerGroup
-      //   }
-      //   item.power = powerGroup
-      // }
-
-      // const newMenuList = this.handleMenuList(menuList);
-      // console.log(newMenuList,'-------------------newMenuList')
 
       this.rolesList = data.data.map(item => {
         const newItem = item;

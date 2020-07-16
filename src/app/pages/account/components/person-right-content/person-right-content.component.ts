@@ -91,6 +91,11 @@ export class PersonRightContentComponent implements OnInit {
       this.validateForm.controls[i].updateValueAndValidity();
     }
 
+    if (!this.validateForm.valid) {
+      console.log(this.validateForm.value,'-------!this.validateForm.valid')
+      return;
+    }
+
     const params = Object.assign(
       this.validateForm.value,
       { id: this.activeUserItem.userId }
