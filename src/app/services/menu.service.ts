@@ -99,11 +99,7 @@ export class MenuService {
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   list = [];
   pageMenu = [];
-
-  stream = new Observable<any>((observer => {
-    observer.next(this.pageMenu)
-  }))
-
+  
   constructor(public http: HttpClient, private router: Router) { }
 
   /**

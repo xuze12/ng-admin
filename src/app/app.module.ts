@@ -22,6 +22,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 // 路由模块
 import { AppRoutingModule } from './app-routing.module';
@@ -76,6 +77,7 @@ registerLocaleData(zh);
     NzAvatarModule,
     NzDropDownModule,
     NzResultModule,
+    NzDividerModule
   ],
   providers: [
     // 防止打包上线页面刷新出现404
