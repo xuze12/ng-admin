@@ -14,7 +14,6 @@
           <nz-dropdown-menu #menu="nzDropdownMenu">
             <ul nz-menu nzSelectable>
               <li nz-menu-item *ngIf='username==="admin"'><a routerLink='/admin/system/menu/list'>菜单配置</a></li>
-              <nz-divider nz-menu-item *ngIf='username==="admin"' style='margin:2px'></nz-divider>
               <li nz-menu-item (click)="logOut()">退出登陆</li>
             </ul>
           </nz-dropdown-menu>
