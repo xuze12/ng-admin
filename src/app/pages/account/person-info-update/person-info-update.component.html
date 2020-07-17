@@ -11,7 +11,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="username" nzRequired>账号</nz-form-label>
           <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入账号!">
-            <input nz-input formControlName="username" placeholder="请输入账号" id="username" />
+            <input nz-input formControlName="username" placeholder="请输入账号" id="username"  />
           </nz-form-control>
         </nz-form-item>
 
@@ -49,7 +49,7 @@
         <nz-form-item *ngIf="type === 'add'">
           <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="password" nzRequired>密码</nz-form-label>
           <nz-form-control [nzSpan]="8" nzErrorTip="密码错误">
-            <input nz-input formControlName="password" placeholder="请输入密码" id="password" />
+            <input nz-input formControlName="password" placeholder="请输入密码" id="password"   (ngModelChange)="validateConfirmPassword()" />
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -95,8 +95,16 @@
         <!--确认密码-->
         <nz-form-item *ngIf="type === 'add'">
           <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="checkPassword" nzRequired>确认密码</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请确认密码">
+          <nz-form-control [nzSpan]="8" [nzErrorTip]="passwordErrorTpl">
             <input nz-input formControlName="checkPassword" placeholder="确认密码" id="checkPassword" />
+            <ng-template #passwordErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                请输入确认密码!
+              </ng-container>
+              <ng-container *ngIf="control.hasError('checkPassword')">
+                密码不一致!
+              </ng-container>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
       </div>

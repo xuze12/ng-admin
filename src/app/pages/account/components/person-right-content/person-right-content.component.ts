@@ -85,7 +85,7 @@ export class PersonRightContentComponent implements OnInit {
     this.isResetVisible = true;
   }
 
-  resetUserPassword(): void {
+  async resetUserPassword() {
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
@@ -100,8 +100,12 @@ export class PersonRightContentComponent implements OnInit {
       this.validateForm.value,
       { id: this.activeUserItem.userId }
     )
-    this.handleResetUserPassword(params)
+   const is_success= this.handleResetUserPassword(params);
+   if(is_success) {
     this.isResetVisible = false;
+    this.validateForm.reset();
+   }
+
   }
 
   // 关闭重置密码弹框

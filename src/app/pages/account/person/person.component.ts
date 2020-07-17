@@ -279,15 +279,17 @@ export class PersonComponent implements OnInit {
 
       if (is_error) {
         this.createNotification('error', '重置用户密码', data.message || '重置用户密码失败！')
-        return;
+        return false;
       }
 
       this.createNotification('success', '重置用户密码', '重置用户密码成功！')
       this.getPersonList();
+      return true;
 
     } catch (error) {
       this.createNotification('error', '重置用户密码', error.message || '禁用用户失败！')
       console.log(error, '---err')
+      return false;
     }
   }
 

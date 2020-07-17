@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup,AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -36,7 +36,7 @@ export class PersonInfoUpdateComponent implements OnInit {
     this.route.params.subscribe(data => {
       this.type = data.type;
 
-      const { required, maxLength, mobile: v_mobile, numberAddLetterAddChinese } = MyValidators;
+      const { required, maxLength, mobile: v_mobile, numberAddLetterAddChinese,numberAddLetter } = MyValidators;
 
       // 初始化表单
       if (data.type === 'edit') {
@@ -52,7 +52,7 @@ export class PersonInfoUpdateComponent implements OnInit {
           sex = null } = JSON.parse(window.localStorage.getItem('edit_user_info') || '{}')
 
         this.validateForm = this.fb.group({
-          username: [tusers.userName, [required, maxLength(30), numberAddLetterAddChinese]],
+          username: [tusers.userName, [required, numberAddLetter(1,30)]],
           mobile: [`${mobile}`, [required, v_mobile]],
           enabled: [tusers.enabled, [required]],
           departmentId: [departmentId, [required]],
@@ -63,7 +63,7 @@ export class PersonInfoUpdateComponent implements OnInit {
         })
       } else {
         this.validateForm = this.fb.group({
-          username: [null, [required, , maxLength(30), numberAddLetterAddChinese]],
+          username: [null, [required, numberAddLetter(1,30)]],
           mobile: [null, [required, v_mobile]],
           enabled: [null, [required]],
           departmentId: [null, [required]],
@@ -71,7 +71,7 @@ export class PersonInfoUpdateComponent implements OnInit {
           name: [null, [required, maxLength(30), numberAddLetterAddChinese]],
           nickname: [null, [required, maxLength(30), numberAddLetterAddChinese]],
           roleInfoId: [null, [required]],
-          checkPassword: [null, [required, numberAddLetterAddChinese]],
+          checkPassword: [null, [required, numberAddLetterAddChinese,this.confirmValidator]],
           sex: [null, [required]]
         })
       }
@@ -100,6 +100,23 @@ export class PersonInfoUpdateComponent implements OnInit {
       console.log(error, '---err')
     }
   }
+
+
+  validateConfirmPassword(): void {
+    setTimeout(() => this.validateForm.controls.checkPassword.updateValueAndValidity());
+  }
+
+  confirmValidator = (control: AbstractControl): { [s: string]: boolean } => {
+    console.log(control.value,'-----control.value')
+    if (!control.value) {
+      return { error: true, required: true };
+    } else if (control.value !== this.validateForm.controls.password.value) {
+      return { checkPassword: true, error: true };
+    }
+    return {};
+  };
+
+
 
   // 表单提交
   submitForm(): void {

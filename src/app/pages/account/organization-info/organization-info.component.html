@@ -7,7 +7,7 @@
     <nz-form-label nzFor="name" nzRequired>机构名称</nz-form-label>
     <nz-form-item>
       <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="请输入机构名称，最多输入30字!">
-        <input nz-input formControlName="name" placeholder="请输入机构名称" id="name" />
+        <input nz-input formControlName="name" placeholder="请输入机构名称" id="name" maxlength='30' />
       </nz-form-control>
     </nz-form-item>
 
