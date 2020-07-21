@@ -60,8 +60,8 @@ export class RolesFormComponent implements OnInit {
         const { name, sign, departmentId } = JSON.parse(window.localStorage.getItem('edit_roles_info') || '{}');
         this.validateForm = this.fb.group({
           name: [name, [required, maxLength(30), numberAddLetterAddChinese]],
-          sign: [{ value: sign, disabled: true }, [required]],
-          departmentId: [0, [required]],
+          sign: [{ value: sign ? sign : null, disabled: true }, [required]],
+          departmentId: [departmentId, [required]],
         });
 
       } else {
@@ -71,6 +71,7 @@ export class RolesFormComponent implements OnInit {
           departmentId: [null, [required]],
         });
       }
+  
     })
 
     // 初始化操作权限
@@ -385,14 +386,15 @@ export class RolesFormComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    console.log(this.validateForm.value,'-------this.validateForm.value')
+    
+
 
     if (!this.validateForm.valid) {
-      console.log(this.validateForm.value,'-------!this.validateForm.valid')
       return;
     }
 
-    const params = this.validateForm.value;
+    // 获取禁止的表单值 getRawValue
+    const params = this.validateForm.getRawValue();
 
     if (this.type === 'edit') {
       const edit_roles_info = JSON.parse(window.localStorage.getItem('edit_roles_info') || '{}');
