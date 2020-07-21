@@ -61,7 +61,7 @@ export class RolesFormComponent implements OnInit {
         this.validateForm = this.fb.group({
           name: [name, [required, maxLength(30), numberAddLetterAddChinese]],
           sign: [{ value: sign, disabled: true }, [required]],
-          departmentId: [departmentId, [required]],
+          departmentId: [0, [required]],
         });
 
       } else {

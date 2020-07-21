@@ -119,6 +119,8 @@ export class MenuService {
       const roleInfo = JSON.parse(window.localStorage.getItem('loginUserInfo') || '{}');
       let role_power = this.roleInfoPower.filter(item => item.roleInfoId === roleInfo.roleInfoId);
 
+      console.log(role_power,'-----role_power')
+
       if (!Array.isArray(role_power) || role_power.length === 0) {
         return;
       }
@@ -173,6 +175,7 @@ export class MenuService {
 
         const newData = data.data.map(item => Object.assign(item, { key: item.id }));
         const power = await this.getRolesPowers();
+        console.log(power, '------------------power')
 
         for (let item of newData) {
           let hasParentPowerLink = '';
