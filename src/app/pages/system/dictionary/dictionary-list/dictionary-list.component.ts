@@ -207,8 +207,15 @@ export class DictionaryListComponent implements OnInit {
       nzContent: `<b style="color: red;">你正在删除${item.name}字典,删除后无法恢复,确定要删除？</b>`,
       nzOkText: '删除',
       nzOkType: 'danger',
-      nzOnOk: () => {
-        this.handleDeleteDictionary(item)
+      nzOnOk: async () => {
+
+        if (item.children && item.children.length > 0) {
+
+          this.createNotification('error', '请先删除子级', '请先删除子级');
+        } else {
+          this.handleDeleteDictionary(item);
+        }
+
       },
       nzCancelText: '取消',
       nzOnCancel: () => console.log('Cancel')
@@ -221,7 +228,8 @@ export class DictionaryListComponent implements OnInit {
    */
   handleDeleteDictionary = async (item: any) => {
     try {
-      const url = `/api/api/user/dictionary/key/department_type/${item.id}`
+      const url = `/api/api/user/dictionary/key/department_type/${item.id}`;
+      console.log(item, '---item')
 
       const data: any = await this.http.delete(url).toPromise()
       const is_error = !(data.code === 200)

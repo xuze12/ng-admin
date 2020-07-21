@@ -99,7 +99,7 @@ export class MenuService {
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   list = [];
   pageMenu = [];
-  
+
   constructor(public http: HttpClient, private router: Router) { }
 
   /**
@@ -170,11 +170,9 @@ export class MenuService {
 
       const data: any = await this.http.get(url).toPromise()
       if (data.code === 200) {
-        const newData = data.data.map((item) => Object.assign(item, { key: item.id }))
-        console.log(newData, '----------------getMenuList--------------------')
 
+        const newData = data.data.map(item => Object.assign(item, { key: item.id }));
         const power = await this.getRolesPowers();
-        console.log(power, '---power');
 
         for (let item of newData) {
           let hasParentPowerLink = '';
@@ -191,21 +189,15 @@ export class MenuService {
             link: hasParentPowerLink,
             open: false,
             selected: false,
-            disabled: false, title: item.name
+            disabled: false,
+            title: item.name,
+            icon: 'mail'
           })
         }
 
-        console.log(newData, '----zzzzz-------newData');
-
         const list = this.handleMenuList(newData);
-        console.log(list, 'list---')
-
-
         let menuList = list;
-
         this.isHasLinkItem(menuList);
-        console.log(menuList, '-----menuList')
-
         menuList = menuList.filter(item => item.children.length > 0 || item.link !== '');
 
         // 判断菜单是否为空 否 设置第一个子菜单为首页
@@ -254,8 +246,6 @@ export class MenuService {
       childrenHasLink(item, item.children);
     }
   }
-
-
 
 
   /**

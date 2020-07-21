@@ -6,6 +6,7 @@ import { MenuService } from '../../services/menu.service'
   templateUrl: './sider.component.html',
   styleUrls: ['./sider.component.scss']
 })
+
 export class SiderComponent implements OnInit {
 
   @Input() isCollapsed: boolean;

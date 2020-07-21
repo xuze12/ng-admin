@@ -350,14 +350,14 @@ export class MenuComponent implements OnInit {
    * 递归删除菜单
    * @param item 
    */
-  handleMenuChilderDelete(item: any) {
+  // handleMenuChilderDelete(item: any) {
 
-    this.handleDeleteMenuItem(item);
+  //   this.handleDeleteMenuItem(item);
 
-    if (item.children) {
-      item.children.forEach(item => this.handleMenuChilderDelete(item))
-    }
-  }
+  //   if (item.children) {
+  //     item.children.forEach(item => this.handleMenuChilderDelete(item))
+  //   }
+  // }
 
   // 删除菜单
   showMenuDeleteConfirm(item: any): void {
@@ -367,7 +367,13 @@ export class MenuComponent implements OnInit {
       nzOkText: '删除',
       nzOkType: 'danger',
       nzOnOk: () => {
-        this.handleMenuChilderDelete(item)
+        // this.handleMenuChilderDelete(item)
+        if (item.children && item.children.length > 0) {
+
+          this.createNotification('error', '请先删除子级', '请先删除子级');
+        } else {
+          this.handleDeleteMenuItem(item);
+        }
       },
       nzCancelText: '取消',
       nzOnCancel: () => console.log('Cancel')

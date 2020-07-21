@@ -84,6 +84,7 @@ export class OrganizationComponent implements OnInit {
       window.localStorage.setItem('organizeQequestList', JSON.stringify(newData));
 
       this.list = this.handleOrganizeList(newData);
+      console.log(this.list, '=======this.list ')
       this.list.forEach(item => {
         this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
       });
@@ -172,7 +173,14 @@ export class OrganizationComponent implements OnInit {
       nzCancelText: '取消',
       nzOnOk: () => {
         console.log(item, '---item')
-        this.handleOrganizaChilderDelete(item);
+
+        if (item.children && item.children.length > 0) {
+
+          this.createNotification('error', '请先删除子级', '请先删除子级');
+        } else {
+          this.handleOrganizaDelete(item);
+        }
+
       },
       nzOnCancel: () => console.log('Cancel')
     });
@@ -187,14 +195,14 @@ export class OrganizationComponent implements OnInit {
    * 递归删除子组织
    * @param item 
    */
-  handleOrganizaChilderDelete(item: any) {
+  // handleOrganizaChilderDelete(item: any) {
 
-    this.handleOrganizaDelete(item);
+  //   this.handleOrganizaDelete(item);
 
-    if (item.children) {
-      item.children.forEach(item => this.handleOrganizaChilderDelete(item))
-    }
-  }
+  //   if (item.children) {
+  //     item.children.forEach(item => this.handleOrganizaChilderDelete(item))
+  //   }
+  // }
 
   /**
    * @param id 组织id

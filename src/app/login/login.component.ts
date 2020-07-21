@@ -10,6 +10,7 @@ import { MenuService } from '../services/menu.service'
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   validateForm!: FormGroup;
   roleInfoPower = [];
