@@ -200,8 +200,11 @@ export class MenuService {
 
         const list = this.handleMenuList(newData);
         let menuList = list;
+        console.log(list,'----list--list--menuList')
         this.isHasLinkItem(menuList);
-        menuList = menuList.filter(item => item.children.length > 0 || item.link !== '');
+        console.log(menuList,'----menuList--menuList--menuList')
+        menuList = menuList.filter(item => (item.children&&item.children.length > 0) || item.link !== '');
+        console.log(menuList,'----menuList--menuList--menuList')
 
         // 判断菜单是否为空 否 设置第一个子菜单为首页
         if (menuList.length > 0) {
@@ -246,7 +249,10 @@ export class MenuService {
     }
 
     for (let item of array) {
-      childrenHasLink(item, item.children);
+
+      if(item.children) {
+        childrenHasLink(item, item.children);
+      }
     }
   }
 
