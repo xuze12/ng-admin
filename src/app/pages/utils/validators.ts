@@ -44,7 +44,7 @@ export class MyValidators extends Validators {
         return null;
       }
 
-      return isNumberAddLetter(value, minLength, maxLength) ? null : { mobile: { 'zh-cn': `请输入${minLength}-${maxLength}位数字、字母组合的密码`, en: `Passwordr is not valid` } };
+      return isNumberAddLetter(value, minLength, maxLength) ? null : { mobile: { 'zh-cn': `请输入${minLength}-${maxLength}位数字或则字母的密码`, en: `Passwordr is not valid` } };
     };
   }
 

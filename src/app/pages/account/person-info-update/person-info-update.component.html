@@ -48,7 +48,7 @@
         <!--密码-->
         <nz-form-item *ngIf="type === 'add'">
           <nz-form-label [nzSpan]="5" [nzSm]="8" [nzXs]="12" nzFor="password" nzRequired>密码</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="密码错误">
+          <nz-form-control [nzSpan]="8" nzErrorTip="密码不能为空！">
             <input nz-input formControlName="password" placeholder="请输入密码" id="password"   (ngModelChange)="validateConfirmPassword()" />
           </nz-form-control>
         </nz-form-item>
